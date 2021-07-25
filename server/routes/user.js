@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { User } = require("../models/user");
+const { auth } = require("../middleware/auth");
 
 router.post("/register", (req, res) => {
   User.findOne({ email: req.body.email }, (err, data) => {
@@ -45,15 +46,15 @@ router.post("/login", (req, res) => {
   });
 });
 
-// router.get("/logout", auth, (req, res) => {
-//   User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, user) => {
-//     if (err) return res.json({ success: false, err });
-//     return res.status(200).json({ success: true });
-//   });
-// });
+router.get("/logout", auth, (req, res) => {
+  User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, user) => {
+    if (err) return res.json({ success: false, err });
+    return res.status(200).json({ success: true });
+  });
+});
 
-// router.get("/user", auth, (req, res) => {
-//   return res.json(req.user);
-// });
+router.get("/user", auth, (req, res) => {
+  return res.json(req.user);
+});
 
 module.exports = router;
