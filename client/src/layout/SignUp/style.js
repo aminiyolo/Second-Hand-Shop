@@ -9,3 +9,7 @@ export const AuthButton = styled.button`
   color: white;
   padding: 5px 8px;
 `;
+
+export const Container = styled.div`
+  margin-bottom: 50px;
+`;

@@ -10,13 +10,13 @@ export const Header = styled.header`
   font-size: 48px;
   line-height: 46px;
   letter-spacing: -0.75px;
-  margin-top: 40px;
+  margin-top: 0px;
   margin-bottom: 40px;
   cursor: pointer;
 `;
 
 export const Form = styled.form`
-  margin: 0 auto;
+  margin: 60px auto 0;
   width: 400px;
   max-width: 400px;
 `;
@@ -104,6 +104,7 @@ export const LinkContainer = styled.p`
   margin: 0 auto 8px;
   width: 400px;
   max-width: 400px;
+  padding-bottom: 20px;
   & a {
     color: #1264a3;
     text-decoration: none;
@@ -140,5 +141,5 @@ export const FormAndImage = styled.div`
 `;
 
 export const Container = styled.div`
-  margin: 60px 50px 50px 85px;
+  margin: 160px 50px 40px 85px;
 `;

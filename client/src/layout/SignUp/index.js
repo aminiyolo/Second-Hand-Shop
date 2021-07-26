@@ -10,7 +10,7 @@ import {
   Header,
   Loading,
 } from "../Login/style";
-import { AuthButton } from "./style";
+import { AuthButton, Container } from "./style";
 import { Link, withRouter } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import axios from "axios";
@@ -153,7 +153,7 @@ const SignUpPage = ({ history }) => {
   }
 
   return (
-    <div id="container" style={{ marginBottom: "30px" }}>
+    <Container>
       <Header onClick={onClickTitle}>2nd Hand</Header>
       <Form>
         <Label id="email-label">
@@ -238,7 +238,7 @@ const SignUpPage = ({ history }) => {
         이미 회원이신가요?&nbsp;
         <Link to="/login">로그인 하러가기</Link>
       </LinkContainer>
-    </div>
+    </Container>
   );
 };
 

@@ -15,11 +15,11 @@ import {
   Container,
 } from "./style";
 import useInput from "../../hooks/useInput";
-import useSWR from "swr";
-import fetcher from "../../hooks/fetcher";
+// import useSWR from "swr";
+// import fetcher from "../../hooks/fetcher";
 
-const LoginPage = ({ history }) => {
-  const { data, revalidate } = useSWR("/api/users/user", fetcher);
+const LoginPage = ({ history, DATA, revalidate }) => {
+  // const { data, revalidate } = useSWR("/api/users/user", fetcher);
   const [email, onChangeEmail] = useInput("");
   const [password, onChangePassword] = useInput("");
   const [logInError, setLogInError] = useState(false);
@@ -44,22 +44,18 @@ const LoginPage = ({ history }) => {
     [email, password, history, revalidate]
   );
 
-  const onClickTitle = useCallback(() => {
-    history.push("/");
-  }, [history]);
-
-  if (data && data.token) {
+  if (DATA && DATA.token) {
     history.push("/");
   }
 
-  if (data === undefined) {
+  if (DATA === undefined) {
     return <Loading>Loading...</Loading>;
   }
 
   return (
     <FormAndImage>
-      <Container id="container">
-        <Header onClick={onClickTitle}>2nd Hand</Header>
+      <Container>
+        <Header>Login</Header>
         <Form onSubmit={onSubmit}>
           <Label id="email-label">
             <span>이메일</span>
@@ -88,7 +84,7 @@ const LoginPage = ({ history }) => {
               <Error>이메일과 비밀번호 조합이 일치하지 않습니다.</Error>
             )}
           </Label>
-          <Button type="submit">Login</Button>
+          <Button type="submit">로그인</Button>
         </Form>
         <LinkContainer>
           아직 회원이 아니신가요?&nbsp;
