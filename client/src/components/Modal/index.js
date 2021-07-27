@@ -29,10 +29,10 @@ const Modal = ({ data, revalidate, history, onCloseModal }) => {
     e.stopPropagation();
   };
 
-  const onMyPage = () => {
+  const onMyPage = useCallback(() => {
     history.push("/myPage");
     onCloseModal();
-  };
+  }, [history, onCloseModal]);
 
   return (
     <CreateModal onClick={onCloseModal}>

@@ -27,7 +27,7 @@ export const ButtonContainer = styled.div`
 export const Upload = styled.div`
   margin-right: 35px;
   color: #ff8a3d;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 16px;
   margin-top: 0;
   border: 2px solid #ff8a3d;

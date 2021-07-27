@@ -12,12 +12,10 @@ const RightMenu = ({ history, data, revalidate }) => {
 
   const onClickProfile = useCallback(() => {
     setShowProfileModal(true);
-    console.log("open");
   }, []);
 
   const onCloseModal = useCallback(() => {
     setShowProfileModal(false);
-    console.log("close");
   }, []);
 
   if (data.isAuth === false) {

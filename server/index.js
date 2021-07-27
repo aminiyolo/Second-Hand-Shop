@@ -28,7 +28,9 @@ mongoose
   .catch((err) => console.log("not working"));
 
 app.use("/api/users", require("./routes/user"));
-app.use("/api/user", require("./routes/authMail"));
+app.use("/api/auth", require("./routes/authMail"));
+app.use("/api/product", require("./routes/product"));
+app.use("/upload", express.static("../upload"));
 
 if (process.env.NODE_ENV === "production") {
   // Set static folder

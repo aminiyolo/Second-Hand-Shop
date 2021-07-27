@@ -53,7 +53,7 @@ router.get("/logout", auth, (req, res) => {
   });
 });
 
-router.get("/user", auth, (req, res) => {
+router.get("/data", auth, (req, res) => {
   return res.json(req.user);
 });
 
