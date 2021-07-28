@@ -9,17 +9,13 @@ import {
   LinkContainer,
   Button,
   Header,
-  Img,
   Loading,
   FormAndImage,
   Container,
 } from "./style";
 import useInput from "../../hooks/useInput";
-// import useSWR from "swr";
-// import fetcher from "../../hooks/fetcher";
 
 const LoginPage = ({ history, DATA, revalidate }) => {
-  // const { data, revalidate } = useSWR("/api/users/user", fetcher);
   const [email, onChangeEmail] = useInput("");
   const [password, onChangePassword] = useInput("");
   const [logInError, setLogInError] = useState(false);
@@ -91,9 +87,6 @@ const LoginPage = ({ history, DATA, revalidate }) => {
           <Link to="/signup">회원가입 하러가기</Link>
         </LinkContainer>
       </Container>
-      <div>
-        <Img />
-      </div>
     </FormAndImage>
   );
 };

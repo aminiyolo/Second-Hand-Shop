@@ -2,15 +2,13 @@ import React, { useCallback, useState } from "react";
 import {
   Success,
   Form,
-  Error,
   Label,
   Input,
   LinkContainer,
   Button,
-  Header,
   Loading,
 } from "../Login/style";
-import { AuthButton, Container } from "./style";
+import { AuthButton, Container, Background, Error, H2 } from "./style";
 import { Link, withRouter } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import axios from "axios";
@@ -23,7 +21,7 @@ const SignUpPage = ({ history }) => {
     return Math.random();
   }
 
-  const { data, revalidate } = useSWR("/api/users/user", fetcher);
+  const { data, revalidate } = useSWR("/api/users/data", fetcher);
   const [authNum, onChangeAuthNum] = useInput("");
   const [auth, setAuth] = useState(getNum());
   const [authCheck, setAuthCheck] = useState(false);
@@ -98,8 +96,7 @@ const SignUpPage = ({ history }) => {
           .catch((e) => {
             console.log(e.response);
             setSignUpError(e.response.data);
-          })
-          .finally(() => {});
+          });
       }
     },
     [email, nickname, password, mismatchError, authCheck, passwordCheck]
@@ -117,7 +114,7 @@ const SignUpPage = ({ history }) => {
         email,
       };
 
-      axios.post("/api/user/mail", data).then((response) => {
+      axios.post("/api/auth/mail", data).then((response) => {
         if (response.data.success) {
           revalidate();
           setSendMail(true);
@@ -140,10 +137,6 @@ const SignUpPage = ({ history }) => {
     [auth, authNum]
   );
 
-  const onClickTitle = useCallback(() => {
-    history.push("/");
-  }, [history]);
-
   if (data && data.token) {
     history.push("/");
   }
@@ -153,92 +146,96 @@ const SignUpPage = ({ history }) => {
   }
 
   return (
-    <Container>
-      <Header onClick={onClickTitle}>2nd Hand</Header>
-      <Form>
-        <Label id="email-label">
-          <span>이메일 주소</span>
-          <div>
-            <Input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={onChangeEmail}
-            />
-            {!sendMail && (
-              <AuthButton onClick={getAuthNum}>인증번호 받기</AuthButton>
+    <Background>
+      <Container>
+        <H2>Sign Up</H2>
+        <Form>
+          <Label id="email-label">
+            <span>이메일 주소</span>
+            <div>
+              <Input
+                type="email"
+                id="email"
+                name="email"
+                value={email}
+                onChange={onChangeEmail}
+              />
+              {!sendMail && (
+                <AuthButton onClick={getAuthNum}>인증번호 받기</AuthButton>
+              )}
+              {emailError && <Error>이메일을 입력해주세요</Error>}
+              {sendMail && <Success>인증번호를 전송했습니다.</Success>}
+            </div>
+          </Label>
+          <Label>
+            <span>인증번호</span>
+            <div>
+              <Input value={authNum} onChange={onChangeAuthNum} />
+              {!authCheck && (
+                <AuthButton onClick={onClickCheckAuthNum}>
+                  인증번호 확인
+                </AuthButton>
+              )}
+              {authCheck && <Success>인증이 되었습니다!</Success>}
+              {authCheck === false && <Error>인증이 필요합니다.</Error>}
+            </div>
+            <div></div>
+          </Label>
+          <Label id="nickname-label">
+            <span>닉네임</span>
+            <div>
+              <Input
+                type="text"
+                id="nickname"
+                name="nickname"
+                value={nickname}
+                onChange={onChangeNickname}
+              />
+            </div>
+          </Label>
+          <Label id="password-label">
+            <span>비밀번호</span>
+            <div>
+              <Input
+                type="password"
+                id="password"
+                name="password"
+                value={password}
+                onChange={onChangePassword}
+              />
+            </div>
+          </Label>
+          <Label id="password-check-label">
+            <span>비밀번호 확인</span>
+            <div>
+              <Input
+                type="password"
+                id="password-check"
+                name="password-check"
+                value={passwordCheck}
+                onChange={onChangePasswordCheck}
+              />
+            </div>
+            {mismatchError && <Error>비밀번호가 일치하지 않습니다.</Error>}
+            {!nickname && nickNameCheck && (
+              <Error>닉네임을 입력해주세요.</Error>
             )}
-            {emailError && <Error>이메일을 입력해주세요</Error>}
-            {sendMail && <Success>인증번호를 전송했습니다.</Success>}
-          </div>
-        </Label>
-        <Label>
-          <span>인증번호</span>
-          <div>
-            <Input value={authNum} onChange={onChangeAuthNum} />
-            {!authCheck && (
-              <AuthButton onClick={onClickCheckAuthNum}>
-                인증번호 확인
-              </AuthButton>
+            {!password && emptyPassword && (
+              <Error>비밀번호를 입력해주세요.</Error>
             )}
-            {authCheck && <Success>인증이 되었습니다!</Success>}
-            {authCheck === false && <Error>인증이 필요합니다.</Error>}
-          </div>
-          <div></div>
-        </Label>
-        <Label id="nickname-label">
-          <span>닉네임</span>
-          <div>
-            <Input
-              type="text"
-              id="nickname"
-              name="nickname"
-              value={nickname}
-              onChange={onChangeNickname}
-            />
-          </div>
-        </Label>
-        <Label id="password-label">
-          <span>비밀번호</span>
-          <div>
-            <Input
-              type="password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={onChangePassword}
-            />
-          </div>
-        </Label>
-        <Label id="password-check-label">
-          <span>비밀번호 확인</span>
-          <div>
-            <Input
-              type="password"
-              id="password-check"
-              name="password-check"
-              value={passwordCheck}
-              onChange={onChangePasswordCheck}
-            />
-          </div>
-          {mismatchError && <Error>비밀번호가 일치하지 않습니다.</Error>}
-          {!nickname && nickNameCheck && <Error>닉네임을 입력해주세요.</Error>}
-          {!password && emptyPassword && (
-            <Error>비밀번호를 입력해주세요.</Error>
-          )}
-          {signUpError && <Error>{signUpError}</Error>}
-          {signUpSuccess && (
-            <Success>회원가입되었습니다! 로그인해주세요.</Success>
-          )}
-        </Label>
-        <Button onClick={onSubmit}>회원가입</Button>
-      </Form>
-      <LinkContainer>
-        이미 회원이신가요?&nbsp;
-        <Link to="/login">로그인 하러가기</Link>
-      </LinkContainer>
-    </Container>
+            {signUpError && <Error>{signUpError}</Error>}
+            {signUpSuccess && (
+              <Success>회원가입되었습니다! 로그인해주세요.</Success>
+            )}
+          </Label>
+          <Button onClick={onSubmit}>회원가입</Button>
+        </Form>
+        <LinkContainer>
+          이미 회원이신가요?&nbsp;
+          <Link to="/login">로그인 하러가기</Link>
+        </LinkContainer>
+      </Container>
+    </Background>
   );
 };
 

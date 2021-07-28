@@ -9,19 +9,21 @@ import useSWR from "swr";
 import fetcher from "./hooks/fetcher";
 
 function App() {
-  const { data, revalidate } = useSWR("/api/users/user", fetcher);
+  const { data, revalidate } = useSWR("/api/users/data", fetcher);
   return (
     <BrowserRouter>
       <NavBar data={data} revalidate={revalidate} />
-      <Switch>
-        <Route exact path="/" component={LandingPage} />
-        <Route
-          path="/login"
-          render={() => <LoginPage DATA={data} revalidate={revalidate} />}
-        />
-        <Route exact path="/signUp" component={SignUpPage} />
-        <Route exact path="/upload" component={Upload} />
-      </Switch>
+      <div style={{ paddingTop: "20px" }}>
+        <Switch>
+          <Route exact path="/" component={LandingPage} />
+          <Route
+            path="/login"
+            render={() => <LoginPage DATA={data} revalidate={revalidate} />}
+          />
+          <Route exact path="/signUp" component={SignUpPage} />
+          <Route exact path="/upload" component={Upload} />
+        </Switch>
+      </div>
     </BrowserRouter>
   );
 }

@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import img from "./image/bg.jpg";
+import img from "./image/LoginBG.jpg";
 
 export const Header = styled.header`
   text-align: center;
   font-family: Slack-Larsseit, Helvetica Neue, Helvetica, Segoe UI, Tahoma,
     Arial, sans-serif;
   font-weight: 700;
-  color: #ff8a3d;
+  color: whitesmoke;
   font-size: 48px;
   line-height: 46px;
   letter-spacing: -0.75px;
@@ -16,7 +16,7 @@ export const Header = styled.header`
 `;
 
 export const Form = styled.form`
-  margin: 60px auto 0;
+  margin: 30px auto 0;
   width: 400px;
   max-width: 400px;
 `;
@@ -115,16 +115,6 @@ export const LinkContainer = styled.p`
   }
 `;
 
-export const Img = styled.img`
-  background-image: url(${img});
-  width: 700px;
-  height: 585px;
-  background-position: center;
-  background-color: white;
-  display: inline-block;
-  content: "";
-`;
-
 export const Loading = styled.div`
   display: flex;
   justify-content: center;
@@ -135,8 +125,13 @@ export const Loading = styled.div`
 `;
 
 export const FormAndImage = styled.div`
+  background-image: url(${img});
+  background-size: cover;
+  background-position: center;
+  height: 590px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
   margin: auto;
 `;
 
