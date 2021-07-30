@@ -7,6 +7,7 @@ export const Nav = styled.div`
   background-color: white;
   display: flex;
   box-shadow: 0 0 30px #f3f1f1;
+  z-index: 1000;
 `;
 
 export const Logo = styled.h1`

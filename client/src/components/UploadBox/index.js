@@ -62,6 +62,7 @@ const UploadBox = ({ getImages, clearImg, setClearImg }) => {
             </div>
           ))}
       </ImageContainer>
+      {images.length > 0 && <H3>사진을 클릭하시면 삭제됩니다.</H3>}
     </React.Fragment>
   );
 };

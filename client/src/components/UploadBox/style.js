@@ -22,8 +22,8 @@ export const ImageContainer = styled.div`
 export const Img = styled.img`
   min-width: 200px;
   width: 200px;
-  height: 140px;
-  margin-right: 7px;
+  height: 160px;
+  margin-right: 9px;
   border-radius: 3px;
 `;
 

@@ -42,4 +42,13 @@ router.post("/upload", (req, res) => {
   });
 });
 
+router.post("/data", (req, res) => {
+  Product.find()
+    .populate("seller")
+    .exec((err, products) => {
+      if (err) return res.status(400).send(err);
+      return res.status(200).send({ success: true, products });
+    });
+});
+
 module.exports = router;

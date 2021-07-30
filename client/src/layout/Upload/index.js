@@ -58,6 +58,7 @@ const Upload = () => {
 
   const onChangeCategory = (e) => {
     setCategories(e.target.value);
+    console.log(e.target.value);
   };
 
   const getImages = (images) => {
@@ -77,6 +78,10 @@ const Upload = () => {
     if (!images.length) {
       setImgError(true);
       return;
+    }
+
+    if (period <= 0) {
+      setPeriodError(true);
     }
 
     if (price <= 0) {
@@ -103,6 +108,7 @@ const Upload = () => {
         makeEmpty();
         alert("업로드 성공!");
       } else {
+        console.log(response.data.err);
         alert("업로드 실패!");
       }
     });
@@ -135,12 +141,14 @@ const Upload = () => {
                 <br />
                 <label>사용한 개월 수</label>
                 <Input type="number" value={period} onChange={onChangePeriod} />
-                {periodError && <Error>사용 개월 수를 입력해주세요</Error>}
+                {periodError && (
+                  <Error>사용 개월 수는 최소 1개월 입니다.</Error>
+                )}
                 <br />
                 <br />
                 <label>가격(원)</label>
                 <Input value={price} onChange={onChangePrice} type="number" />
-                {priceError && <Error>가격은 1 이상이어야 합니다.</Error>}
+                {priceError && <Error>가격은 최소 1원 입니다.</Error>}
               </Description>
               <br />
               <br />
@@ -148,7 +156,9 @@ const Upload = () => {
                 <label>카테고리</label>
                 <Select value={category} onChange={onChangeCategory}>
                   {Categories.map((Category, index) => (
-                    <option key={index}>{Category.value}</option>
+                    <option key={index} value={Category.key}>
+                      {Category.value}
+                    </option>
                   ))}
                 </Select>
               </SelectBox>
