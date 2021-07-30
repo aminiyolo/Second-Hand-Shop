@@ -4,6 +4,7 @@ import img from "../Login/image/LoginBG.jpg";
 export const LandingContainer = styled.div`
   margin: 30px auto 100px;
   padding-bottom: 40px;
+  background-color: whitesmoke;
 `;
 
 export const Background = styled.div`
@@ -12,14 +13,19 @@ export const Background = styled.div`
   background-position: center;
   width: 100%;
   height: 430px;
+  & > .sentence {
+    position: absolute;
+    top: 25%;
+    left: 21%;
+  }
 `;
 
 export const FilterBox = styled.div`
   width: 85%;
   margin: 25px auto;
   position: absolute;
-  top: 40%;
-  left: 7%;
+  top: 55%;
+  left: 30%;
 `;
 
 export const RenderBox = styled.div`

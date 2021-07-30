@@ -10,9 +10,9 @@ import {
 } from "./style";
 import { Col, Card, Row } from "antd";
 import CategoryFilter from "../../components/CategoryFilter";
-import PeriodFilter from "../../components/PeriodFilter";
 import SearchFilter from "../../components/SearchFilter";
 import dayjs from "dayjs";
+import { Categories } from "../Upload/data";
 
 const cardStyle = {
   color: "black",
@@ -22,13 +22,23 @@ const cardStyle = {
 const LandingPage = () => {
   const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    axios.post("/api/product/data").then((response) => {
+  const getData = (data) => {
+    axios.post("/api/product/data", data).then((response) => {
       if (response.data.success) {
         setProducts(response.data.products);
       }
     });
+  };
+
+  useEffect(() => {
+    let data = {};
+    getData(data);
   }, []);
+
+  const categoryFilter = (selected) => {
+    let data = { category: [...selected] };
+    getData(data);
+  };
 
   const uploadedProduct = products.map((product, index) => {
     return (
@@ -56,16 +66,20 @@ const LandingPage = () => {
   return (
     <LandingContainer>
       <Background alt="background">
+        <h1 className="sentence">
+          당신이 필요한 제품을 구매하시고 필요 없는 상품은 판매해보세요 !
+        </h1>
         <SearchFilter />
       </Background>
       <FilterBox>
         <Row gutter={[25, 25]}>
           <Col lg={12} xs={24}>
-            <CategoryFilter />
+            <CategoryFilter
+              Categories={Categories}
+              categoryFilter={(selected) => categoryFilter(selected)}
+            />
           </Col>
-          <Col lg={12} xs={24}>
-            <PeriodFilter />
-          </Col>
+          <Col lg={12} xs={24}></Col>
         </Row>
       </FilterBox>
       <RenderBox>

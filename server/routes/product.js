@@ -43,7 +43,15 @@ router.post("/upload", (req, res) => {
 });
 
 router.post("/data", (req, res) => {
-  Product.find()
+  let filter = {};
+
+  if (req.body.category && req.body.category.length > 0) {
+    filter = {
+      category: req.body.category,
+    };
+  }
+
+  Product.find(filter)
     .populate("seller")
     .exec((err, products) => {
       if (err) return res.status(400).send(err);
