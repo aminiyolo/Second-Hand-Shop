@@ -23,7 +23,7 @@ const CategoryFilter = ({ Categories, categoryFilter }) => {
   return (
     <div>
       <Collapse>
-        <Panel header="카테고리">
+        <Panel header="카테고리로 검색하기">
           {Categories &&
             Categories.map((category, index) => (
               <Checkbox

@@ -43,6 +43,7 @@ router.post("/upload", (req, res) => {
 });
 
 router.post("/data", (req, res) => {
+  let searchValue = req.body.searchValue;
   let filter = {};
 
   if (req.body.category && req.body.category.length > 0) {
@@ -51,12 +52,22 @@ router.post("/data", (req, res) => {
     };
   }
 
-  Product.find(filter)
-    .populate("seller")
-    .exec((err, products) => {
-      if (err) return res.status(400).send(err);
-      return res.status(200).send({ success: true, products });
-    });
+  if (!searchValue) {
+    Product.find(filter)
+      .populate("seller")
+      .exec((err, products) => {
+        if (err) return res.status(400).send(err);
+        return res.status(200).send({ success: true, products });
+      });
+  } else {
+    Product.find(filter)
+      .find({ $text: { $search: searchValue } })
+      .populate("seller")
+      .exec((err, products) => {
+        if (err) return res.status(400).send(err);
+        return res.status(200).send({ success: true, products });
+      });
+  }
 });
 
 module.exports = router;

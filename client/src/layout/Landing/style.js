@@ -16,7 +16,7 @@ export const Background = styled.div`
   & > .sentence {
     position: absolute;
     top: 25%;
-    left: 21%;
+    left: 19.5%;
   }
 `;
 
@@ -31,6 +31,9 @@ export const FilterBox = styled.div`
 export const RenderBox = styled.div`
   width: 85%;
   margin: 40px auto;
+  & .result {
+    text-align: center;
+  }
 `;
 
 export const ProductData = styled.div`
@@ -47,5 +50,28 @@ export const ProductData = styled.div`
 
   & > .date {
     font-size: 12px;
+  }
+`;
+
+export const cardStyle = {
+  color: "black",
+  paddingBottom: "50px",
+};
+
+export const GetAllButton = styled.div`
+  position: absolute;
+  top: 49%;
+  left: 46%;
+  border: 2px solid #ff8a3d;
+  background-color: #ff8a3d;
+  color: whitesmoke;
+  font-weight: 600;
+  padding: 4px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    background-color: white;
+    color: #ff8a3d;
+    border: 2px solid white;
   }
 `;
