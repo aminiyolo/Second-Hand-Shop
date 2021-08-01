@@ -5,6 +5,7 @@ import SignUpPage from "./layout/SignUp";
 import LandingPage from "./layout/Landing";
 import NavBar from "./components/Navbar";
 import Upload from "./layout/Upload";
+import ProductDetail from "./layout/ProductDetail";
 import useSWR from "swr";
 import fetcher from "./hooks/fetcher";
 
@@ -22,6 +23,11 @@ function App() {
           />
           <Route exact path="/signUp" component={SignUpPage} />
           <Route exact path="/upload" component={Upload} />
+          <Route
+            exact
+            path="/product/:id"
+            render={() => <ProductDetail DATA={data} />}
+          />
         </Switch>
       </div>
     </BrowserRouter>

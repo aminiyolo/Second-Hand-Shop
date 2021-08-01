@@ -57,4 +57,37 @@ router.get("/data", auth, (req, res) => {
   return res.json(req.user);
 });
 
+// router.post("/cart", auth, (req, res) => {
+//   User.findOne({_id: req.user._id})
+// })
+
+router.post("/addTo_cart", auth, (req, res) => {
+  User.findOneAndUpdate(
+    { _id: req.user._id },
+    { cart: { id: req.body.id } },
+    (err, userInfo) => {
+      if (err) return res.status(400).json({ success: false, err });
+      return res.status(200).json({ success: true });
+    }
+  );
+});
+
+router.post("/removeFrom_cart", auth, (req, res) => {
+  User.findOneAndUpdate(
+    { _id: req.user._id },
+    {
+      $pull: {
+        cart: {
+          id: req.body.id,
+        },
+      },
+    },
+    { new: true },
+    (err, userInfo) => {
+      if (err) return res.status(400).json({ success: false, err });
+      return res.status(200).json({ success: true });
+    }
+  );
+});
+
 module.exports = router;

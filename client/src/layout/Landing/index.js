@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Slider from "../../components/Slider";
+import ProductCard from "../../components/ProductCard";
 import {
   Background,
   LandingContainer,
@@ -53,6 +53,7 @@ const LandingPage = () => {
   };
 
   const searchFilter = (searchValue) => {
+    console.log(filter);
     let data = {
       filter,
       searchValue,
@@ -97,7 +98,7 @@ const LandingPage = () => {
                   style={cardStyle}
                   cover={
                     <a href={`product/${product._id}`}>
-                      <Slider product={product} />
+                      <ProductCard product={product} />
                     </a>
                   }
                 >

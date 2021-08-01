@@ -1,17 +1,12 @@
 import React from "react";
+import { Img } from "./style";
 
-const Slider = ({ product }) => {
+const ProductCard = ({ product }) => {
   return (
     <div>
       {product.images[0] && (
         <div>
-          <img
-            style={{
-              width: "100%",
-              margin: "auto",
-              height: "180px",
-              borderRadius: "5px",
-            }}
+          <Img
             src={`http://localhost:3050/${product.images[0]}`}
             alt={product.title}
           />
@@ -21,4 +16,4 @@ const Slider = ({ product }) => {
   );
 };
 
-export default Slider;
+export default ProductCard;

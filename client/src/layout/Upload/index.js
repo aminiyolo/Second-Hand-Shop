@@ -139,7 +139,7 @@ const Upload = () => {
                 {descriptionError && <Error>상세설명을 입력해주세요</Error>}
                 <br />
                 <br />
-                <label>사용한 개월 수</label>
+                <label>사용한 개월 수 (ex 3 또는 7) </label>
                 <Input type="number" value={period} onChange={onChangePeriod} />
                 {periodError && (
                   <Error>사용 개월 수는 최소 1개월 입니다.</Error>

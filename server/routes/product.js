@@ -52,22 +52,33 @@ router.post("/data", (req, res) => {
     };
   }
 
-  if (!searchValue) {
+  if (searchValue) {
     Product.find(filter)
+      .find({ $text: { $search: searchValue } })
       .populate("seller")
       .exec((err, products) => {
-        if (err) return res.status(400).send(err);
-        return res.status(200).send({ success: true, products });
+        if (err) return res.status(400).json(err);
+        return res.status(200).json({ success: true, products });
       });
   } else {
     Product.find(filter)
-      .find({ $text: { $search: searchValue } })
       .populate("seller")
       .exec((err, products) => {
         if (err) return res.status(400).send(err);
         return res.status(200).send({ success: true, products });
       });
   }
+});
+
+router.get("/product_by_id", (req, res) => {
+  let id = req.query.id;
+
+  Product.find({ _id: { $in: id } })
+    .populate("seller")
+    .exec((err, productInfo) => {
+      if (err) return res.status(400).json(err);
+      return res.status(200).json({ success: true, productInfo });
+    });
 });
 
 module.exports = router;

@@ -55,7 +55,7 @@ export const ProductData = styled.div`
 
 export const cardStyle = {
   color: "black",
-  paddingBottom: "50px",
+  paddingBottom: "65px",
 };
 
 export const GetAllButton = styled.div`
