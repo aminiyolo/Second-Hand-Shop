@@ -45,7 +45,7 @@ export const Upload = styled.div`
 export const Cart = styled.div`
   color: #ff8a3d;
   margin-right: 30px;
-  font-size: 32px;
+  font-size: 38px;
   line-height: 40px;
   cursor: pointer;
   transition: 250ms ease-out;

@@ -58,22 +58,34 @@ router.post("/data", (req, res) => {
       .populate("seller")
       .exec((err, products) => {
         if (err) return res.status(400).json(err);
-        return res.status(200).json({ success: true, products });
+        return res
+          .status(200)
+          .json({ success: true, products, length: products.length });
       });
   } else {
     Product.find(filter)
       .populate("seller")
       .exec((err, products) => {
         if (err) return res.status(400).send(err);
-        return res.status(200).send({ success: true, products });
+        return res
+          .status(200)
+          .send({ success: true, products, length: products.length });
       });
   }
 });
 
 router.get("/product_by_id", (req, res) => {
-  let id = req.query.id;
+  let ID = req.query.id;
+  let type = req.query.type;
 
-  Product.find({ _id: { $in: id } })
+  if (type === "array") {
+    let ids = req.query.id.split(",");
+    ID = ids.map((id) => {
+      return id;
+    });
+  }
+
+  Product.find({ _id: { $in: ID } })
     .populate("seller")
     .exec((err, productInfo) => {
       if (err) return res.status(400).json(err);

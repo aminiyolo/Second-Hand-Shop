@@ -57,14 +57,16 @@ router.get("/data", auth, (req, res) => {
   return res.json(req.user);
 });
 
-// router.post("/cart", auth, (req, res) => {
-//   User.findOne({_id: req.user._id})
-// })
-
 router.post("/addTo_cart", auth, (req, res) => {
   User.findOneAndUpdate(
     { _id: req.user._id },
-    { cart: { id: req.body.id } },
+    {
+      $push: {
+        cart: {
+          id: req.body.id,
+        },
+      },
+    },
     (err, userInfo) => {
       if (err) return res.status(400).json({ success: false, err });
       return res.status(200).json({ success: true });

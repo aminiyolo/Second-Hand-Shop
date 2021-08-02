@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { checkCategory } from "./categoryData";
 import dayjs from "dayjs";
 import axios from "axios";
-import { useParams } from "react-router";
+import { useParams, withRouter } from "react-router";
 import {
   addedStyle,
   normalStyle,
@@ -11,27 +11,29 @@ import {
   Description,
 } from "./style";
 
-const ProductInfo = ({ product, DATA }) => {
+const ProductInfo = ({ product, DATA, revalidate, history }) => {
   const { id } = useParams();
   const [category, setCategory] = useState("");
   const [inAcart, setInAcart] = useState(false);
 
-  useEffect(() => {
-    if (DATA) {
-      DATA.cart.forEach((data) => {
-        if (data.id === id) setInAcart(true);
-      });
-    }
-  }, [id, DATA]);
-
   const onClickCart = () => {
+    if (DATA && DATA.isAuth === false) {
+      let choice = window.confirm("로그인이 필요한 서비스 입니다.");
+      if (choice) {
+        history.push("/login");
+      }
+      return;
+    }
+
     let data = {
       id,
     };
+
     if (!inAcart) {
       axios.post("/api/users/addTo_cart", data).then((response) => {
         if (response.data.success) {
           setInAcart(true);
+          revalidate();
         } else {
           console.log(response.data);
         }
@@ -40,6 +42,7 @@ const ProductInfo = ({ product, DATA }) => {
       axios.post("/api/users/removeFrom_cart", data).then((response) => {
         if (response.data.success) {
           setInAcart(false);
+          revalidate();
         } else {
           console.log("removeErr");
         }
@@ -47,9 +50,24 @@ const ProductInfo = ({ product, DATA }) => {
     }
   };
 
+  const onClickChat = () => {
+    if (DATA && !DATA.isAuth) {
+      let choice = window.confirm("로그인이 필요한 서비스 입니다.");
+      if (choice) {
+        history.push("/login");
+      }
+      return;
+    }
+  };
+
   useEffect(() => {
     checkCategory(product, setCategory);
-  }, [product]);
+    if (DATA && DATA.token) {
+      DATA.cart.forEach((data) => {
+        if (data.id === id) setInAcart(true);
+      });
+    }
+  }, [product, DATA, id]);
 
   return (
     <div>
@@ -73,10 +91,10 @@ const ProductInfo = ({ product, DATA }) => {
         >
           {!inAcart ? "장바구니에 담기" : "장바구니에서 빼기"}
         </button>
-        <ChatBtn>판매자와 채팅</ChatBtn>
+        <ChatBtn onClick={onClickChat}>판매자와 채팅</ChatBtn>
       </BtnContainer>
     </div>
   );
 };
 
-export default ProductInfo;
+export default withRouter(ProductInfo);

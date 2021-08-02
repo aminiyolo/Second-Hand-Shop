@@ -114,10 +114,10 @@ const SignUpPage = ({ history }) => {
         email,
       };
 
+      setSendMail(true);
       axios.post("/api/auth/mail", data).then((response) => {
         if (response.data.success) {
           revalidate();
-          setSendMail(true);
           setAuth(response.data.authNum);
         }
       });

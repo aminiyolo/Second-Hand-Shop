@@ -5,7 +5,7 @@ import ProductInfo from "../../components/ProductInfo";
 import { Row, Col } from "antd";
 import axios from "axios";
 
-const ProductDetail = ({ DATA }) => {
+const ProductDetail = ({ DATA, revalidate }) => {
   const { id } = useParams();
   const [product, setProduct] = useState("");
 
@@ -32,7 +32,7 @@ const ProductDetail = ({ DATA }) => {
         </Col>
         <Col lg={12} sm={24}>
           {/* product description and function buttons */}
-          <ProductInfo product={product} DATA={DATA} />
+          <ProductInfo product={product} DATA={DATA} revalidate={revalidate} />
         </Col>
       </Row>
     </div>

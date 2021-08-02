@@ -3,13 +3,15 @@ import { Collapse, Checkbox } from "antd";
 
 const { Panel } = Collapse;
 
-const CategoryFilter = ({ Categories, categoryFilter }) => {
+const CategoryFilter = ({ Categories, categoryFilter, categoryCheck }) => {
   const [selected, setSelected] = useState([]);
 
   const onToggle = (key) => {
     // 선택된 것의 index number를 구한 뒤 인덱스 넘버가 이미 체크되어 있으면 삭제시키고 그렇지 않으면 추가해준다.
     const indexNum = selected.indexOf(key);
     const willBeUpdated = [...selected];
+
+    categoryCheck(key);
 
     if (indexNum === -1) {
       willBeUpdated.push(key);
