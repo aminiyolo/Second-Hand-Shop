@@ -93,4 +93,18 @@ router.get("/product_by_id", (req, res) => {
     });
 });
 
+router.post("/myProduct", (req, res) => {
+  Product.find({ seller: req.body.id }, (err, productInfo) => {
+    if (err) return res.status(400).send(err);
+    return res.status(200).json({ success: true, productInfo });
+  });
+});
+
+router.post("/remove_from_myPage", (req, res) => {
+  Product.findByIdAndDelete({ _id: req.body.id }, (err, result) => {
+    if (err) return res.status(400).send(err);
+    return res.status(200).json({ success: true });
+  });
+});
+
 module.exports = router;

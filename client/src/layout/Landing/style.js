@@ -60,7 +60,7 @@ export const cardStyle = {
 
 export const GetAllButton = styled.div`
   position: absolute;
-  top: 49%;
+  top: 47%;
   left: 46%;
   border: 2px solid #ff8a3d;
   background-color: #ff8a3d;

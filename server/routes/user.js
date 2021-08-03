@@ -92,4 +92,11 @@ router.post("/removeFrom_cart", auth, (req, res) => {
   );
 });
 
+router.post("/count_added_product", (req, res) => {
+  User.find({ cart: { id: req.body.id } }, (err, info) => {
+    if (err) return res.status(400).send(err);
+    return res.status(200).json({ length: info.length });
+  });
+});
+
 module.exports = router;

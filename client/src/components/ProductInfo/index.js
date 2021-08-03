@@ -9,12 +9,17 @@ import {
   ChatBtn,
   BtnContainer,
   Description,
+  HeartContainer,
 } from "./style";
+import { HeartOutlined } from "@ant-design/icons";
 
-const ProductInfo = ({ product, DATA, revalidate, history }) => {
+const ProductInfo = ({ product, DATA, revalidate, history, seller }) => {
   const { id } = useParams();
   const [category, setCategory] = useState("");
   const [inAcart, setInAcart] = useState(false);
+  const [count, setCount] = useState(0);
+
+  console.log(DATA);
 
   const onClickCart = () => {
     if (DATA && DATA.isAuth === false) {
@@ -23,6 +28,10 @@ const ProductInfo = ({ product, DATA, revalidate, history }) => {
         history.push("/login");
       }
       return;
+    }
+
+    if (seller === DATA.email) {
+      return alert("본인의 상품은 장바구니에 담을 수 없습니다.");
     }
 
     let data = {
@@ -35,7 +44,7 @@ const ProductInfo = ({ product, DATA, revalidate, history }) => {
           setInAcart(true);
           revalidate();
         } else {
-          console.log(response.data);
+          alert("장바구니 추가 실패!");
         }
       });
     } else {
@@ -44,19 +53,22 @@ const ProductInfo = ({ product, DATA, revalidate, history }) => {
           setInAcart(false);
           revalidate();
         } else {
-          console.log("removeErr");
+          alert("삭제 실패!");
         }
       });
     }
   };
 
   const onClickChat = () => {
-    if (DATA && !DATA.isAuth) {
+    if (DATA && DATA.isAuth === false) {
       let choice = window.confirm("로그인이 필요한 서비스 입니다.");
       if (choice) {
         history.push("/login");
       }
       return;
+    }
+    if (seller === DATA.email) {
+      return alert("판매자가 본인에 해당합니다.");
     }
   };
 
@@ -67,6 +79,14 @@ const ProductInfo = ({ product, DATA, revalidate, history }) => {
         if (data.id === id) setInAcart(true);
       });
     }
+
+    let data = {
+      id,
+    };
+
+    axios.post("/api/users/count_added_product", data).then((response) => {
+      setCount(response.data.length);
+    });
   }, [product, DATA, id]);
 
   return (
@@ -74,15 +94,19 @@ const ProductInfo = ({ product, DATA, revalidate, history }) => {
       <Description>
         <h1>{product.title}</h1>
         <div className="detail">
-          <div className="category">{category}</div>
-          <div>
-            / &nbsp;&nbsp; 업로드 날짜:
+          <span className="category">{category}</span>
+          <span>
+            / &nbsp;&nbsp; 업로드 날짜: &nbsp;
             {dayjs(product.createdAt).format("YYYY-MM-DD")}
-          </div>
+          </span>
         </div>
         <h3>{product.description}</h3>
         <div>사용기간: &nbsp;{product.period}개월</div>
         <div className="price">가격: &nbsp;{product.price}원</div>
+        <HeartContainer>
+          <HeartOutlined />
+          <span>{count}</span>
+        </HeartContainer>
       </Description>
       <BtnContainer>
         <button

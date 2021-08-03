@@ -58,7 +58,6 @@ const Upload = () => {
 
   const onChangeCategory = (e) => {
     setCategories(e.target.value);
-    console.log(e.target.value);
   };
 
   const getImages = (images) => {
@@ -77,19 +76,17 @@ const Upload = () => {
 
     if (!images.length) {
       setImgError(true);
-      return;
+    }
+
+    if (price <= 0) {
+      setPriceError(true);
     }
 
     if (period <= 0) {
       setPeriodError(true);
     }
 
-    if (price <= 0) {
-      setPriceError(true);
-      return;
-    }
-
-    if (!title || !description || !price || !period) {
+    if (!title || !description || !price || !period || !images.length) {
       return;
     }
 

@@ -18,15 +18,14 @@ import { Categories } from "../Upload/data";
 
 const LandingPage = () => {
   const [products, setProducts] = useState([]);
-  const [productsLength, setProductsLength] = useState(8);
   const [renderToggle, setRenderToggle] = useState(false);
   const [noneResult, setNoneResult] = useState(false);
   const [search, setSearch] = useState(false);
-  const [getLength, setGetLength] = useState(false);
+  const [getAll, setGetAll] = useState(false);
   const [filter, setFilter] = useState({
     category: [],
   });
-  const [items, setItems] = useState(8);
+  const [items, setItems] = useState(10);
   const [scrollOption, setScrollOption] = useState(false);
 
   const scrollOption_check = (value) => {
@@ -38,35 +37,24 @@ const LandingPage = () => {
   const getData = useCallback(
     (data) => {
       axios.post("/api/product/data", data).then((response) => {
-        let leng;
         if (response.data.success) {
           if (response.data.products.length > 0) {
-            setNoneResult(false);
-            if (productsLength <= 0) {
-              return;
-            }
-            if (productsLength < 4) {
-              setProducts(response.data.products);
-              console.log("all");
+            if (getAll) {
+              setProducts(response.data.products.splice(0, items));
             } else {
               setProducts(response.data.products.splice(0, items));
-              console.log("some");
-              leng = response.data.length;
             }
+            setNoneResult(false);
+            setGetAll(true);
           } else {
             setNoneResult(true);
           }
         } else {
           console.log(response.data.err);
         }
-        if (!getLength) {
-          setProductsLength(leng);
-          setGetLength(true);
-        }
-        console.log(productsLength);
       });
     },
-    [items, getLength, productsLength]
+    [items, getAll]
   );
 
   const infiniteScroll = useCallback(() => {
@@ -75,27 +63,17 @@ const LandingPage = () => {
     let clientHeight = document.body.clientHeight;
     let result = Math.round(scrollHeight - scrollTop - clientHeight);
     if (result === 0) {
-      console.log(productsLength);
-      if (productsLength < 0) {
-        return;
-      }
-      if (productsLength - 4 < 4) {
-        let newLeng = productsLength - 4;
-        setItems(items + newLeng);
-      } else {
-        let n = 4;
-        setItems(items + n);
-      }
+      let n = 4;
+      setItems((items) => items + n);
     }
-    setProductsLength(productsLength - 4);
-  }, [items]);
+  }, []);
 
   useEffect(() => {
     let data = {};
 
     if (scrollOption === false) {
       getData(data);
-      window.addEventListener("scroll", () => infiniteScroll());
+      window.addEventListener("scroll", infiniteScroll);
     }
   }, [renderToggle, items]);
 
@@ -124,9 +102,27 @@ const LandingPage = () => {
   return (
     <LandingContainer>
       <Background alt="background">
-        <h1 className="sentence">
+        <h1
+          style={{
+            paddingTop: "100px",
+            textAlign: "center",
+            fontSize: "1.7rem",
+          }}
+        >
           당신이 필요한 제품을 구매하시고 필요 없는 상품은 판매해보세요 !
         </h1>
+        <FilterBox>
+          <Row gutter={[25, 25]}>
+            <Col lg={12} xs={12}>
+              <CategoryFilter
+                Categories={Categories}
+                categoryFilter={(selected) => categoryFilter(selected)}
+                categoryCheck={scrollOption_check}
+              />
+            </Col>
+            <Col lg={12} xs={24}></Col>
+          </Row>
+        </FilterBox>
         <SearchFilter
           searchFilter={searchFilter}
           checkSearch={scrollOption_check}
@@ -135,18 +131,6 @@ const LandingPage = () => {
           <GetAllButton onClick={getAllProduct}>전체 목록 보기</GetAllButton>
         )}
       </Background>
-      <FilterBox>
-        <Row gutter={[25, 25]}>
-          <Col lg={12} xs={24}>
-            <CategoryFilter
-              Categories={Categories}
-              categoryFilter={(selected) => categoryFilter(selected)}
-              categoryCheck={scrollOption_check}
-            />
-          </Col>
-          <Col lg={12} xs={24}></Col>
-        </Row>
-      </FilterBox>
       <RenderBox>
         {noneResult && (
           <h1 className="result">찾으시려는 상품이 존재하지 않습니다.</h1>

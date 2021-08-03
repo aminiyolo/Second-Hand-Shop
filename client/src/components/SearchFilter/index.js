@@ -19,14 +19,16 @@ const SearchFilter = ({ searchFilter, checkSearch }) => {
 
   return (
     <React.Fragment>
-      <form onSubmit={onSubmit}>
-        <Search
-          placeholder="찾고자 하는 제품을 검색헤보세요."
-          value={value}
-          onChange={onSearch}
-          style={SearchStyle}
-        />
-      </form>
+      <div>
+        <form style={{ textAlign: "center" }} onSubmit={onSubmit}>
+          <Search
+            placeholder="찾고자 하는 제품을 검색해보세요."
+            value={value}
+            onChange={onSearch}
+            style={SearchStyle}
+          />
+        </form>
+      </div>
     </React.Fragment>
   );
 };

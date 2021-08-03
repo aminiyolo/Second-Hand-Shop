@@ -18,7 +18,6 @@ export const H2 = styled.h2`
 `;
 
 export const Container = styled.div`
-  background-color: whitesmoke;
   border-radius: 7px;
   width: 35%;
   margin-bottom: 0px;

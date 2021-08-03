@@ -7,7 +7,9 @@ const RightMenu = ({ history, data, revalidate }) => {
   const [showProfileModal, setShowProfileModal] = useState(false);
 
   const onClickLogin = useCallback(() => {
-    history.push("/login");
+    setTimeout(() => {
+      history.push("/login");
+    }, 300);
   }, [history]);
 
   const onClickProfile = useCallback(() => {

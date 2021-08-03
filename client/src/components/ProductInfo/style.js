@@ -43,15 +43,24 @@ export const Description = styled.div`
   text-align: center;
   background-color: whitesmoke;
   padding: 50px 10px;
+  position: relative;
   & .detail {
-    display: flex;
-    margin-left: 180px;
-    margin-bottom: 15px;
+    margin: auto;
+    text-align: center;
     & .category {
       margin-right: 20px;
     }
   }
   & .price {
     margin-top: 10px;
+  }
+`;
+
+export const HeartContainer = styled.div`
+  position: absolute;
+  right: 20px;
+  font-size: 20px;
+  & > span {
+    margin-left: 5px;
   }
 `;

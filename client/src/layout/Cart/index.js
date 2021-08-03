@@ -1,6 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { CartContainer, Empty, ProductContainer, Img } from "./style";
+import { Redirect } from "react-router";
 
 const Cart = ({ DATA, revalidate }) => {
   const [products, setProducts] = useState([]);
@@ -24,58 +26,61 @@ const Cart = ({ DATA, revalidate }) => {
     }
   }, [DATA]);
 
-  const onClick = (id) => {
-    let data = {
-      id,
-    };
-    axios.post("/api/users/removeFrom_cart", data).then((response) => {
-      if (response.data.success) {
+  const onClick = useCallback(
+    (id) => {
+      let data = {
+        id,
+      };
+      axios.post("/api/users/removeFrom_cart", data).then((response) => {
         revalidate();
-      } else {
-        console.log("removeErr");
-      }
-    });
-  };
+        if (response.data.success) {
+          alert("삭제 되었습니다.");
+        } else {
+          console.log("removeErr");
+        }
+      });
+    },
+    [revalidate]
+  );
+
+  if (DATA === undefined) {
+    return <div>Loading...</div>;
+  }
+
+  if (DATA && DATA.isAuth === false) {
+    <Redirect to="/login" />;
+  }
 
   return (
-    <div style={{ width: "85%", margin: "80px auto" }}>
-      <h1>장바구니</h1>
-      <hr />
+    <CartContainer>
+      <h1 className="title">장바구니</h1>
+      <div className="info">
+        <p># 상품의 이미지를 클릭하시면 상품페이지로 이동됩니다.</p>
+        <p className="caution">
+          # 판매자가 상품판매 완료 혹은 상품삭제 시 장바구니에서 자동
+          삭제됩니다.
+        </p>
+      </div>
       <br />
       <div>
+        {DATA && DATA.token && DATA.cart.length === 0 && (
+          <Empty>
+            <h1>텅 ~</h1>
+          </Empty>
+        )}
         {products !== [] &&
           products.map((product, index) => (
             <React.Fragment key={index}>
-              <div
-                style={{
-                  width: "95%",
-                  margin: "auto",
-                  display: "flex",
-                  marginBottom: "20px",
-                  border: "4px solid #FF8A3D",
-                  borderRadius: "5px",
-                  padding: "10px",
-                  position: "relative",
-                }}
-              >
+              <ProductContainer>
                 <div>
                   <a href={`/product/${product._id}`}>
-                    <img
-                      style={{ width: "200px", height: "100%" }}
+                    <Img
                       src={`http://localhost:3050/${product.images[0]}`}
                       alt={product.title}
                     />
                   </a>
                 </div>
-                <div
-                  style={{
-                    marginLeft: "20px",
-                    display: "flex",
-                    flexDirection: "column",
-                    color: "black",
-                  }}
-                >
-                  {/* title */}
+                <div className="detail">
                   <h2>{product.title}</h2>
                   <p>
                     업로드 날짜: {dayjs(product.createdAt).format("YYYY-MM-DD")}
@@ -84,28 +89,16 @@ const Cart = ({ DATA, revalidate }) => {
                   <div>{product.price}원</div>
                 </div>
                 <button
+                  className="removeBtn"
                   onClick={() => onClick(product._id)}
-                  style={{
-                    position: "absolute",
-                    right: "30px",
-                    bottom: "20px",
-                    fontSize: "15px",
-                    border: "1px solid #FF8A3D",
-                    outline: "none",
-                    backgroundColor: "#FF8A3D",
-                    color: "white",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                    padding: "8px 12px",
-                  }}
                 >
                   삭제
                 </button>
-              </div>
+              </ProductContainer>
             </React.Fragment>
           ))}
       </div>
-    </div>
+    </CartContainer>
   );
 };
 
