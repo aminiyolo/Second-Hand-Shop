@@ -99,4 +99,18 @@ router.post("/count_added_product", (req, res) => {
   });
 });
 
+router.get("/find", async (req, res) => {
+  const userId = req.query.userId;
+  const userName = req.query.username;
+
+  try {
+    const user = userId
+      ? await User.findById(userId)
+      : User.findOne({ nickname: userName });
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;

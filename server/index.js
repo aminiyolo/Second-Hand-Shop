@@ -5,6 +5,31 @@ const config = require("./config/key");
 const cookieParser = require("cookie-parser");
 // const cors = require("cors");
 const path = require("path");
+const http = require("http");
+const SocketIO = require("socket.io");
+
+const server = http.createServer(app);
+const io = SocketIO(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["*"],
+    credentials: true,
+  },
+});
+
+io.on("connection", (socket) => {
+  socket.onAny((event) => {
+    console.log(`Socket Event: ${event}`);
+  });
+  socket.on("msg", (msg, done) => {
+    console.log(socket.id);
+    socket.join(msg);
+    console.log(socket.rooms);
+    done();
+    socket.to(msg).emit("Welcome");
+  });
+});
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -31,6 +56,8 @@ app.use("/api/users", require("./routes/user"));
 app.use("/api/auth", require("./routes/authMail"));
 app.use("/api/product", require("./routes/product"));
 app.use("/upload", express.static("../upload"));
+app.use("/api/conversations", require("./routes/conversation"));
+app.use("/api/messages", require("./routes/message"));
 
 if (process.env.NODE_ENV === "production") {
   // Set static folder
@@ -45,6 +72,6 @@ if (process.env.NODE_ENV === "production") {
 
 const port = process.env.PORT || 3050;
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server Listening on ${port}`);
 });
