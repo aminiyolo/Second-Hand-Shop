@@ -19,8 +19,6 @@ const ProductInfo = ({ product, DATA, revalidate, history, seller }) => {
   const [inAcart, setInAcart] = useState(false);
   const [count, setCount] = useState(0);
 
-  console.log(DATA);
-
   const onClickCart = () => {
     if (DATA && DATA.isAuth === false) {
       let choice = window.confirm("로그인이 필요한 서비스 입니다.");
@@ -70,6 +68,16 @@ const ProductInfo = ({ product, DATA, revalidate, history, seller }) => {
     if (seller === DATA.email) {
       return alert("판매자가 본인에 해당합니다.");
     }
+
+    let data = {
+      senderId: product.seller._id,
+      receiverId: DATA._id,
+      title: product.title,
+    };
+
+    axios.post("/api/conversations", data).then((response) => {
+      console.log("made");
+    });
   };
 
   useEffect(() => {
