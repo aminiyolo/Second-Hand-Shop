@@ -18,16 +18,27 @@ const io = SocketIO(server, {
   },
 });
 
+let users = [];
+
+const addUser = (userId, socketId) => {
+  !users.some((user) => user.userId === userId) &&
+    users.push({ userId, socketId });
+};
+
+const removeUser = (socketId) => {
+  users = user.filter((user) => user.socketId !== socketId);
+};
+
 io.on("connection", (socket) => {
-  socket.onAny((event) => {
-    console.log(`Socket Event: ${event}`);
+  console.log("socket is connected");
+  // take userId and socketId from user
+  socket.on("addUser", (userId) => {
+    addUser(userId, socket.id);
   });
-  socket.on("msg", (msg, done) => {
-    console.log(socket.id);
-    socket.join(msg);
-    console.log(socket.rooms);
-    done();
-    socket.to(msg).emit("Welcome");
+
+  socket.on("disconnect", () => {
+    console.log("disconnected");
+    removeUser(socket.id);
   });
 });
 

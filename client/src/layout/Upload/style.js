@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 export const UploadContainer = styled.div`
   width: 70%;
-  margin: 100px auto;
+  margin: 0px auto;
+  padding-top: 100px;
   padding-bottom: 40px;
   & > .flex {
     display: flex;

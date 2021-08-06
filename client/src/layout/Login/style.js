@@ -128,11 +128,11 @@ export const FormAndImage = styled.div`
   background-image: url(${img});
   background-size: cover;
   background-position: center;
-  height: 590px;
+  height: 620px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: auto;
+  margin: 0 auto;
 `;
 
 export const Container = styled.div`

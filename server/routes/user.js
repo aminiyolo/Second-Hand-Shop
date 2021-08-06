@@ -101,7 +101,7 @@ router.post("/count_added_product", (req, res) => {
 
 router.get("/find", async (req, res) => {
   const userId = req.query.userId;
-  const userName = req.query.username;
+  const userName = req.query.userName;
 
   try {
     const user = userId

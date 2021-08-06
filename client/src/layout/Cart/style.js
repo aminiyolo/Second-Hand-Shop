@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 export const CartContainer = styled.div`
   width: 85%;
-  margin: 80px auto;
+  margin: 0px auto;
+  padding-top: 100px;
   padding-bottom: 10px;
   & > .title {
     font-size: 32px;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { checkCategory } from "./categoryData";
 import dayjs from "dayjs";
 import axios from "axios";
-import { useParams, withRouter } from "react-router";
+import { Redirect, useParams, withRouter } from "react-router";
 import {
   addedStyle,
   normalStyle,
@@ -75,9 +75,27 @@ const ProductInfo = ({ product, DATA, revalidate, history, seller }) => {
       title: product.title,
     };
 
-    axios.post("/api/conversations", data).then((response) => {
-      console.log("made");
-    });
+    const makeConversation = async () => {
+      try {
+        await axios.post("/api/conversations", data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    const checkConversation = async () => {
+      try {
+        const res = await axios.post("/api/conversations/check", data);
+        if (res.data[0].members) {
+          history.push("/chat");
+        } else {
+          makeConversation();
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    checkConversation();
   };
 
   useEffect(() => {

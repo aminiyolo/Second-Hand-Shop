@@ -2,7 +2,7 @@ import styled from "styled-components";
 import img from "../Login/image/LoginBG.jpg";
 
 export const LandingContainer = styled.div`
-  margin: 30px auto 100px;
+  margin: 0px auto 100px;
   padding-bottom: 40px;
   background-color: whitesmoke;
 `;
@@ -24,7 +24,7 @@ export const FilterBox = styled.div`
   width: 85%;
   margin: 25px auto;
   position: absolute;
-  top: 55%;
+  top: 45%;
   left: 30%;
 `;
 
@@ -60,7 +60,7 @@ export const cardStyle = {
 
 export const GetAllButton = styled.div`
   position: absolute;
-  top: 47%;
+  top: 40%;
   left: 46%;
   border: 2px solid #ff8a3d;
   background-color: #ff8a3d;

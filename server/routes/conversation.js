@@ -2,6 +2,18 @@ const express = require("express");
 const router = express.Router();
 const Conversation = require("../models/conversation");
 
+// check if thers is a conversation or not
+router.post("/check", async (req, res) => {
+  try {
+    const existedConversation = await Conversation.find({
+      members: { $in: [req.body.senderId, req.body.receiverId] },
+    });
+    res.status(200).json(existedConversation);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 // new conversation
 
 router.post("/", async (req, res) => {

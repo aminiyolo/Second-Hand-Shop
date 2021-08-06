@@ -17,29 +17,29 @@ function App() {
   return (
     <BrowserRouter>
       <NavBar data={data} revalidate={revalidate} />
-      <div style={{ paddingTop: "20px" }}>
-        <Switch>
-          <Route exact path="/" component={LandingPage} />
-          <Route
-            path="/login"
-            render={() => <LoginPage DATA={data} revalidate={revalidate} />}
-          />
-          <Route exact path="/signUp" component={SignUpPage} />
-          <Route exact path="/upload" component={Upload} />
-          <Route exact path="/chat" render={() => <Chat DATA={data} />} />
-          <Route exact path="/myPage" render={() => <MyPage DATA={data} />} />
-          <Route
-            exact
-            path="/cart"
-            render={() => <Cart DATA={data} revalidate={revalidate} />}
-          />
-          <Route
-            exact
-            path="/product/:id"
-            render={() => <ProductDetail DATA={data} revalidate={revalidate} />}
-          />
-        </Switch>
-      </div>
+      {/* <div style={{ paddingTop: "20px", overflowY: "hidden" }}> */}
+      <Switch>
+        <Route exact path="/" component={LandingPage} />
+        <Route
+          path="/login"
+          render={() => <LoginPage DATA={data} revalidate={revalidate} />}
+        />
+        <Route exact path="/signUp" component={SignUpPage} />
+        <Route exact path="/upload" component={Upload} />
+        <Route exact path="/chat" render={() => <Chat DATA={data} />} />
+        <Route exact path="/myPage" render={() => <MyPage DATA={data} />} />
+        <Route
+          exact
+          path="/cart"
+          render={() => <Cart DATA={data} revalidate={revalidate} />}
+        />
+        <Route
+          exact
+          path="/product/:id"
+          render={() => <ProductDetail DATA={data} revalidate={revalidate} />}
+        />
+      </Switch>
+      {/* </div> */}
     </BrowserRouter>
   );
 }
