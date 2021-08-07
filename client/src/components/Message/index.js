@@ -1,11 +1,10 @@
 import React from "react";
 import dayjs from "dayjs";
+import "./style.css";
 
 const Message = ({ message, owner }) => {
-  console.log(owner);
-
   return (
-    <div style={{ marginBottom: "30px", height: "70px" }}>
+    <div className={owner ? "sender" : "message"}>
       <div>
         <p>{message.text}</p>
       </div>

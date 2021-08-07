@@ -8,6 +8,9 @@ const ConversationSchema = new mongoose.Schema(
     title: {
       type: String,
     },
+    productId: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

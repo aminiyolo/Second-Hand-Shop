@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import Conversation from "../Conversation";
-import Message from "../Message";
+import Conversation from "../../components/Conversation";
+import Message from "../../components/Message";
 import socketIOClient from "socket.io-client";
+import "./style.css";
 
 const Messenger = ({ user }) => {
   const [conversations, setConversations] = useState([]);
@@ -93,19 +94,9 @@ const Messenger = ({ user }) => {
   }, [messages]);
 
   return (
-    <div style={{ display: "flex" }}>
-      <div
-        style={{
-          borderRight: "solid",
-          borderColor: "lightgray",
-          flexDirection: "column",
-          width: "20%",
-          height: "100vh",
-        }}
-      >
-        <div
-          style={{ textAlign: "center", margin: "100px auto", width: "100%" }}
-        >
+    <div className="messenger_Wrapper">
+      <div className="messenger_list">
+        <div className="conversation">
           {conversations.map((conversation, index) => (
             <div key={index} onClick={() => setCurrentChat(conversation)}>
               <Conversation conversation={conversation} currentUser={user} />
@@ -113,21 +104,8 @@ const Messenger = ({ user }) => {
           ))}
         </div>
       </div>
-      <div
-        style={{
-          margin: "auto",
-          marginTop: "70px",
-          width: "70%",
-        }}
-      >
-        <div
-          style={{
-            margin: "30px auto 20px",
-            textAlign: "center",
-            height: "350px",
-            overflowY: "auto",
-          }}
-        >
+      <div className="message_wrapper">
+        <div className="message_workspace">
           {currentChat ? (
             <div>
               {messages?.map((message, index) => (
@@ -143,7 +121,7 @@ const Messenger = ({ user }) => {
             <div>Open a conversation to start a chat</div>
           )}
         </div>
-        <div style={{ textAlign: "center", marginTop: "50px" }}>
+        <div className="textarea">
           <textarea
             value={newMessages}
             onChange={(e) => setNewMessages(e.target.value)}

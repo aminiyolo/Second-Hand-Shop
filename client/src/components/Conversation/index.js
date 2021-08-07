@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "./style.css";
 
 const Conversation = ({ conversation, currentUser }) => {
   const [user, setUser] = useState(null);
@@ -21,21 +22,10 @@ const Conversation = ({ conversation, currentUser }) => {
   }, [conversation, currentUser]);
 
   return (
-    <div
-      style={{
-        border: "1px solid black",
-        width: "90%",
-        display: "flex",
-        height: "60px",
-      }}
-    >
+    <div className="profile">
       {user && (
         <div>
-          <img
-            style={{ width: "30px", height: "30px" }}
-            src={user.image}
-            alt="profile"
-          />
+          <img className="img" src={user.image} alt="profile" />
         </div>
       )}
       {user && <span>{user.nickname}</span>}

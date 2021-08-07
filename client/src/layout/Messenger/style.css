@@ -1,0 +1,35 @@
+.messenger_Wrapper {
+  display: flex;
+}
+
+.messenger_list {
+  border-right: solid;
+  border-color: lightgray;
+  flex-direction: column;
+  width: 20%;
+  height: 100vh;
+}
+
+.conversation {
+  text-align: center;
+  margin: 100px auto;
+  width: 100%;
+}
+
+.message_wrapper {
+  margin: auto;
+  margin-top: 70px;
+  width: 70%;
+}
+
+.message_workspace {
+  margin: 30px auto 20px;
+  text-align: center;
+  height: 350px;
+  overflow-y: auto;
+}
+
+.textarea {
+  text-align: center;
+  margin-top: 50px;
+}

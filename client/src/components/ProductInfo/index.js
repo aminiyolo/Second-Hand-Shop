@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { checkCategory } from "./categoryData";
 import dayjs from "dayjs";
 import axios from "axios";
-import { Redirect, useParams, withRouter } from "react-router";
+import { useParams, withRouter } from "react-router";
 import {
   addedStyle,
   normalStyle,
@@ -65,6 +65,7 @@ const ProductInfo = ({ product, DATA, revalidate, history, seller }) => {
       }
       return;
     }
+
     if (seller === DATA.email) {
       return alert("판매자가 본인에 해당합니다.");
     }
@@ -73,11 +74,13 @@ const ProductInfo = ({ product, DATA, revalidate, history, seller }) => {
       senderId: product.seller._id,
       receiverId: DATA._id,
       title: product.title,
+      productId: product._id,
     };
 
     const makeConversation = async () => {
       try {
         await axios.post("/api/conversations", data);
+        history.push("/chat");
       } catch (err) {
         console.log(err);
       }
@@ -86,7 +89,8 @@ const ProductInfo = ({ product, DATA, revalidate, history, seller }) => {
     const checkConversation = async () => {
       try {
         const res = await axios.post("/api/conversations/check", data);
-        if (res.data[0].members) {
+
+        if (res.data.length > 0) {
           history.push("/chat");
         } else {
           makeConversation();

@@ -1,0 +1,11 @@
+.profile {
+  border: 1px solid black;
+  width: 90%;
+  display: flex;
+  height: 60px;
+}
+
+.img {
+  width: 30px;
+  height: 30px;
+}

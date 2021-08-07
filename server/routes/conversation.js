@@ -6,7 +6,7 @@ const Conversation = require("../models/conversation");
 router.post("/check", async (req, res) => {
   try {
     const existedConversation = await Conversation.find({
-      members: { $in: [req.body.senderId, req.body.receiverId] },
+      members: { $all: [req.body.senderId, req.body.receiverId] },
     });
     res.status(200).json(existedConversation);
   } catch (err) {
@@ -20,6 +20,7 @@ router.post("/", async (req, res) => {
   const newConversation = new Conversation({
     members: [req.body.senderId, req.body.receiverId],
     title: req.body.title,
+    productId: req.body.productId,
   });
 
   try {

@@ -10,10 +10,11 @@ import Cart from "./layout/Cart";
 import useSWR from "swr";
 import fetcher from "./hooks/fetcher";
 import MyPage from "./layout/MyPage";
-import Chat from "./layout/Chat";
+import Messenger from "./layout/Messenger";
 
 function App() {
   const { data, revalidate } = useSWR("/api/users/data", fetcher);
+  console.log(data);
   return (
     <BrowserRouter>
       <NavBar data={data} revalidate={revalidate} />
@@ -26,7 +27,7 @@ function App() {
         />
         <Route exact path="/signUp" component={SignUpPage} />
         <Route exact path="/upload" component={Upload} />
-        <Route exact path="/chat" render={() => <Chat DATA={data} />} />
+        <Route exact path="/chat" render={() => <Messenger user={data} />} />
         <Route exact path="/myPage" render={() => <MyPage DATA={data} />} />
         <Route
           exact

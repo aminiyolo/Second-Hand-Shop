@@ -1,0 +1,11 @@
+.message {
+  text-align: right;
+  margin-bottom: 30px;
+  height: 70px;
+}
+
+.sender {
+  text-align: left;
+  margin-bottom: 30px;
+  height: 70px;
+}
