@@ -93,18 +93,29 @@ router.get("/product_by_id", (req, res) => {
     });
 });
 
-router.post("/myProduct", (req, res) => {
-  Product.find({ seller: req.body.id }, (err, productInfo) => {
-    if (err) return res.status(400).send(err);
-    return res.status(200).json({ success: true, productInfo });
-  });
+router.post("/myProduct", async (req, res) => {
+  try {
+    const productInfo = await Product.find({ seller: req.body.id });
+    res.status(200).json(productInfo);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
-router.post("/remove_from_myPage", (req, res) => {
-  Product.findByIdAndDelete({ _id: req.body.id }, (err, result) => {
-    if (err) return res.status(400).send(err);
-    return res.status(200).json({ success: true });
-  });
+// router.post("/myProduct", (req, res) => {
+//   Product.find({ seller: req.body.id }, (err, productInfo) => {
+//     if (err) return res.status(400).send(err);
+//     return res.status(200).json({ success: true, productInfo });
+//   });
+// });
+
+router.post("/remove_from_myPage", async (req, res) => {
+  try {
+    await Product.findByIdAndDelete({ _id: req.body.id });
+    res.status(200).json({ success: true });
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;

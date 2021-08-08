@@ -14,7 +14,6 @@ import Messenger from "./layout/Messenger";
 
 function App() {
   const { data, revalidate } = useSWR("/api/users/data", fetcher);
-  console.log(data);
   return (
     <BrowserRouter>
       <NavBar data={data} revalidate={revalidate} />

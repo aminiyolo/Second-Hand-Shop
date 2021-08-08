@@ -11,7 +11,7 @@ const SocketIO = require("socket.io");
 const server = http.createServer(app);
 const io = SocketIO(server, {
   cors: {
-    origin: "*",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
     allowedHeaders: ["*"],
     credentials: true,
@@ -40,7 +40,7 @@ io.on("connection", (socket) => {
   // take userId and socketId from user
   socket.on("addUser", (userId) => {
     addUser(userId, socket.id);
-    io.emit("getUsers", users);
+    io.emit("getUser", users);
   });
 
   // send and get message
@@ -56,6 +56,7 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("disconnected");
     removeUser(socket.id);
+    io.emit("getUsers", users);
   });
 });
 

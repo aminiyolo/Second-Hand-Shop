@@ -18,9 +18,11 @@ export const Menu = styled.div`
   width: 200px;
   height: 250px;
   & > .profile {
-    padding: 20px 0;
+    padding: 20px 45px;
+    margin-left: 10px;
     margin-top: 5px;
     font-size: 16px;
+    border: none;
   }
   & > p {
     font-size: 12px;

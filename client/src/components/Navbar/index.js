@@ -17,11 +17,15 @@ const Navbar = ({ data, revalidate, history }) => {
     history.push("/cart");
   };
 
+  const onClick = () => {
+    history.push("/");
+  };
+
   if (data && data.token) {
     return (
       <Nav>
         <Logo>
-          <a href="/">2nd Hand</a>
+          <span onClick={onClick}>2nd Hand</span>
         </Logo>
         <ButtonContainer>
           <Cart onClick={onCart}>

@@ -46,57 +46,64 @@ router.post("/login", (req, res) => {
   });
 });
 
-router.get("/logout", auth, (req, res) => {
-  User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, user) => {
-    if (err) return res.json({ success: false, err });
-    return res.status(200).json({ success: true });
-  });
+router.get("/logout", auth, async (req, res) => {
+  try {
+    await User.findOneAndUpdate({ _id: req.user._id }, { token: "" });
+    res.status(200).json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success });
+  }
 });
 
 router.get("/data", auth, (req, res) => {
   return res.json(req.user);
 });
 
-router.post("/addTo_cart", auth, (req, res) => {
-  User.findOneAndUpdate(
-    { _id: req.user._id },
-    {
-      $push: {
-        cart: {
-          id: req.body.id,
+router.post("/addTo_cart", auth, async (req, res) => {
+  try {
+    await User.findOneAndUpdate(
+      { _id: req.user._id },
+      {
+        $push: {
+          cart: {
+            id: req.body.id,
+          },
         },
-      },
-    },
-    (err, userInfo) => {
-      if (err) return res.status(400).json({ success: false, err });
-      return res.status(200).json({ success: true });
-    }
-  );
+      }
+    );
+    res.status(200).json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false });
+  }
 });
 
-router.post("/removeFrom_cart", auth, (req, res) => {
-  User.findOneAndUpdate(
-    { _id: req.user._id },
-    {
-      $pull: {
-        cart: {
-          id: req.body.id,
+router.post("/removeFrom_cart", auth, async (req, res) => {
+  try {
+    await User.findOneAndUpdate(
+      { _id: req.user._id },
+      {
+        $pull: {
+          cart: {
+            id: req.body.id,
+          },
         },
-      },
-    },
-    { new: true },
-    (err, userInfo) => {
-      if (err) return res.status(400).json({ success: false, err });
-      return res.status(200).json({ success: true });
-    }
-  );
+      }
+    );
+    res.status(200).json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false });
+  }
 });
 
-router.post("/count_added_product", (req, res) => {
-  User.find({ cart: { id: req.body.id } }, (err, info) => {
-    if (err) return res.status(400).send(err);
-    return res.status(200).json({ length: info.length });
-  });
+router.post("/count_added_product", async (req, res) => {
+  const id = req.body.id;
+  try {
+    const info = await User.find({ cart: { id } });
+    res.status(200).json({ length: info.length });
+  } catch (err) {
+    res.status(500).json(err);
+    console.log(err);
+  }
 });
 
 router.get("/find", async (req, res) => {

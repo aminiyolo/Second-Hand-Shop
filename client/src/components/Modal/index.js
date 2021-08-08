@@ -41,10 +41,10 @@ const Modal = ({ data, revalidate, history, onCloseModal }) => {
       <MeunContainer>
         <Menu onClick={stopPropagation}>
           <CloseBtn onClick={onCloseModal}>&times;</CloseBtn>
-          <div className="profile">
+          <span className="profile">
             {data.nickname}
             <Img src={data.image} />
-          </div>
+          </span>
           <p>{data.email}</p>
           <Category>
             <div onClick={onMyPage} className="myPage">

@@ -23,15 +23,20 @@ const MyPage = ({ DATA }) => {
   };
 
   useEffect(() => {
-    if (DATA && DATA._id) {
+    if (DATA?._id) {
       let data = {
         id: DATA._id,
       };
-      axios.post("/api/product/myProduct", data).then((response) => {
-        if (response.data.success) {
-          setProducts(response.data.productInfo);
+
+      const getMyProduct = async () => {
+        try {
+          const res = await axios.post("/api/product/myProduct", data);
+          setProducts(res.data);
+        } catch (err) {
+          console.log(err);
         }
-      });
+      };
+      getMyProduct();
     }
   }, [DATA, deleteToggle]);
   return (
