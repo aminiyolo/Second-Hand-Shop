@@ -7,6 +7,7 @@ router.post("/check", async (req, res) => {
   try {
     const existedConversation = await Conversation.find({
       members: { $all: [req.body.senderId, req.body.receiverId] },
+      productId: req.body.productId,
     });
     res.status(200).json(existedConversation);
   } catch (err) {

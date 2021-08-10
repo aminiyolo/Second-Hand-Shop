@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import { withRouter } from "react-router";
 import Conversation from "../../components/Conversation";
 import Message from "../../components/Message";
 import { io } from "socket.io-client";
 import "./style.css";
 
-const Messenger = ({ user }) => {
+const Messenger = ({ user, history }) => {
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -13,22 +14,7 @@ const Messenger = ({ user }) => {
   const [receivedMessage, setReceivedMessage] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const socket = useRef();
-  // const [socket, setSocket] = useState(null);
   const scrollRef = useRef();
-
-  // useEffect(() => {
-  //   setSocket(io("ws://localhost:3050"));
-  // }, []);
-
-  // useEffect(() => {
-  //   socket?.on("getMessage", (data) => {
-  //     setReceivedMessage({
-  //       sender: data.senderId,
-  //       text: data.text,
-  //       createdAt: Date.now(),
-  //     });
-  //   });
-  // }, [socket]);
 
   useEffect(() => {
     socket.current = io("ws://localhost:3050");
@@ -46,13 +32,6 @@ const Messenger = ({ user }) => {
       currentChat?.members.includes(receivedMessage.sender) &&
       setMessages((prev) => [...prev, receivedMessage]);
   }, [receivedMessage, currentChat]);
-
-  // useEffect(() => {
-  //   socket?.emit("addUser", user?._id);
-  //   socket?.on("getUser", (users) => {
-  //     setOnlineUsers(users);
-  //   });
-  // }, [socket, user]);
 
   useEffect(() => {
     socket.current.emit("addUser", user?._id);
@@ -88,6 +67,10 @@ const Messenger = ({ user }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!newMessages.trim()) {
+      return;
+    }
+
     const message = {
       sender: user._id,
       text: newMessages,
@@ -111,14 +94,6 @@ const Messenger = ({ user }) => {
       online = true;
     }
 
-    // if (online) {
-    //   socket?.emit("sendMessage", {
-    //     senderId: user._id,
-    //     receiverId,
-    //     text: newMessages,
-    //   });
-    // }
-
     if (online) {
       socket.current.emit("sendMessage", {
         senderId: user._id,
@@ -140,18 +115,31 @@ const Messenger = ({ user }) => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  if (user?.isAuth === false) {
+    history.push("/");
+  }
+
   return (
     <div className="messenger_Wrapper">
       <div className="messenger_list">
-        <div className="conversation">
+        <div className="conversation_Wrapper">
           {conversations.map((conversation, index) => (
-            <div key={index} onClick={() => setCurrentChat(conversation)}>
+            <div
+              className="conversation"
+              key={index}
+              onClick={() => setCurrentChat(conversation)}
+            >
               <Conversation conversation={conversation} currentUser={user} />
             </div>
           ))}
         </div>
       </div>
       <div className="message_wrapper">
+        <div className="message">
+          {currentChat && (
+            <Conversation conversation={currentChat} currentUser={user} />
+          )}
+        </div>
         <div className="message_workspace">
           {currentChat ? (
             <div>
@@ -160,26 +148,34 @@ const Messenger = ({ user }) => {
                   <Message
                     message={message}
                     owner={message.sender === user?._id}
+                    currentUser={user}
                   />
                 </div>
               ))}
             </div>
           ) : (
-            <div>Open a conversation to start a chat</div>
+            <div className="info">
+              메세지를 보낼 상대방을 좌측에서 선택해주세요.
+            </div>
           )}
         </div>
-        <div className="textarea">
-          <textarea
-            value={newMessages}
-            onChange={(e) => setNewMessages(e.target.value)}
-          />
-          <div>
-            <button onClick={handleSubmit}>Submit</button>
+        {currentChat && (
+          <div className="textareaWrapper">
+            <form className="form" onSubmit={handleSubmit}>
+              <input
+                className="textarea"
+                value={newMessages}
+                onChange={(e) => setNewMessages(e.target.value)}
+              />
+              <div className="submit">
+                <button onClick={handleSubmit}>Submit</button>
+              </div>
+            </form>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default Messenger;
+export default withRouter(Messenger);

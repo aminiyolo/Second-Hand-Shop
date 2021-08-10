@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import useSWR from "swr";
+import { withRouter } from "react-router";
 import fetcher from "../../hooks/fetcher";
 import useInput from "../../hooks/useInput";
 import UploadBox from "../../components/UploadBox";
@@ -17,7 +18,7 @@ import {
 } from "./style";
 import { Error } from "../Login/style";
 
-const Upload = () => {
+const Upload = ({ history }) => {
   const { data: DATA } = useSWR("/api/users/data", fetcher);
   const [category, setCategories] = useState(1);
   const [title, onChangeTitle, setTitle] = useInput("");
@@ -111,6 +112,10 @@ const Upload = () => {
     });
   };
 
+  if (DATA?.isAuth === false) {
+    history.push("/");
+  }
+
   return (
     <React.Fragment>
       <UploadContainer>
@@ -171,4 +176,4 @@ const Upload = () => {
   );
 };
 
-export default Upload;
+export default withRouter(Upload);

@@ -2,15 +2,15 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { CartContainer, Empty, ProductContainer, Img } from "./style";
-import { Redirect } from "react-router";
+import { withRouter } from "react-router-dom";
 
-const Cart = ({ DATA, revalidate }) => {
+const Cart = ({ DATA, revalidate, history }) => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     let container = [];
 
-    if (DATA && DATA.cart.length > 0) {
+    if (DATA?.cart?.length > 0) {
       DATA.cart.forEach((data) => {
         container.push(data.id);
       });
@@ -31,24 +31,30 @@ const Cart = ({ DATA, revalidate }) => {
       let data = {
         id,
       };
-      axios.post("/api/users/removeFrom_cart", data).then((response) => {
-        revalidate();
-        if (response.data.success) {
+
+      const removeItem = async () => {
+        try {
+          await axios.post("/api/users/removeFrom_cart", data);
+          revalidate();
           alert("삭제 되었습니다.");
-        } else {
-          console.log("removeErr");
+        } catch (err) {
+          console.log(err);
         }
-      });
+      };
+
+      removeItem();
     },
     [revalidate]
   );
 
   if (DATA === undefined) {
-    return <div>Loading...</div>;
+    return <div style={{ fontSize: "16px" }}>Loading...</div>;
   }
 
-  if (DATA && DATA.isAuth === false) {
-    <Redirect to="/login" />;
+  console.log(DATA);
+
+  if (DATA?.isAuth === false) {
+    history.push("/");
   }
 
   return (
@@ -102,4 +108,4 @@ const Cart = ({ DATA, revalidate }) => {
   );
 };
 
-export default Cart;
+export default withRouter(Cart);

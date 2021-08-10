@@ -6,7 +6,7 @@ const Conversation = ({ conversation, currentUser }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const counterpart = conversation.members.find(
+    const counterpart = conversation?.members?.find(
       (member) => member !== currentUser._id
     );
 
@@ -28,7 +28,10 @@ const Conversation = ({ conversation, currentUser }) => {
           <img className="img" src={user.image} alt="profile" />
         </div>
       )}
-      {user && <span>{user.nickname}</span>}
+      <div className="detail">
+        {user && <span className="nickname">{user.nickname}</span>}
+        <span className="title">{conversation?.title}</span>
+      </div>
     </div>
   );
 };

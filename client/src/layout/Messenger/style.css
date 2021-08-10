@@ -10,26 +10,71 @@
   height: 100vh;
 }
 
-.conversation {
+.conversation_Wrapper {
+  border: none;
   text-align: center;
   margin: 100px auto;
   width: 100%;
 }
 
+.conversation {
+  margin-left: 5px;
+}
+
 .message_wrapper {
   margin: auto;
-  margin-top: 70px;
+  padding-top: 20px;
+  margin-top: 20px;
   width: 70%;
 }
 
-.message_workspace {
-  margin: 30px auto 20px;
+.profile {
+  margin-left: 5px;
+}
+
+.info {
   text-align: center;
-  height: 350px;
+  padding-top: 140px;
+  font-size: 20px;
+}
+
+.message_workspace {
+  text-align: center;
+  height: 380px;
   overflow-y: auto;
+  background-color: aliceblue;
+  border-radius: 5px;
+}
+
+.message {
+  margin-bottom: 0;
+  margin-top: 45px;
+}
+
+.textareaWrapper {
+  display: flex;
+  text-align: center;
+  margin-top: 0px;
+  width: 100%;
+}
+
+.form {
+  width: 100%;
+  display: flex;
 }
 
 .textarea {
-  text-align: center;
-  margin-top: 50px;
+  width: 100%;
+  outline: none;
+}
+
+.submit {
+  padding: 10px;
+}
+
+button {
+  padding: 10px 5px;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid lightgray;
 }

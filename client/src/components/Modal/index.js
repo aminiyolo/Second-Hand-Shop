@@ -36,6 +36,11 @@ const Modal = ({ data, revalidate, history, onCloseModal }) => {
     onCloseModal();
   }, [history, onCloseModal]);
 
+  const onMessenger = useCallback(() => {
+    history.push("/chat");
+    onCloseModal();
+  }, [history, onCloseModal]);
+
   return (
     <CreateModal onClick={onCloseModal}>
       <MeunContainer>
@@ -49,6 +54,16 @@ const Modal = ({ data, revalidate, history, onCloseModal }) => {
           <Category>
             <div onClick={onMyPage} className="myPage">
               My Page
+            </div>
+            <div
+              onClick={onMessenger}
+              style={{
+                cursor: "pointer",
+                padding: "18px",
+                borderBottom: "2px solid #ff8a7d",
+              }}
+            >
+              Messenger
             </div>
             <div onClick={onLogout} className="logout">
               Logout

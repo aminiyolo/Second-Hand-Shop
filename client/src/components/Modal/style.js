@@ -16,7 +16,7 @@ export const Menu = styled.div`
   right: 28px;
   background-color: #ff6a4d;
   width: 200px;
-  height: 250px;
+  height: 280px;
   & > .profile {
     padding: 20px 45px;
     margin-left: 10px;
@@ -49,15 +49,16 @@ export const Category = styled.div`
   & > .myPage {
     border-top: 2px solid #ff8a7d;
     border-bottom: 2px solid #ff8a7d;
-    padding: 26px 0;
+    padding: 18px 0;
     cursor: pointer;
     &:hover {
       background-color: #ff8a4d;
     }
   }
   & > .logout {
-    padding-top: 16px;
-    padding-bottom: 26px;
+    padding-top: 4px;
+    line-height: 52px;
+    padding-bottom: 7px;
     cursor: pointer;
     &:hover {
       background-color: #ff8a4d;

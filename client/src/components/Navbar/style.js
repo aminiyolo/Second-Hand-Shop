@@ -14,8 +14,9 @@ export const Logo = styled.h1`
   font-weight: 800;
   font-size: 32px;
   margin-bottom: 0;
-  & > a {
+  & > span {
     color: #ff8a3d;
+    cursor: pointer;
   }
 `;
 
