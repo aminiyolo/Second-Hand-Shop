@@ -40,7 +40,7 @@ const LoginPage = ({ history, DATA, revalidate }) => {
     [email, password, history, revalidate]
   );
 
-  if (DATA && DATA.token) {
+  if (DATA?.token) {
     history.push("/");
   }
 

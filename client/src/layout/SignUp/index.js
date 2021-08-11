@@ -137,7 +137,7 @@ const SignUpPage = ({ history }) => {
     [auth, authNum]
   );
 
-  if (data && data.token) {
+  if (data?.token) {
     history.push("/");
   }
 

@@ -41,6 +41,8 @@ export const ProductData = styled.div`
   & > .title {
     margin-bottom: 5px;
     font-size: 16px;
+    color: black;
+    font-weight: 550;
   }
 
   & > .price {

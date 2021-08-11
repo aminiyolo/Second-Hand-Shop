@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Input } from "antd";
 import { SearchStyle } from "./style";
 
@@ -7,15 +7,19 @@ const { Search } = Input;
 const SearchFilter = ({ searchFilter, checkSearch }) => {
   const [value, setValue] = useState("");
 
-  const onSearch = (e) => {
+  const onSearch = useCallback((e) => {
     setValue(e.target.value);
-  };
+  }, []);
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    searchFilter(value);
-    checkSearch(value);
-  };
+  const onSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      searchFilter(value);
+      checkSearch(value);
+      setValue("");
+    },
+    [value, searchFilter, checkSearch]
+  );
 
   return (
     <React.Fragment>

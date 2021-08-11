@@ -7,6 +7,7 @@ import { withRouter } from "react-router";
 const MyPage = ({ DATA, history }) => {
   const [products, setProducts] = useState([]);
   const [deleteToggle, setDeleteToggle] = useState(false);
+  const [receiveData, setReceiveData] = useState(false);
 
   const onRemove = (id) => {
     let data = {
@@ -35,6 +36,8 @@ const MyPage = ({ DATA, history }) => {
       const getMyProduct = async () => {
         try {
           const res = await axios.post("/api/product/myProduct", data);
+          if (res.data.length < 0) setReceiveData(true);
+          else setReceiveData(true);
           setProducts(res.data);
         } catch (err) {
           console.log(err);
@@ -57,7 +60,7 @@ const MyPage = ({ DATA, history }) => {
       </p>
       <br />
       <div>
-        {products.length === 0 && (
+        {products.length === 0 && receiveData !== false && (
           <Empty>
             <h1>텅 ~</h1>
           </Empty>

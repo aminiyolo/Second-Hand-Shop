@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { checkCategory } from "./categoryData";
 import dayjs from "dayjs";
 import axios from "axios";
@@ -19,7 +19,7 @@ const ProductInfo = ({ product, DATA, revalidate, history, seller }) => {
   const [inAcart, setInAcart] = useState(false);
   const [count, setCount] = useState(0);
 
-  const onClickCart = () => {
+  const onClickCart = useCallback(() => {
     if (DATA && DATA.isAuth === false) {
       let choice = window.confirm("로그인이 필요한 서비스 입니다.");
       if (choice) {
@@ -55,7 +55,7 @@ const ProductInfo = ({ product, DATA, revalidate, history, seller }) => {
         }
       });
     }
-  };
+  }, [DATA, history, id, seller, inAcart, revalidate]);
 
   const onClickChat = () => {
     if (DATA && DATA.isAuth === false) {

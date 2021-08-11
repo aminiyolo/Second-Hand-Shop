@@ -51,8 +51,6 @@ const Cart = ({ DATA, revalidate, history }) => {
     return <div style={{ fontSize: "16px" }}>Loading...</div>;
   }
 
-  console.log(DATA);
-
   if (DATA?.isAuth === false) {
     history.push("/");
   }
@@ -69,11 +67,12 @@ const Cart = ({ DATA, revalidate, history }) => {
       </div>
       <br />
       <div>
-        {DATA && DATA.token && DATA.cart.length === 0 && (
-          <Empty>
-            <h1>텅 ~</h1>
-          </Empty>
-        )}
+        {DATA?.cart?.length === 0 ||
+          (products.length === 0 && (
+            <Empty>
+              <h1>텅 ~</h1>
+            </Empty>
+          ))}
         {products !== [] &&
           products.map((product, index) => (
             <React.Fragment key={index}>

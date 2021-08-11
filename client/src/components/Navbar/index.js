@@ -40,7 +40,7 @@ const Navbar = ({ data, revalidate, history }) => {
     return (
       <Nav>
         <Logo>
-          <a href="/">2nd Hand</a>
+          <span onClick={onClick}>2nd Hand</span>
         </Logo>
         <ButtonContainer>
           <RightMenu data={data} revalidate={revalidate} />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import axios from "axios";
 import Dropzone from "react-dropzone";
 import { UploadOutlined } from "@ant-design/icons";
@@ -25,13 +25,16 @@ const UploadBox = ({ getImages, clearImg, setClearImg }) => {
     });
   };
 
-  const onRemove = (image) => {
-    const indexNum = images.indexOf(image);
-    let willBeUpdated = [...images];
-    willBeUpdated.splice(indexNum, 1);
-    setImages(willBeUpdated);
-    getImages(willBeUpdated);
-  };
+  const onRemove = useCallback(
+    (image) => {
+      const indexNum = images.indexOf(image);
+      let willBeUpdated = [...images];
+      willBeUpdated.splice(indexNum, 1);
+      setImages(willBeUpdated);
+      getImages(willBeUpdated);
+    },
+    [images]
+  );
 
   if (clearImg) {
     setTimeout(() => {

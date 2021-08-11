@@ -28,11 +28,11 @@ const LandingPage = () => {
   const [items, setItems] = useState(10);
   const [scrollOption, setScrollOption] = useState(false);
 
-  const scrollOption_check = (value) => {
+  const scrollOption_check = useCallback((value) => {
     if (value) {
       setScrollOption(true);
     }
-  };
+  }, []);
 
   const getData = useCallback(
     (data) => {
@@ -40,9 +40,10 @@ const LandingPage = () => {
         if (response.data.success) {
           if (response.data.products.length > 0) {
             if (getAll) {
-              setProducts(response.data.products.splice(0, items));
+              // 가장 최근의 업로드 된 것을 가장 위에 표시하기 위해 reverse() 함수사용
+              setProducts(response.data.products.reverse().splice(0, items));
             } else {
-              setProducts(response.data.products.splice(0, items));
+              setProducts(response.data.products.reverse().splice(0, items));
             }
             setNoneResult(false);
             setGetAll(true);
@@ -77,27 +78,33 @@ const LandingPage = () => {
     }
   }, [renderToggle, items]);
 
-  const categoryFilter = (selected) => {
-    let willBeUpdated = { ...filter };
-    willBeUpdated["category"] = selected;
-    let data = willBeUpdated;
-    getData(data);
-    setFilter(willBeUpdated);
-  };
+  const categoryFilter = useCallback(
+    (selected) => {
+      let willBeUpdated = { ...filter };
+      willBeUpdated["category"] = selected;
+      let data = willBeUpdated;
+      getData(data);
+      setFilter(willBeUpdated);
+    },
+    [filter, getData]
+  );
 
-  const searchFilter = (searchValue) => {
-    setSearch(true);
-    let data = {
-      filter,
-      searchValue,
-    };
-    getData(data);
-  };
+  const searchFilter = useCallback(
+    (searchValue) => {
+      setSearch(true);
+      let data = {
+        filter,
+        searchValue,
+      };
+      getData(data);
+    },
+    [filter, getData]
+  );
 
-  const getAllProduct = () => {
+  const getAllProduct = useCallback(() => {
     setRenderToggle((prev) => !prev);
     setScrollOption(false);
-  };
+  }, []);
 
   return (
     <LandingContainer>
@@ -137,8 +144,7 @@ const LandingPage = () => {
         )}
         <Row gutter={[24, 24]}>
           {!noneResult &&
-            products &&
-            products.map((product, index) => (
+            products?.map((product, index) => (
               <Col lg={6} md={8} xs={24} key={index}>
                 <Card
                   style={cardStyle}

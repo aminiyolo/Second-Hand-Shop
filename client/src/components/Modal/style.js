@@ -55,6 +55,15 @@ export const Category = styled.div`
       background-color: #ff8a4d;
     }
   }
+  & > .messenger {
+    cursor: pointer;
+    padding: 18px;
+    border-bottom: 2px solid #ff8a7d;
+    &:hover {
+      background-color: #ff8a4d;
+    }
+  }
+
   & > .logout {
     padding-top: 4px;
     line-height: 52px;

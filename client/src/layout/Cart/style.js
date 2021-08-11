@@ -13,6 +13,7 @@ export const CartContainer = styled.div`
     justify-content: space-around;
     font-weight: 600;
     font-size: 15px;
+    padding-top: 0;
 
     & > .caution {
       display: flex;

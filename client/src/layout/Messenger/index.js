@@ -44,7 +44,8 @@ const Messenger = ({ user, history }) => {
     const getConversation = async () => {
       try {
         const res = await axios.get(`/api/conversations/${user?._id}`);
-        setConversations(res.data);
+        // 가장 최근의 생성된 대화방을 가장 위에 나타내기 위하여 reverse() 사용.
+        setConversations(res.data.reverse());
       } catch (err) {
         console.log(err);
       }
@@ -155,7 +156,9 @@ const Messenger = ({ user, history }) => {
             </div>
           ) : (
             <div className="info">
-              메세지를 보낼 상대방을 좌측에서 선택해주세요.
+              {conversations.length > 0
+                ? "메세지를 보낼 상대방을 좌측에서 선택해주세요."
+                : "생성된 대화방이 존재하지 않습니다."}
             </div>
           )}
         </div>

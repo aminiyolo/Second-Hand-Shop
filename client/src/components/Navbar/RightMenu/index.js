@@ -26,7 +26,7 @@ const RightMenu = ({ history, data, revalidate }) => {
         <Button onClick={onClickLogin}>로그인</Button>
       </Menu>
     );
-  } else if (data && data.token) {
+  } else if (data?.token) {
     return (
       <React.Fragment>
         <Button onClick={onClickProfile}>

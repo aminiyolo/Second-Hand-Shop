@@ -25,5 +25,6 @@
 
 .title {
   font-size: 11px;
+  text-align: left;
   color: lightslategrey;
 }
