@@ -3,20 +3,35 @@ const router = express.Router();
 const { User } = require("../models/user");
 const { auth } = require("../middleware/auth");
 
-router.post("/register", (req, res) => {
-  User.findOne({ email: req.body.email }, (err, data) => {
-    if (data) {
-      return res.json({ success: false, msg: " Already Exist User" });
-    }
-  });
-  const user = new User(req.body);
-  user.save((err, doc) => {
-    if (err) {
-      return res.json({ success: false, err });
-    }
-    return res.status(200).json({ success: true });
-  });
-});
+router.post("/register", async (req, res) => {
+  try {
+    const email = await User.findOne({ email: req.body.email });
+    if(email) return res.status(200).json({ success: false, msg: "이미 가입된 이메일입니다."});
+    
+    const ID = await User.findOne({ ID: req.body.ID });
+    if(ID) return res.status(200).json({ success: false, msg: "이미 존재하는 아이디입니다."});
+
+    const user = new User(req.body);
+    
+    const saved = await user.save();
+    if(saved) return res.status(200).json({success: true});
+  } catch (err) {
+    return res.status(500).json({ success: false });
+  }
+};
+//   User.findOne({ email: req.body.email }, (err, data) => {
+//     if (data) {
+//       return res.json({ success: false, msg: "이미 가입된 이메일입니다." });
+//     }
+//   });
+//   const user = new User(req.body);
+//   user.save((err, doc) => {
+//     if (err) {
+//       return res.json({ success: false, err });
+//     }
+//     return res.status(200).json({ success: true });
+//   });
+// });
 
 router.post("/login", (req, res) => {
   // Look for a requested ID in a database

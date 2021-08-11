@@ -13,6 +13,9 @@ const userSchema = mongoose.Schema({
     trim: true,
     unique: true,
   },
+  ID: {
+    type: String,
+  },
   nickname: {
     type: String,
   },

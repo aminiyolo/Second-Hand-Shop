@@ -29,9 +29,13 @@ const SignUpPage = ({ history }) => {
   const [emailError, setEmailError] = useState(false);
   const [nickNameCheck, setNickNameCheck] = useState(false);
   const [emptyPassword, setEmptyPassword] = useState(false);
+  const [emptyID, setEmptyID] = useState(false);
+  const [shortID, setShortID] = useState(false);
 
   const [email, onChangeEmail] = useInput("");
+  const [validatedEmail, setValidatedEmail] = useState("");
   const [nickname, onChangeNickname] = useInput("");
+  const [ID, onChangeID] = useInput("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [mismatchError, setMismatchError] = useState(false);
@@ -68,18 +72,20 @@ const SignUpPage = ({ history }) => {
       e.preventDefault();
       ValidationCheck(nickname, setNickNameCheck);
       ValidationCheck(password, setEmptyPassword);
+      ValidationCheck(ID, setEmptyID);
 
-      if (!passwordCheck.trim() || !authCheck) {
-        return;
-      }
+      if (ID.length < 6) setShortID(true);
+      else setShortID(false);
+
+      if (!passwordCheck.trim() || !authCheck) return;
 
       if (!mismatchError) {
-        console.log("서버 회원 가입하기");
         setSignUpSuccess(false);
         setSignUpError("");
 
         let data = {
-          email,
+          email: validatedEmail,
+          ID,
           nickname,
           password,
           image: `http://gravatar.com/avatar/${dayjs(
@@ -99,22 +105,25 @@ const SignUpPage = ({ history }) => {
           });
       }
     },
-    [email, nickname, password, mismatchError, authCheck, passwordCheck]
+    [email, nickname, password, mismatchError, authCheck, passwordCheck, ID]
   );
 
   const getAuthNum = useCallback(
     (e) => {
       e.preventDefault();
+
       if (!email.trim()) {
         setEmailError(true);
         return;
       }
       setEmailError(false);
+
       let data = {
         email,
       };
 
       setSendMail(true);
+      setValidatedEmail(email);
       axios.post("/api/auth/mail", data).then((response) => {
         if (response.data.success) {
           revalidate();
@@ -182,6 +191,18 @@ const SignUpPage = ({ history }) => {
             <div></div>
           </Label>
           <Label id="nickname-label">
+            <span>아이디</span>
+            <div>
+              <Input
+                type="text"
+                id="ID"
+                name="ID"
+                value={ID}
+                onChange={onChangeID}
+              />
+            </div>
+          </Label>
+          <Label id="nickname-label">
             <span>닉네임</span>
             <div>
               <Input
@@ -217,6 +238,8 @@ const SignUpPage = ({ history }) => {
               />
             </div>
             {mismatchError && <Error>비밀번호가 일치하지 않습니다.</Error>}
+            {emptyID && <Error>아이디를 입력해주세요.</Error>}
+            {shortID && <Error>아이디는 여섯글자 이상이어야 합니다.</Error>}
             {!nickname && nickNameCheck && (
               <Error>닉네임을 입력해주세요.</Error>
             )}
