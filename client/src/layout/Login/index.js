@@ -16,28 +16,36 @@ import {
 import useInput from "../../hooks/useInput";
 
 const LoginPage = ({ history, DATA, revalidate }) => {
-  const [email, onChangeEmail] = useInput("");
+  const [ID, onChangeID] = useInput("");
   const [password, onChangePassword] = useInput("");
   const [logInError, setLogInError] = useState(false);
 
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
+
       let data = {
-        email,
+        ID,
         password,
       };
 
-      axios.post("/api/users/login", data).then((response) => {
-        if (response.data.success) {
-          revalidate();
-          history.push("/");
-        } else {
-          setLogInError(true);
+      const login = async () => {
+        try {
+          const res = await axios.post("/api/users/login", data);
+          if (res.data.success) {
+            revalidate();
+            history.push("/");
+          } else {
+            setLogInError(true);
+          }
+        } catch (err) {
+          console.log(err);
         }
-      });
+      };
+
+      login();
     },
-    [email, password, history, revalidate]
+    [ID, password, history, revalidate]
   );
 
   if (DATA?.token) {
@@ -54,14 +62,14 @@ const LoginPage = ({ history, DATA, revalidate }) => {
         <Header>Login</Header>
         <Form onSubmit={onSubmit}>
           <Label id="email-label">
-            <span>이메일</span>
+            <span>아이디</span>
             <div>
               <Input
-                type="email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={onChangeEmail}
+                type="text"
+                id="ID"
+                name="ID"
+                value={ID}
+                onChange={onChangeID}
               />
             </div>
           </Label>

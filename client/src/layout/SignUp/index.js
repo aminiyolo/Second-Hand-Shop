@@ -31,6 +31,7 @@ const SignUpPage = ({ history }) => {
   const [emptyPassword, setEmptyPassword] = useState(false);
   const [emptyID, setEmptyID] = useState(false);
   const [shortID, setShortID] = useState(false);
+  const [shortPassword, setShortPassword] = useState(false);
 
   const [email, onChangeEmail] = useInput("");
   const [validatedEmail, setValidatedEmail] = useState("");
@@ -39,7 +40,6 @@ const SignUpPage = ({ history }) => {
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [mismatchError, setMismatchError] = useState(false);
-  const [signUpError, setSignUpError] = useState("");
   const [signUpSuccess, setSignUpSuccess] = useState(false);
 
   const onChangePassword = useCallback(
@@ -67,21 +67,26 @@ const SignUpPage = ({ history }) => {
     }
   }
 
+  function checkIfShort(state, setState) {
+    if (state.length < 6) setState(true);
+    else setState(false);
+  }
+
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
+
       ValidationCheck(nickname, setNickNameCheck);
       ValidationCheck(password, setEmptyPassword);
       ValidationCheck(ID, setEmptyID);
 
-      if (ID.length < 6) setShortID(true);
-      else setShortID(false);
+      checkIfShort(ID, setShortID);
+      checkIfShort(password, setShortPassword);
 
       if (!passwordCheck.trim() || !authCheck) return;
 
       if (!mismatchError) {
         setSignUpSuccess(false);
-        setSignUpError("");
 
         let data = {
           email: validatedEmail,
@@ -93,19 +98,30 @@ const SignUpPage = ({ history }) => {
           ).unix()}?d=identicon`,
         };
 
-        axios
-          .post("/api/users/register", data)
-          .then((response) => {
-            console.log(response);
-            setSignUpSuccess(true);
-          })
-          .catch((e) => {
-            console.log(e.response);
-            setSignUpError(e.response.data);
-          });
+        const getResult = async () => {
+          try {
+            const res = await axios.post("/api/users/register", data);
+            if (res.data.success) {
+              alert("회원가입이 성공했습니다.");
+              history.push("/login");
+            } else alert(res.data.msg);
+          } catch (err) {
+            console.log(err);
+          }
+        };
+        getResult();
       }
     },
-    [email, nickname, password, mismatchError, authCheck, passwordCheck, ID]
+    [
+      nickname,
+      password,
+      mismatchError,
+      authCheck,
+      passwordCheck,
+      ID,
+      validatedEmail,
+      history,
+    ]
   );
 
   const getAuthNum = useCallback(
@@ -123,13 +139,20 @@ const SignUpPage = ({ history }) => {
       };
 
       setSendMail(true);
-      setValidatedEmail(email);
-      axios.post("/api/auth/mail", data).then((response) => {
-        if (response.data.success) {
-          revalidate();
-          setAuth(response.data.authNum);
+      setValidatedEmail(email); // 인증번호를 받고 이메일 주소를 지우거나 다른 것으로 기입할 경우에 대비하여 인증번호를 발송한 이메일 주소를 state에 저장
+
+      const authNumber = async () => {
+        try {
+          const res = axios.post("/api/auth/mail", data);
+          if (res.data.success) {
+            revalidate();
+            setAuth(res.data.authNum);
+          }
+        } catch (err) {
+          console.log(err);
         }
-      });
+      };
+      authNumber();
     },
     [email, setAuth, revalidate]
   );
@@ -240,13 +263,15 @@ const SignUpPage = ({ history }) => {
             {mismatchError && <Error>비밀번호가 일치하지 않습니다.</Error>}
             {emptyID && <Error>아이디를 입력해주세요.</Error>}
             {shortID && <Error>아이디는 여섯글자 이상이어야 합니다.</Error>}
+            {shortPassword && (
+              <Error>비밀번호는 여섯글자 이상이어야 합니다.</Error>
+            )}
             {!nickname && nickNameCheck && (
               <Error>닉네임을 입력해주세요.</Error>
             )}
             {!password && emptyPassword && (
               <Error>비밀번호를 입력해주세요.</Error>
             )}
-            {signUpError && <Error>{signUpError}</Error>}
             {signUpSuccess && (
               <Success>회원가입되었습니다! 로그인해주세요.</Success>
             )}

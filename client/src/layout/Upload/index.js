@@ -21,10 +21,10 @@ import { Error } from "../Login/style";
 const Upload = ({ history }) => {
   const { data: DATA } = useSWR("/api/users/data", fetcher);
   const [category, setCategories] = useState(1);
-  const [title, onChangeTitle, setTitle] = useInput("");
-  const [description, onChangeDescription, setDescription] = useInput("");
-  const [period, onChangePeriod, setPeriod] = useInput("");
-  const [price, onChangePrice, setPrice] = useInput("");
+  const [title, onChangeTitle] = useInput("");
+  const [description, onChangeDescription] = useInput("");
+  const [period, onChangePeriod] = useInput("");
+  const [price, onChangePrice] = useInput("");
   const [images, setImages] = useState([]);
   const [clearImg, setClearImg] = useState(false);
 
@@ -47,15 +47,6 @@ const Upload = ({ history }) => {
       setState(false);
     }
   }
-
-  const makeEmpty = () => {
-    setCategories("");
-    setTitle("");
-    setDescription("");
-    setPeriod("");
-    setPrice("");
-    setClearImg(true);
-  };
 
   const onChangeCategory = (e) => {
     setCategories(e.target.value);
@@ -103,10 +94,9 @@ const Upload = ({ history }) => {
 
     axios.post("api/product/upload", data).then((response) => {
       if (response.data.success) {
-        makeEmpty();
         alert("업로드 성공!");
+        history.push("/");
       } else {
-        console.log(response.data.err);
         alert("업로드 실패!");
       }
     });

@@ -10,20 +10,27 @@ const Cart = ({ DATA, revalidate, history }) => {
   useEffect(() => {
     let container = [];
 
-    if (DATA?.cart?.length > 0) {
-      DATA.cart.forEach((data) => {
-        container.push(data.id);
-      });
-      axios
-        .get(`/api/product/product_by_id?id=${container}&type=array`)
-        .then((response) => {
-          if (response.data.success) {
-            setProducts(response.data.productInfo);
-          }
+    const getProduct = async () => {
+      if (DATA?.cart?.length > 0) {
+        DATA.cart.forEach((data) => {
+          container.push(data.id);
         });
-    } else {
-      setProducts([]);
-    }
+      } else {
+        setProducts([]);
+      }
+
+      try {
+        const res = await axios.get(
+          `/api/product/product_by_id?id=${container}&type=array`
+        );
+
+        setProducts(res.data.productInfo);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getProduct();
   }, [DATA]);
 
   const onClick = useCallback(
@@ -55,6 +62,8 @@ const Cart = ({ DATA, revalidate, history }) => {
     history.push("/");
   }
 
+  console.log(DATA?.cart.length);
+
   return (
     <CartContainer>
       <h1 className="title">장바구니</h1>
@@ -67,12 +76,11 @@ const Cart = ({ DATA, revalidate, history }) => {
       </div>
       <br />
       <div>
-        {DATA?.cart?.length === 0 ||
-          (products.length === 0 && (
-            <Empty>
-              <h1>텅 ~</h1>
-            </Empty>
-          ))}
+        {products.length < 1 && (
+          <Empty>
+            <h1>텅 ~</h1>
+          </Empty>
+        )}
         {products !== [] &&
           products.map((product, index) => (
             <React.Fragment key={index}>

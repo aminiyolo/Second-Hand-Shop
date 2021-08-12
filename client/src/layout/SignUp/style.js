@@ -15,6 +15,8 @@ export const H2 = styled.h2`
   text-align: center;
   padding-top: 20px;
   font-size: 32px;
+  font-weight: 700;
+  color: white;
 `;
 
 export const Container = styled.div`
@@ -28,7 +30,7 @@ export const Background = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  height: 1050px;
+  height: 1250px;
   display: flex;
   justify-content: center;
   align-items: center;

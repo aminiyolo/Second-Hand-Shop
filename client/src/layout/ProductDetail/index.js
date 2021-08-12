@@ -12,17 +12,20 @@ const ProductDetail = ({ DATA, revalidate }) => {
   const [seller, setSeller] = useState("");
 
   useEffect(() => {
-    axios
-      .get(`/api/product/product_by_id?id=${id}&type=single`)
-      .then((response) => {
-        if (response.data.success) {
-          setSeller(response.data.productInfo[0].seller.email);
-          setProduct(response.data.productInfo[0]);
-        } else {
-          console.log(response.data.err);
-        }
-      });
-  }, []);
+    const getProductInfo = async () => {
+      try {
+        const res = await axios.get(
+          `/api/product/product_by_id?id=${id}&type=single`
+        );
+        setSeller(res.data.productInfo[0].seller.email);
+        setProduct(res.data.productInfo[0]);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getProductInfo();
+  }, [id]);
 
   return (
     <DetailContainer>

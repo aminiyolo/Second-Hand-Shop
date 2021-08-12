@@ -74,7 +74,7 @@ router.post("/data", (req, res) => {
   }
 });
 
-router.get("/product_by_id", (req, res) => {
+router.get("/product_by_id", async (req, res) => {
   let ID = req.query.id;
   let type = req.query.type;
 
@@ -85,12 +85,14 @@ router.get("/product_by_id", (req, res) => {
     });
   }
 
-  Product.find({ _id: { $in: ID } })
-    .populate("seller")
-    .exec((err, productInfo) => {
-      if (err) return res.status(400).json(err);
-      return res.status(200).json({ success: true, productInfo });
-    });
+  try {
+    const productInfo = await Product.find({ _id: { $in: ID } }).populate(
+      "seller"
+    );
+    res.status(200).json({ productInfo });
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 router.post("/myProduct", async (req, res) => {
@@ -101,13 +103,6 @@ router.post("/myProduct", async (req, res) => {
     res.status(500).json(err);
   }
 });
-
-// router.post("/myProduct", (req, res) => {
-//   Product.find({ seller: req.body.id }, (err, productInfo) => {
-//     if (err) return res.status(400).send(err);
-//     return res.status(200).json({ success: true, productInfo });
-//   });
-// });
 
 router.post("/remove_from_myPage", async (req, res) => {
   try {

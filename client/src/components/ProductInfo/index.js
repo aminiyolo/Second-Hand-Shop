@@ -124,9 +124,9 @@ const ProductInfo = ({ product, DATA, revalidate, history, seller }) => {
       <Description>
         <h1>{product.title}</h1>
         <div className="detail">
-          <span className="category">{category}</span>
+          {/* <span className="category">{category}</span> */}
           <span>
-            / &nbsp;&nbsp; 업로드 날짜: &nbsp;
+            {category} &nbsp; / &nbsp; 업로드 날짜: &nbsp;
             {dayjs(product.createdAt).format("YYYY-MM-DD")}
           </span>
         </div>
