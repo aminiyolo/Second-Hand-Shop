@@ -36,6 +36,11 @@ const Modal = ({ data, revalidate, history, onCloseModal }) => {
     onCloseModal();
   }, [history, onCloseModal]);
 
+  const onAdminPage = useCallback(() => {
+    history.push("/admin");
+    onCloseModal();
+  }, [history, onCloseModal]);
+
   const onMessenger = useCallback(() => {
     history.push("/chat");
     onCloseModal();
@@ -52,9 +57,18 @@ const Modal = ({ data, revalidate, history, onCloseModal }) => {
           </span>
           <p>{data.email}</p>
           <Category>
-            <div onClick={onMyPage} className="myPage">
+            {data.role ? (
+              <div onClick={onAdminPage} className="myPage">
+                Admin Page
+              </div>
+            ) : (
+              <div onClick={onMyPage} className="myPage">
+                My Page
+              </div>
+            )}
+            {/* <div onClick={onMyPage} className="myPage">
               My Page
-            </div>
+            </div> */}
             <div className="messenger" onClick={onMessenger}>
               Messenger
             </div>

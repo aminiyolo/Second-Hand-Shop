@@ -86,9 +86,9 @@ router.get("/product_by_id", async (req, res) => {
   }
 
   try {
-    const productInfo = await Product.find({ _id: { $in: ID } }).populate(
-      "seller"
-    );
+    const productInfo = await Product.find({ _id: { $in: ID } })
+      .populate("seller")
+      .exec();
     res.status(200).json({ productInfo });
   } catch (err) {
     res.status(500).json(err);
@@ -105,6 +105,7 @@ router.post("/myProduct", async (req, res) => {
 });
 
 router.post("/remove_from_myPage", async (req, res) => {
+  console.log(req.body.id);
   try {
     await Product.findByIdAndDelete({ _id: req.body.id });
     res.status(200).json({ success: true });

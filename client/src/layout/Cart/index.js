@@ -16,7 +16,7 @@ const Cart = ({ DATA, revalidate, history }) => {
           container.push(data.id);
         });
       } else {
-        setProducts([]);
+        return setProducts([]);
       }
 
       try {
@@ -61,8 +61,6 @@ const Cart = ({ DATA, revalidate, history }) => {
   if (DATA?.isAuth === false) {
     history.push("/");
   }
-
-  console.log(DATA?.cart.length);
 
   return (
     <CartContainer>

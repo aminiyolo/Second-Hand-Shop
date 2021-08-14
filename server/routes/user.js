@@ -119,7 +119,6 @@ router.post("/count_added_product", async (req, res) => {
     res.status(200).json({ length: info.length });
   } catch (err) {
     res.status(500).json(err);
-    console.log(err);
   }
 });
 
@@ -132,6 +131,15 @@ router.get("/find", async (req, res) => {
       ? await User.findById(userId)
       : User.findOne({ nickname: userName });
     res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.get("/all", async (req, res) => {
+  try {
+    const ALL = await User.find();
+    res.status(200).json(ALL);
   } catch (err) {
     res.status(500).json(err);
   }

@@ -11,13 +11,13 @@ import useSWR from "swr";
 import fetcher from "./hooks/fetcher";
 import MyPage from "./layout/MyPage";
 import Messenger from "./layout/Messenger";
+import AdminPage from "./layout/AdminPage";
 
 function App() {
   const { data, revalidate } = useSWR("/api/users/data", fetcher);
   return (
     <BrowserRouter>
       <NavBar data={data} revalidate={revalidate} />
-      {/* <div style={{ paddingTop: "20px", overflowY: "hidden" }}> */}
       <Switch>
         <Route exact path="/" component={LandingPage} />
         <Route
@@ -38,8 +38,8 @@ function App() {
           path="/product/:id"
           render={() => <ProductDetail DATA={data} revalidate={revalidate} />}
         />
+        <Route exact path="/admin" render={() => <AdminPage DATA={data} />} />
       </Switch>
-      {/* </div> */}
     </BrowserRouter>
   );
 }

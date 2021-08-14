@@ -143,7 +143,7 @@ const SignUpPage = ({ history }) => {
 
       const authNumber = async () => {
         try {
-          const res = axios.post("/api/auth/mail", data);
+          const res = await axios.post("/api/auth/mail", data);
           if (res.data.success) {
             revalidate();
             setAuth(res.data.authNum);

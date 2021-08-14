@@ -4,43 +4,42 @@ const jwt = require("jsonwebtoken");
 const saltRounds = 10;
 const PRIVATE_TOKEN = "NANA";
 
-const userSchema = mongoose.Schema({
-  name: {
-    type: String,
+const userSchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+    },
+    email: {
+      type: String,
+      trim: true,
+      unique: true,
+    },
+    ID: {
+      type: String,
+    },
+    nickname: {
+      type: String,
+    },
+    password: {
+      type: String,
+      minlength: 5,
+    },
+    role: {
+      type: Number,
+      default: 0,
+    },
+    image: String,
+    token: {
+      type: String,
+    },
+    isAuth: Boolean,
+    cart: {
+      type: Array,
+      default: [],
+    },
   },
-  email: {
-    type: String,
-    trim: true,
-    unique: true,
-  },
-  ID: {
-    type: String,
-  },
-  nickname: {
-    type: String,
-  },
-  password: {
-    type: String,
-    minlength: 5,
-  },
-  role: {
-    type: Number,
-    default: 0,
-  },
-  image: String,
-  token: {
-    type: String,
-  },
-  isAuth: Boolean,
-  cart: {
-    type: Array,
-    default: [],
-  },
-  history: {
-    type: Array,
-    default: [],
-  },
-});
+  { timestamps: true }
+);
 
 userSchema.pre("save", function (next) {
   var user = this;
