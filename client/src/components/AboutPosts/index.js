@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { withRouter } from "react-router";
 import dayjs from "dayjs";
+import { Img, Table, Title, Tr } from "./style";
 
 const AboutPosts = ({ history }) => {
   const [products, setProducts] = useState([]);
@@ -12,7 +13,6 @@ const AboutPosts = ({ history }) => {
       let data = {};
       try {
         const res = await axios.post("/api/product/data", data);
-        console.log(res.data.products);
         setProducts(res.data.products);
       } catch (err) {}
     };
@@ -49,12 +49,12 @@ const AboutPosts = ({ history }) => {
   }, []);
 
   return (
-    <div>
-      <h2 style={{ textAlign: "center" }}>게시물 관리</h2>
+    <>
+      <Title>게시물 관리</Title>
       <div>총 게시물 수: {products.length}개</div>
       <br />
-      <div>
-        <table>
+      <>
+        <Table>
           <thead>
             <tr>
               <th>이미지</th>
@@ -67,25 +67,19 @@ const AboutPosts = ({ history }) => {
           </thead>
           <tbody>
             {products.map((product) => (
-              <tr>
-                <th style={{ width: "15%" }}>
-                  <img
+              <Tr key={product._id}>
+                <th>
+                  <Img
                     onClick={() => onClickImg(product._id)}
-                    style={{
-                      cursor: "pointer",
-                      width: "80px",
-                      height: "80px",
-                      borderRadius: "10px",
-                    }}
                     src={`http://localhost:3050/${product.images[0]}`}
                     alt={product.title}
                   />
                 </th>
-                <th style={{ width: "35%" }}>{product.title}</th>
+                <th className="title">{product.title}</th>
                 <th>{product.seller.ID}</th>
                 <th>{product.price}원</th>
                 <th>{dayjs(product.createdAt).format("YYYY-MM-DD")}</th>
-                <th style={{ width: "10%" }}>
+                <th className="button">
                   <button
                     onClick={() => onRemove(product._id)}
                     style={{ cursor: "pointer" }}
@@ -93,30 +87,12 @@ const AboutPosts = ({ history }) => {
                     게시물 삭제
                   </button>
                 </th>
-              </tr>
+              </Tr>
             ))}
           </tbody>
-        </table>
-      </div>
-    </div>
-    // <div>
-    //   <div>
-    //     {products.map((product) => (
-    //       <div style={{ display: "flex" }}>
-    //         <img
-    //           style={{ width: "80px", height: "80px" }}
-    //           src={`http://localhost:3050/${product.images[0]}`}
-    //           alt={product.title}
-    //         />
-    //         <div style={{ marginLeft: "15px" }}>
-    //           <div>{product.title} </div>
-    //           <div>{product.seller.ID} </div>
-    //           <div>{product.price}원 </div>
-    //         </div>
-    //       </div>
-    //     ))}
-    //   </div>
-    // </div>
+        </Table>
+      </>
+    </>
   );
 };
 

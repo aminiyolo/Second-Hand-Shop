@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router";
 import AboutPosts from "../../components/AboutPosts";
 import AboutUsers from "../../components/AboutUsers";
-import "./style.css";
+import { AdminPageContainer, ButtonWrapper, RenderWrapper } from "./style";
 
 const AdminPage = ({ DATA, history }) => {
   const [users, setUsers] = useState([]);
@@ -20,7 +20,6 @@ const AdminPage = ({ DATA, history }) => {
     const getAllUsers = async () => {
       try {
         const res = await axios.get("/api/users/all");
-        console.log(res.data);
         setUsers(res.data);
       } catch (err) {
         console.log(err);
@@ -31,19 +30,14 @@ const AdminPage = ({ DATA, history }) => {
   }, []);
 
   return (
-    <div style={{ paddingTop: "120px", width: "85%", margin: "auto" }}>
-      <div style={{ display: "flex", justifyContent: "space-around" }}>
+    <AdminPageContainer>
+      <ButtonWrapper>
         <div
           onClick={() => {
             setClickedUsers(true);
             setClickedPosts(false);
           }}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "whitesmoke",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
+          className="users"
         >
           회원 정보
         </div>
@@ -52,22 +46,17 @@ const AdminPage = ({ DATA, history }) => {
             setClickedUsers(false);
             setClickedPosts(true);
           }}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "whitesmoke",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
+          className="posts"
         >
           게시물 관리
         </div>
-      </div>
+      </ButtonWrapper>
       <hr />
-      <div style={{ marginTop: "15px" }}>
+      <RenderWrapper>
         {clickedUsers && <AboutUsers users={users} />}
         {clickedPosts && <AboutPosts users={users} />}
-      </div>
-    </div>
+      </RenderWrapper>
+    </AdminPageContainer>
   );
 };
 

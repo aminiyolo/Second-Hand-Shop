@@ -1,15 +1,15 @@
 import React from "react";
 import dayjs from "dayjs";
+import { H2, Table, Tr } from "./style";
 
 const AboutUsers = ({ users }) => {
-  console.log(users);
   return (
     <div>
-      <h2 style={{ textAlign: "center" }}>회원 정보</h2>
+      <H2>회원 정보</H2>
       <div>총 회원 수: {users.length}명</div>
       <br />
       <div>
-        <table>
+        <Table>
           <thead>
             <tr>
               <th>아이디</th>
@@ -20,15 +20,16 @@ const AboutUsers = ({ users }) => {
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr>
+              <Tr key={user._id}>
+                {/* 관리자의 role은 1, 회원들의 role은 0이므로 값이 true일 경우에만 관리자 호칭 붙이기 */}
                 <th>{user.role ? `${user.ID} (관리자)` : user.ID}</th>
-                <th style={{ width: "40%" }}>{user.email}</th>
+                <th className="email">{user.email}</th>
                 <th>{user.nickname}</th>
                 <th>{dayjs(user.createdAt).format("YYYY-MM-DD")}</th>
-              </tr>
+              </Tr>
             ))}
           </tbody>
-        </table>
+        </Table>
       </div>
     </div>
   );
