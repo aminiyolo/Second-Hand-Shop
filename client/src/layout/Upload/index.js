@@ -16,7 +16,7 @@ import {
   Button,
   SelectBox,
 } from "./style";
-import { Error } from "../Login/style";
+import { Error, Loading } from "../Login/style";
 
 const Upload = ({ history }) => {
   const { data: DATA } = useSWR("/api/users/data", fetcher);
@@ -78,7 +78,15 @@ const Upload = ({ history }) => {
       setPeriodError(true);
     }
 
-    if (!title || !description || !price || !period || !images.length) {
+    if (
+      !title ||
+      !description ||
+      !price ||
+      !period ||
+      !images.length ||
+      period <= 0 ||
+      price <= 0
+    ) {
       return;
     }
 
@@ -101,6 +109,10 @@ const Upload = ({ history }) => {
       }
     });
   };
+
+  if (DATA === undefined) {
+    return <Loading>Loading...</Loading>;
+  }
 
   if (DATA?.isAuth === false) {
     history.push("/");

@@ -2,8 +2,11 @@ import React, { useCallback, useState } from "react";
 import { withRouter } from "react-router";
 import { Menu, Button, Img, Nickname } from "./style";
 import Modal from "../../Modal/index";
+import useSWR from "swr";
+import fetcher from "../../../hooks/fetcher";
 
-const RightMenu = ({ history, data, revalidate }) => {
+const RightMenu = ({ history }) => {
+  const { data } = useSWR("/api/users/data", fetcher);
   const [showProfileModal, setShowProfileModal] = useState(false);
 
   const onClickLogin = useCallback(() => {
@@ -20,7 +23,7 @@ const RightMenu = ({ history, data, revalidate }) => {
     setShowProfileModal(false);
   }, []);
 
-  if (data.isAuth === false) {
+  if (data?.isAuth === false) {
     return (
       <Menu>
         <Button onClick={onClickLogin}>로그인</Button>
@@ -33,13 +36,7 @@ const RightMenu = ({ history, data, revalidate }) => {
           <Nickname>{data.nickname}</Nickname>
           <Img src={data.image} alt={data.nickname} />
         </Button>
-        {showProfileModal && (
-          <Modal
-            data={data}
-            revalidate={revalidate}
-            onCloseModal={onCloseModal}
-          />
-        )}
+        {showProfileModal && <Modal onCloseModal={onCloseModal} />}
       </React.Fragment>
     );
   }

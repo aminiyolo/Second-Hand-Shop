@@ -3,11 +3,13 @@ import RightMenu from "./RightMenu";
 import { Nav, Logo, Upload, ButtonContainer, Cart } from "./style";
 import { withRouter } from "react-router";
 import { ShoppingOutlined } from "@ant-design/icons";
+import useSWR from "swr";
+import fetcher from "../../hooks/fetcher";
 
-const Navbar = ({ data, revalidate, history }) => {
-  if (data === undefined) {
-    return <div></div>;
-  }
+const Navbar = ({ history }) => {
+  const { data } = useSWR("/api/users/data", fetcher, {
+    dedupingInterval: 2000,
+  });
 
   const onUpload = () => {
     history.push("/upload");
@@ -21,7 +23,11 @@ const Navbar = ({ data, revalidate, history }) => {
     history.push("/");
   };
 
-  if (data && data.token) {
+  if (data === undefined) {
+    return <div>Loading...</div>;
+  }
+
+  if (data?.token) {
     return (
       <Nav>
         <Logo>
@@ -32,7 +38,7 @@ const Navbar = ({ data, revalidate, history }) => {
             <ShoppingOutlined />
           </Cart>
           <Upload onClick={onUpload}>상품 업로드</Upload>
-          <RightMenu data={data} revalidate={revalidate} />
+          <RightMenu />
         </ButtonContainer>
       </Nav>
     );
@@ -43,7 +49,7 @@ const Navbar = ({ data, revalidate, history }) => {
           <span onClick={onClick}>2nd Hand</span>
         </Logo>
         <ButtonContainer>
-          <RightMenu data={data} revalidate={revalidate} />
+          <RightMenu />
         </ButtonContainer>
       </Nav>
     );

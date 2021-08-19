@@ -39,7 +39,7 @@ router.post("/login", (req, res) => {
   // Look for a requested ID in a database
   User.findOne({ ID: req.body.ID }, (err, user) => {
     if (!user) {
-      return res.json({ success: false, msg: "Doesn't Exist USER" });
+      return res.json({ success: false, msg: "존재하지 않는 사용자 입니다." });
     }
     // If there is a data that we look for, Check the password if corrected
     user.comparePassword(req.body.password, (err, isMatch) => {
@@ -47,7 +47,10 @@ router.post("/login", (req, res) => {
         return res.json({ success: false, msg: err });
       }
       if (isMatch === false) {
-        return res.json({ success: false, msg: "password is incorrect" });
+        return res.json({
+          success: false,
+          msg: "비밀번호가 일치하지 않습니다.",
+        });
       }
       // If the password is correct, Give a token
       user.giveToken((err, user) => {

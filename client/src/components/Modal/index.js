@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useCallback } from "react";
+import React, { useCallback, FC } from "react";
 import {
   CreateModal,
   Menu,
@@ -9,22 +9,29 @@ import {
   MeunContainer,
 } from "./style";
 import { withRouter } from "react-router";
+import useSWR from "swr";
+import fetcher from "../../hooks/fetcher";
 
-const Modal = ({ data, revalidate, history, onCloseModal }) => {
+const Modal = ({ history, onCloseModal }) => {
+  const { data, revalidate } = useSWR("/api/users/data", fetcher);
   const onLogout = useCallback(() => {
-    axios.get("/api/users/logout").then((response) => {
-      if (response.data.success) {
+    const Logout = async () => {
+      try {
+        await axios.get("/api/users/logout");
         onCloseModal();
         document.cookie =
           "USER=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
         revalidate();
+
         setTimeout(() => {
           history.push("/login");
-        }, 300);
-      } else {
+        }, 500);
+      } catch (err) {
         alert("로그아웃에 실패하였습니다.");
       }
-    });
+    };
+
+    Logout();
   }, [history, onCloseModal, revalidate]);
 
   const stopPropagation = (e) => {
@@ -50,32 +57,31 @@ const Modal = ({ data, revalidate, history, onCloseModal }) => {
     <CreateModal onClick={onCloseModal}>
       <MeunContainer>
         <Menu onClick={stopPropagation}>
-          <CloseBtn onClick={onCloseModal}>&times;</CloseBtn>
-          <span className="profile">
-            {data.nickname}
-            <Img src={data.image} />
-          </span>
-          <p>{data.email}</p>
-          <Category>
-            {data.role ? (
-              <div onClick={onAdminPage} className="myPage">
-                Admin Page
+          <div className="menuWrapper">
+            <CloseBtn onClick={onCloseModal}>&times;</CloseBtn>
+            <span className="profile">
+              {data.nickname}
+              <Img src={data.image} />
+            </span>
+            <p>{data.email}</p>
+            <Category>
+              {data.role ? (
+                <div onClick={onAdminPage} className="myPage">
+                  Admin Page
+                </div>
+              ) : (
+                <div onClick={onMyPage} className="myPage">
+                  My Page
+                </div>
+              )}
+              <div className="messenger" onClick={onMessenger}>
+                Messenger
               </div>
-            ) : (
-              <div onClick={onMyPage} className="myPage">
-                My Page
+              <div onClick={onLogout} className="logout">
+                Logout
               </div>
-            )}
-            {/* <div onClick={onMyPage} className="myPage">
-              My Page
-            </div> */}
-            <div className="messenger" onClick={onMessenger}>
-              Messenger
-            </div>
-            <div onClick={onLogout} className="logout">
-              Logout
-            </div>
-          </Category>
+            </Category>
+          </div>
         </Menu>
       </MeunContainer>
     </CreateModal>

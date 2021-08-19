@@ -5,8 +5,12 @@ import Conversation from "../../components/Conversation";
 import Message from "../../components/Message";
 import { io } from "socket.io-client";
 import "./style.css";
+import { Loading } from "../Login/style";
+import useSWR from "swr";
+import fetcher from "../../hooks/fetcher";
 
-const Messenger = ({ user, history }) => {
+const Messenger = ({ history }) => {
+  const { data: userData } = useSWR("/api/users/data", fetcher);
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -34,16 +38,16 @@ const Messenger = ({ user, history }) => {
   }, [receivedMessage, currentChat]);
 
   useEffect(() => {
-    socket.current.emit("addUser", user?._id);
+    socket.current.emit("addUser", userData?._id);
     socket.current.on("getUser", (users) => {
       setOnlineUsers(users);
     });
-  }, [user]);
+  }, [userData]);
 
   useEffect(() => {
     const getConversation = async () => {
       try {
-        const res = await axios.get(`/api/conversations/${user?._id}`);
+        const res = await axios.get(`/api/conversations/${userData?._id}`);
         // 가장 최근의 생성된 대화방을 가장 위에 나타내기 위하여 reverse() 사용.
         setConversations(res.data.reverse());
       } catch (err) {
@@ -51,7 +55,7 @@ const Messenger = ({ user, history }) => {
       }
     };
     getConversation();
-  }, [user]);
+  }, [userData]);
 
   useEffect(() => {
     const getMessages = async () => {
@@ -73,13 +77,13 @@ const Messenger = ({ user, history }) => {
     }
 
     const message = {
-      sender: user._id,
+      sender: userData._id,
       text: newMessages,
       conversationId: currentChat._id,
     };
 
     const receiverId = currentChat.members.find(
-      (member) => member !== user._id
+      (member) => member !== userData._id
     );
 
     let online;
@@ -97,7 +101,7 @@ const Messenger = ({ user, history }) => {
 
     if (online) {
       socket.current.emit("sendMessage", {
-        senderId: user._id,
+        senderId: userData._id,
         receiverId,
         text: newMessages,
       });
@@ -116,7 +120,11 @@ const Messenger = ({ user, history }) => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  if (user?.isAuth === false) {
+  if (userData === undefined) {
+    return <Loading>Loading...</Loading>;
+  }
+
+  if (userData?.isAuth === false) {
     history.push("/");
   }
 
@@ -130,16 +138,14 @@ const Messenger = ({ user, history }) => {
               key={index}
               onClick={() => setCurrentChat(conversation)}
             >
-              <Conversation conversation={conversation} currentUser={user} />
+              <Conversation conversation={conversation} />
             </div>
           ))}
         </div>
       </div>
       <div className="message_wrapper">
         <div className="message">
-          {currentChat && (
-            <Conversation conversation={currentChat} currentUser={user} />
-          )}
+          {currentChat && <Conversation conversation={currentChat} />}
         </div>
         <div className="message_workspace">
           {currentChat ? (
@@ -148,8 +154,7 @@ const Messenger = ({ user, history }) => {
                 <div key={index} ref={scrollRef}>
                   <Message
                     message={message}
-                    owner={message.sender === user?._id}
-                    currentUser={user}
+                    owner={message.sender === userData?._id}
                   />
                 </div>
               ))}

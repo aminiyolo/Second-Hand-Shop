@@ -2,10 +2,10 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { withRouter } from "react-router";
 import dayjs from "dayjs";
-import { Img, Table, Title, Tr } from "./style";
+import { Img, Loading, Table, Title, Tr } from "./style";
 
 const AboutPosts = ({ history }) => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(null);
   const [deleteToggle, setDeleteToggle] = useState(false);
 
   useEffect(() => {
@@ -14,6 +14,8 @@ const AboutPosts = ({ history }) => {
       try {
         const res = await axios.post("/api/product/data", data);
         setProducts(res.data.products);
+
+        if (!res) setProducts([]);
       } catch (err) {}
     };
 
@@ -47,6 +49,10 @@ const AboutPosts = ({ history }) => {
 
     remove();
   }, []);
+
+  if (products === null) {
+    return <Loading>Loading...</Loading>;
+  }
 
   return (
     <>

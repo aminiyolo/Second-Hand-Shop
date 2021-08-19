@@ -12,15 +12,19 @@ import {
   HeartContainer,
 } from "./style";
 import { HeartOutlined } from "@ant-design/icons";
+import useSWR from "swr";
+import fetcher from "../../hooks/fetcher";
 
-const ProductInfo = ({ product, DATA, revalidate, history, seller }) => {
+const ProductInfo = ({ product, history, seller }) => {
+  const { data: userData, revalidate } = useSWR("/api/users/data", fetcher);
+
   const { id } = useParams();
   const [category, setCategory] = useState("");
   const [inAcart, setInAcart] = useState(false);
   const [count, setCount] = useState(0);
 
   const onClickCart = useCallback(() => {
-    if (DATA && DATA.isAuth === false) {
+    if (userData?.isAuth === false) {
       let choice = window.confirm("로그인이 필요한 서비스 입니다.");
       if (choice) {
         history.push("/login");
@@ -28,7 +32,7 @@ const ProductInfo = ({ product, DATA, revalidate, history, seller }) => {
       return;
     }
 
-    if (seller === DATA.email) {
+    if (seller === userData.email) {
       return alert("본인의 상품은 장바구니에 담을 수 없습니다.");
     }
 
@@ -55,10 +59,10 @@ const ProductInfo = ({ product, DATA, revalidate, history, seller }) => {
         }
       });
     }
-  }, [DATA, history, id, seller, inAcart, revalidate]);
+  }, [userData, history, id, seller, inAcart, revalidate]);
 
   const onClickChat = () => {
-    if (DATA && DATA.isAuth === false) {
+    if (userData?.isAuth === false) {
       let choice = window.confirm("로그인이 필요한 서비스 입니다.");
       if (choice) {
         history.push("/login");
@@ -66,13 +70,13 @@ const ProductInfo = ({ product, DATA, revalidate, history, seller }) => {
       return;
     }
 
-    if (seller === DATA.email) {
+    if (seller === userData.email) {
       return alert("판매자가 본인에 해당합니다.");
     }
 
     let data = {
       senderId: product.seller._id,
-      receiverId: DATA._id,
+      receiverId: userData._id,
       title: product.title,
       productId: product._id,
     };
@@ -104,8 +108,8 @@ const ProductInfo = ({ product, DATA, revalidate, history, seller }) => {
 
   useEffect(() => {
     checkCategory(product, setCategory);
-    if (DATA && DATA.token) {
-      DATA.cart.forEach((data) => {
+    if (userData?.token) {
+      userData.cart.forEach((data) => {
         if (data.id === id) setInAcart(true);
       });
     }
@@ -117,25 +121,24 @@ const ProductInfo = ({ product, DATA, revalidate, history, seller }) => {
     axios.post("/api/users/count_added_product", data).then((response) => {
       setCount(response.data.length);
     });
-  }, [product, DATA, id]);
+  }, [product, userData, id]);
 
   return (
     <div>
       <Description>
-        <h1>{product.title}</h1>
+        <h1>{product?.title}</h1>
         <div className="detail">
-          {/* <span className="category">{category}</span> */}
           <span>
             {category} &nbsp; / &nbsp; 업로드 날짜: &nbsp;
-            {dayjs(product.createdAt).format("YYYY-MM-DD")}
+            {dayjs(product?.createdAt).format("YYYY-MM-DD")}
           </span>
         </div>
-        <h3>{product.description}</h3>
-        <div>사용기간: &nbsp;{product.period}개월</div>
-        <div className="price">가격: &nbsp;{product.price}원</div>
+        <h3>{product?.description}</h3>
+        <div>사용기간: &nbsp;{product?.period}개월</div>
+        <div className="price">가격: &nbsp;{product?.price}원</div>
         <HeartContainer>
           <HeartOutlined />
-          <span>{count}</span>
+          <span inAcart={inAcart}>{count}</span>
         </HeartContainer>
       </Description>
       <BtnContainer>

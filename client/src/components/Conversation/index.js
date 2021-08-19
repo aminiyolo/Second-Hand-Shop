@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./style.css";
+import { Profile } from "./style";
+import useSWR from "swr";
+import fetcher from "../../hooks/fetcher";
 
-const Conversation = ({ conversation, currentUser }) => {
+const Conversation = ({ conversation }) => {
+  const { data: currentUser } = useSWR("/api/users/data", fetcher);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -22,7 +25,7 @@ const Conversation = ({ conversation, currentUser }) => {
   }, [conversation, currentUser]);
 
   return (
-    <div className="profile">
+    <Profile>
       {user && (
         <div>
           <img className="img" src={user.image} alt="profile" />
@@ -32,7 +35,7 @@ const Conversation = ({ conversation, currentUser }) => {
         {user && <span className="nickname">{user.nickname}</span>}
         <span className="title">{conversation?.title}</span>
       </div>
-    </div>
+    </Profile>
   );
 };
 

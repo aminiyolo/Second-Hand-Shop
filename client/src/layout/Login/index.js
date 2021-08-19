@@ -14,15 +14,26 @@ import {
   Container,
 } from "./style";
 import useInput from "../../hooks/useInput";
+import useSWR from "swr";
+import fetcher from "../../hooks/fetcher";
 
-const LoginPage = ({ history, DATA, revalidate }) => {
+const LoginPage = ({ history }) => {
+  const { data, revalidate } = useSWR("/api/users/data", fetcher);
   const [ID, onChangeID] = useInput("");
   const [password, onChangePassword] = useInput("");
-  const [logInError, setLogInError] = useState(false);
+  const [logInError, setLogInError] = useState("");
+  const [emptyCheck, setEmptyCheck] = useState(false);
 
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
+      setLogInError("");
+
+      if (!ID.trim() || !password.trim()) {
+        return setEmptyCheck(true);
+      }
+
+      setEmptyCheck(false);
 
       let data = {
         ID,
@@ -36,7 +47,7 @@ const LoginPage = ({ history, DATA, revalidate }) => {
             revalidate();
             history.push("/");
           } else {
-            setLogInError(true);
+            setLogInError(res.data.msg);
           }
         } catch (err) {
           console.log(err);
@@ -48,11 +59,11 @@ const LoginPage = ({ history, DATA, revalidate }) => {
     [ID, password, history, revalidate]
   );
 
-  if (DATA?.token) {
+  if (data?.token) {
     history.push("/");
   }
 
-  if (DATA === undefined) {
+  if (data === undefined) {
     return <Loading>Loading...</Loading>;
   }
 
@@ -84,8 +95,9 @@ const LoginPage = ({ history, DATA, revalidate }) => {
                 onChange={onChangePassword}
               />
             </div>
-            {logInError && (
-              <Error>이메일과 비밀번호 조합이 일치하지 않습니다.</Error>
+            {logInError && <Error>{logInError}</Error>}
+            {emptyCheck && (
+              <Error>아이디와 비밀번호를 모두 작성해주세요.</Error>
             )}
           </Label>
           <Button type="submit">로그인</Button>

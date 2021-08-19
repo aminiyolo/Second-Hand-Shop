@@ -5,7 +5,7 @@ const ImageSlider = ({ product }) => {
   let container = [];
 
   if (product) {
-    product.images.map((image) => {
+    product?.images.map((image) => {
       container.push({
         original: `http://localhost:3050/${image}`,
         thumbnail: `http://localhost:3050/${image}`,

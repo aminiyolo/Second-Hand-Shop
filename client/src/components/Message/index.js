@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import "./style.css";
+import { MessageWrapper } from "./style";
+import useSWR from "swr";
+import fetcher from "../../hooks/fetcher";
 
-const Message = ({ message, owner, currentUser }) => {
+const Message = ({ message, owner }) => {
+  const { data: currentUser } = useSWR("/api/users/data", fetcher);
   const [counterpart, setCounterpart] = useState(null);
 
   useEffect(() => {
@@ -12,7 +15,7 @@ const Message = ({ message, owner, currentUser }) => {
   }, [currentUser, message]);
 
   return (
-    <div className="messageWrapper">
+    <MessageWrapper className="messageWrapper">
       <div className={owner ? "sender" : "message"}>
         <div className={counterpart ? "recieve" : "send"}>
           {counterpart && <p className="couterpart">{counterpart}:</p>}
@@ -22,7 +25,7 @@ const Message = ({ message, owner, currentUser }) => {
           {dayjs(message.createdAt).format("MM/DD - h:mm A")}
         </div>
       </div>
-    </div>
+    </MessageWrapper>
   );
 };
 

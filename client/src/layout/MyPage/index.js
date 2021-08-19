@@ -3,9 +3,14 @@ import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { CartContainer, Empty, ProductContainer, Img } from "../Cart/style";
 import { withRouter } from "react-router";
+import { Link } from "react-router-dom";
+import { Loading } from "../Login/style";
+import useSWR from "swr";
+import fetcher from "../../hooks/fetcher";
 
-const MyPage = ({ DATA, history }) => {
-  const [products, setProducts] = useState([]);
+const MyPage = ({ history }) => {
+  const { data: userData } = useSWR("/api/users/data", fetcher);
+  const [products, setProducts] = useState(null);
   const [deleteToggle, setDeleteToggle] = useState(false);
   const [receiveData, setReceiveData] = useState(false);
 
@@ -28,16 +33,19 @@ const MyPage = ({ DATA, history }) => {
   };
 
   useEffect(() => {
-    if (DATA?._id) {
+    if (userData?._id) {
       let data = {
-        id: DATA._id,
+        id: userData._id,
       };
 
       const getMyProduct = async () => {
         try {
           const res = await axios.post("/api/product/myProduct", data);
-          if (res.data.length < 0) setReceiveData(true);
-          else setReceiveData(true);
+          if (res.data.length < 0) {
+            setReceiveData(true);
+            setProducts([]);
+          } else setReceiveData(true);
+
           setProducts(res.data);
         } catch (err) {
           console.log(err);
@@ -46,10 +54,14 @@ const MyPage = ({ DATA, history }) => {
 
       getMyProduct();
     }
-  }, [DATA, deleteToggle]);
+  }, [userData, deleteToggle]);
 
-  if (DATA?.isAuth === false) {
+  if (userData?.isAuth === false) {
     history.push("/");
+  }
+
+  if (products === null) {
+    return <Loading>Loading...</Loading>;
   }
 
   return (
@@ -69,12 +81,12 @@ const MyPage = ({ DATA, history }) => {
           <React.Fragment key={index}>
             <ProductContainer>
               <div>
-                <a href={`/product/${product._id}`}>
+                <Link to={`/product/${product._id}`}>
                   <Img
                     src={`http://localhost:3050/${product.images[0]}`}
                     alt={product.title}
                   />
-                </a>
+                </Link>
               </div>
               <div className="detail">
                 <h2>{product.title}</h2>

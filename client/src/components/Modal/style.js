@@ -16,24 +16,34 @@ export const Menu = styled.div`
   right: 28px;
   background-color: #ff6a4d;
   width: 200px;
-  height: 280px;
-  & > .profile {
-    padding: 20px 45px;
-    margin-left: 10px;
-    margin-top: 5px;
-    font-size: 16px;
-    border: none;
-  }
-  & > p {
-    font-size: 12px;
+  height: 264.5px;
+  & > .menuWrapper {
+    position: relative;
+    padding-top: 15px;
+    & > .profile {
+      padding: 20px 25px;
+      padding-top: 10px;
+      margin-left: 10px;
+      margin-top: 20px;
+      font-size: 16px;
+      border: none;
+    }
+    & > p {
+      font-size: 12px;
+    }
   }
 `;
 
 export const CloseBtn = styled.span`
   position: absolute;
-  right: 18px;
+  right: 14px;
+  top: -5px;
   font-size: 25px;
   cursor: pointer;
+  transition: all 300ms ease-out;
+  &:hover {
+    transform: scale(1.2);
+  }
 `;
 
 export const Img = styled.img`

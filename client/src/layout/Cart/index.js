@@ -2,17 +2,21 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { CartContainer, Empty, ProductContainer, Img } from "./style";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
+import { Loading } from "../Login/style";
+import useSWR from "swr";
+import fetcher from "../../hooks/fetcher";
 
-const Cart = ({ DATA, revalidate, history }) => {
-  const [products, setProducts] = useState([]);
+const Cart = ({ history }) => {
+  const { data: userData, revalidate } = useSWR("/api/users/data", fetcher);
+  const [products, setProducts] = useState(null);
 
   useEffect(() => {
     let container = [];
 
     const getProduct = async () => {
-      if (DATA?.cart?.length > 0) {
-        DATA.cart.forEach((data) => {
+      if (userData?.cart?.length > 0) {
+        userData.cart.forEach((data) => {
           container.push(data.id);
         });
       } else {
@@ -31,7 +35,7 @@ const Cart = ({ DATA, revalidate, history }) => {
     };
 
     getProduct();
-  }, [DATA]);
+  }, [userData]);
 
   const onClick = useCallback(
     (id) => {
@@ -54,12 +58,16 @@ const Cart = ({ DATA, revalidate, history }) => {
     [revalidate]
   );
 
-  if (DATA === undefined) {
-    return <div style={{ fontSize: "16px" }}>Loading...</div>;
+  if (userData === undefined) {
+    return <Loading>Loading...</Loading>;
   }
 
-  if (DATA?.isAuth === false) {
+  if (userData?.isAuth === false) {
     history.push("/");
+  }
+
+  if (products === null) {
+    return <Loading>Loading...</Loading>;
   }
 
   return (
@@ -84,12 +92,12 @@ const Cart = ({ DATA, revalidate, history }) => {
             <React.Fragment key={index}>
               <ProductContainer>
                 <div>
-                  <a href={`/product/${product._id}`}>
+                  <Link to={`/product/${product._id}`}>
                     <Img
                       src={`http://localhost:3050/${product.images[0]}`}
                       alt={product.title}
                     />
-                  </a>
+                  </Link>
                 </div>
                 <div className="detail">
                   <h2>{product.title}</h2>

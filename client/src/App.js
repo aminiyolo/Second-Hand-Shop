@@ -1,46 +1,36 @@
 import React from "react";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
-import LoginPage from "./layout/Login";
-import SignUpPage from "./layout/SignUp";
-import LandingPage from "./layout/Landing";
-import NavBar from "./components/Navbar";
-import Upload from "./layout/Upload";
-import ProductDetail from "./layout/ProductDetail";
-import Cart from "./layout/Cart";
-import useSWR from "swr";
-import fetcher from "./hooks/fetcher";
-import MyPage from "./layout/MyPage";
-import Messenger from "./layout/Messenger";
-import AdminPage from "./layout/AdminPage";
+import loadble from "@loadable/component";
+
+const Login = loadble(() => import("./layout/Login"));
+const SignUp = loadble(() => import("./layout/SignUp"));
+const Landing = loadble(() => import("./layout/Landing"));
+const NavBar = loadble(() => import("./components/Navbar"));
+const Upload = loadble(() => import("./layout/Upload"));
+const ProductDetail = loadble(() => import("./layout/ProductDetail"));
+const Cart = loadble(() => import("./layout/Cart"));
+const MyPage = loadble(() => import("./layout/MyPage"));
+const Messenger = loadble(() => import("./layout/Messenger"));
+const Admin = loadble(() => import("./layout/AdminPage"));
 
 function App() {
-  const { data, revalidate } = useSWR("/api/users/data", fetcher);
   return (
-    <BrowserRouter>
-      <NavBar data={data} revalidate={revalidate} />
-      <Switch>
-        <Route exact path="/" component={LandingPage} />
-        <Route
-          path="/login"
-          render={() => <LoginPage DATA={data} revalidate={revalidate} />}
-        />
-        <Route exact path="/signUp" component={SignUpPage} />
-        <Route exact path="/upload" component={Upload} />
-        <Route exact path="/chat" render={() => <Messenger user={data} />} />
-        <Route exact path="/myPage" render={() => <MyPage DATA={data} />} />
-        <Route
-          exact
-          path="/cart"
-          render={() => <Cart DATA={data} revalidate={revalidate} />}
-        />
-        <Route
-          exact
-          path="/product/:id"
-          render={() => <ProductDetail DATA={data} revalidate={revalidate} />}
-        />
-        <Route exact path="/admin" render={() => <AdminPage DATA={data} />} />
-      </Switch>
-    </BrowserRouter>
+    <>
+      <BrowserRouter>
+        <NavBar />
+        <Switch>
+          <Route exact path="/" component={Landing} />
+          <Route path="/login" component={Login} />
+          <Route exact path="/signUp" component={SignUp} />
+          <Route exact path="/upload" component={Upload} />
+          <Route exact path="/chat" component={Messenger} />
+          <Route exact path="/myPage" component={MyPage} />
+          <Route exact path="/cart" component={Cart} />
+          <Route exact path="/product/:id" component={ProductDetail} />
+          <Route exact path="/admin" component={Admin} />
+        </Switch>
+      </BrowserRouter>
+    </>
   );
 }
 

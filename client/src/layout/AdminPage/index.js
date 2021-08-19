@@ -1,20 +1,18 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router";
+import useSWR from "swr";
 import AboutPosts from "../../components/AboutPosts";
 import AboutUsers from "../../components/AboutUsers";
+import fetcher from "../../hooks/fetcher";
+import { Loading } from "../Login/style";
 import { AdminPageContainer, ButtonWrapper, RenderWrapper } from "./style";
 
-const AdminPage = ({ DATA, history }) => {
+const AdminPage = ({ history }) => {
+  const { data: userData } = useSWR("/api/users/data", fetcher);
   const [users, setUsers] = useState([]);
   const [clickedUsers, setClickedUsers] = useState(false);
   const [clickedPosts, setClickedPosts] = useState(false);
-
-  useEffect(() => {
-    if (DATA?.role === 0) {
-      history.push("/");
-    }
-  }, [DATA, history]);
 
   useEffect(() => {
     const getAllUsers = async () => {
@@ -28,6 +26,14 @@ const AdminPage = ({ DATA, history }) => {
 
     getAllUsers();
   }, []);
+
+  if (userData === undefined) {
+    return <Loading>Loading...</Loading>;
+  }
+
+  if (userData?.role !== 1) {
+    history.push("/");
+  }
 
   return (
     <AdminPageContainer>

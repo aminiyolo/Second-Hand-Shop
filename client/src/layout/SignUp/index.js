@@ -68,7 +68,7 @@ const SignUpPage = ({ history }) => {
   }
 
   function checkIfShort(state, setState) {
-    if (state.length < 6) setState(true);
+    if (state.length >= 1 && state.length < 6) setState(true);
     else setState(false);
   }
 
@@ -222,6 +222,7 @@ const SignUpPage = ({ history }) => {
                 name="ID"
                 value={ID}
                 onChange={onChangeID}
+                maxLength="13"
               />
             </div>
           </Label>
@@ -234,6 +235,7 @@ const SignUpPage = ({ history }) => {
                 name="nickname"
                 value={nickname}
                 onChange={onChangeNickname}
+                maxLength="13"
               />
             </div>
           </Label>
@@ -246,6 +248,7 @@ const SignUpPage = ({ history }) => {
                 name="password"
                 value={password}
                 onChange={onChangePassword}
+                maxLength="16"
               />
             </div>
           </Label>
@@ -258,6 +261,7 @@ const SignUpPage = ({ history }) => {
                 name="password-check"
                 value={passwordCheck}
                 onChange={onChangePasswordCheck}
+                maxLength="16"
               />
             </div>
             {mismatchError && <Error>비밀번호가 일치하지 않습니다.</Error>}

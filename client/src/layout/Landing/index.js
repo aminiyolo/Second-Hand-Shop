@@ -15,6 +15,8 @@ import CategoryFilter from "../../components/CategoryFilter";
 import SearchFilter from "../../components/SearchFilter";
 import dayjs from "dayjs";
 import { Categories } from "../Upload/data";
+import { Link } from "react-router-dom";
+import { Loading } from "../Login/style";
 
 const LandingPage = () => {
   const [products, setProducts] = useState([]);
@@ -149,9 +151,9 @@ const LandingPage = () => {
                 <Card
                   style={cardStyle}
                   cover={
-                    <a href={`product/${product._id}`}>
+                    <Link to={`product/${product._id}`}>
                       <ProductCard product={product} />
-                    </a>
+                    </Link>
                   }
                 >
                   <ProductData>

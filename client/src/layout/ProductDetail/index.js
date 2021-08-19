@@ -5,10 +5,11 @@ import ProductInfo from "../../components/ProductInfo";
 import { Row, Col } from "antd";
 import axios from "axios";
 import { DetailContainer } from "./style";
+import { Loading } from "../Login/style";
 
-const ProductDetail = ({ DATA, revalidate }) => {
+const ProductDetail = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState("");
+  const [product, setProduct] = useState(null);
   const [seller, setSeller] = useState("");
 
   useEffect(() => {
@@ -19,6 +20,8 @@ const ProductDetail = ({ DATA, revalidate }) => {
         );
         setSeller(res.data.productInfo[0].seller.email);
         setProduct(res.data.productInfo[0]);
+
+        if (!res) setProduct([]);
       } catch (err) {
         console.log(err);
       }
@@ -26,6 +29,10 @@ const ProductDetail = ({ DATA, revalidate }) => {
 
     getProductInfo();
   }, [id]);
+
+  if (product === null) {
+    return <Loading>Loading...</Loading>;
+  }
 
   return (
     <DetailContainer>
@@ -36,12 +43,7 @@ const ProductDetail = ({ DATA, revalidate }) => {
         </Col>
         <Col lg={12} sm={24}>
           {/* product description and function buttons */}
-          <ProductInfo
-            product={product}
-            DATA={DATA}
-            revalidate={revalidate}
-            seller={seller}
-          />
+          <ProductInfo product={product} seller={seller} />
         </Col>
       </Row>
     </DetailContainer>

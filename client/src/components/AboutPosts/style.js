@@ -34,3 +34,12 @@ export const Tr = styled.tr`
     width: 10%;
   }
 `;
+
+export const Loading = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  font-size: 30px;
+  font-weight: 800;
+`;
