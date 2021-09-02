@@ -12,6 +12,20 @@ export const UploadContainer = styled.div`
       width: 50%;
     }
   }
+
+  @media screen and (max-width: 991px) {
+    margin: 0 auto;
+    text-align: center;
+    overflow-x: hidden;
+    & > .flex {
+      margin: 0 auto;
+      margin-top: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  }
 `;
 
 export const DescriptionBox = styled.div`
@@ -21,9 +35,27 @@ export const DescriptionBox = styled.div`
 export const Description = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
+  margin: 0 1rem;
+
   & > label {
     font-size: 14px;
     margin-bottom: 4px;
+  }
+
+  & > .input {
+    padding: 7px;
+    border: 2px solid #ff8a3d;
+    border-radius: 3px;
+    outline: none;
+    width: 90%;
+  }
+
+  @media screen and (max-width: 991px) {
+    width: 100%;
+    & > label {
+      width: 90%;
+    }
   }
 `;
 
@@ -32,6 +64,7 @@ export const Input = styled.input`
   border: 2px solid #ff8a3d;
   border-radius: 3px;
   outline: none;
+  width: 90%;
 `;
 
 export const Textarea = styled.textarea`
@@ -39,11 +72,17 @@ export const Textarea = styled.textarea`
   border: 2px solid #ff8a3d;
   border-radius: 3px;
   outline: none;
+  width: 90%;
 `;
 
 export const SelectBox = styled.div`
   display: flex;
   flex-direction: column;
+  margin: 0 1rem;
+
+  & > .category {
+    text-align: left;
+  }
 `;
 
 export const Select = styled.select`
@@ -60,7 +99,8 @@ export const Button = styled.button`
   border-radius: 5px;
   background-color: white;
   color: #ff8a3d;
-  font-size: 16px;
+  margin: 0 1rem;
+  font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
   &:hover {

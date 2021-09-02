@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { withRouter } from "react-router";
+import { useHistory } from "react-router";
 import useSWR from "swr";
 import AboutPosts from "../../components/AboutPosts";
 import AboutUsers from "../../components/AboutUsers";
@@ -8,8 +8,9 @@ import fetcher from "../../hooks/fetcher";
 import { Loading } from "../Login/style";
 import { AdminPageContainer, ButtonWrapper, RenderWrapper } from "./style";
 
-const AdminPage = ({ history }) => {
+const AdminPage = () => {
   const { data: userData } = useSWR("/api/users/data", fetcher);
+  const history = useHistory();
   const [users, setUsers] = useState([]);
   const [clickedUsers, setClickedUsers] = useState(false);
   const [clickedPosts, setClickedPosts] = useState(false);
@@ -66,4 +67,4 @@ const AdminPage = ({ history }) => {
   );
 };
 
-export default withRouter(AdminPage);
+export default AdminPage;

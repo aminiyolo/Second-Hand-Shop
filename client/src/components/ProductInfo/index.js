@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { checkCategory } from "./categoryData";
 import dayjs from "dayjs";
 import axios from "axios";
-import { useParams, withRouter } from "react-router";
+import { useParams, useHistory } from "react-router";
 import {
   addedStyle,
   normalStyle,
@@ -10,14 +10,15 @@ import {
   BtnContainer,
   Description,
   HeartContainer,
+  ProductInfoContainer,
 } from "./style";
 import { HeartOutlined } from "@ant-design/icons";
 import useSWR from "swr";
 import fetcher from "../../hooks/fetcher";
 
-const ProductInfo = ({ product, history, seller }) => {
+const ProductInfo = ({ product, seller }) => {
   const { data: userData, revalidate } = useSWR("/api/users/data", fetcher);
-
+  const history = useHistory();
   const { id } = useParams();
   const [category, setCategory] = useState("");
   const [inAcart, setInAcart] = useState(false);
@@ -124,7 +125,7 @@ const ProductInfo = ({ product, history, seller }) => {
   }, [product, userData, id]);
 
   return (
-    <div>
+    <ProductInfoContainer>
       <Description>
         <h1>{product?.title}</h1>
         <div className="detail">
@@ -138,7 +139,7 @@ const ProductInfo = ({ product, history, seller }) => {
         <div className="price">가격: &nbsp;{product?.price}원</div>
         <HeartContainer>
           <HeartOutlined />
-          <span inAcart={inAcart}>{count}</span>
+          <span>{count}</span>
         </HeartContainer>
       </Description>
       <BtnContainer>
@@ -150,8 +151,8 @@ const ProductInfo = ({ product, history, seller }) => {
         </button>
         <ChatBtn onClick={onClickChat}>판매자와 채팅</ChatBtn>
       </BtnContainer>
-    </div>
+    </ProductInfoContainer>
   );
 };
 
-export default withRouter(ProductInfo);
+export default ProductInfo;

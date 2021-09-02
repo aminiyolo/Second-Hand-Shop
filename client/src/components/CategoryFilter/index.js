@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { Collapse, Checkbox } from "antd";
 
 const { Panel } = Collapse;
 
-const CategoryFilter = ({ Categories, categoryFilter, categoryCheck }) => {
+const CategoryFilter = ({
+  Categories,
+  categoryFilter,
+  categoryCheck,
+  clearCategory,
+}) => {
   const [selected, setSelected] = useState([]);
 
   const onToggle = (key) => {
@@ -21,6 +26,10 @@ const CategoryFilter = ({ Categories, categoryFilter, categoryCheck }) => {
     setSelected(willBeUpdated);
     categoryFilter(willBeUpdated);
   };
+
+  useEffect(() => {
+    setSelected([]);
+  }, [clearCategory]);
 
   return (
     <div>

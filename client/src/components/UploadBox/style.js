@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const InputContainer = styled.div`
-  width: 330px;
+  width: 20.5rem;
   height: 270px;
   margin-top: 20px;
   border: 2px solid #ff8a3d;
@@ -9,14 +9,23 @@ export const InputContainer = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+
+  @media screen and (max-width: 991px) {
+    width: 120%;
+  }
 `;
 
 export const ImageContainer = styled.div`
   margin-top: 20px;
   display: flex;
-  width: 300px;
-  height: 170px;
+  width: 18.75rem;
+  height: 10.5rem;
   overflow-x: auto;
+
+  @media screen and (max-width: 991px) {
+    margin: 0;
+    height: 5rem;
+  }
 `;
 
 export const Img = styled.img`

@@ -16,7 +16,6 @@ import SearchFilter from "../../components/SearchFilter";
 import dayjs from "dayjs";
 import { Categories } from "../Upload/data";
 import { Link } from "react-router-dom";
-import { Loading } from "../Login/style";
 
 const LandingPage = () => {
   const [products, setProducts] = useState([]);
@@ -29,6 +28,7 @@ const LandingPage = () => {
   });
   const [items, setItems] = useState(10);
   const [scrollOption, setScrollOption] = useState(false);
+  const [clearCategory, setClearCategory] = useState(false);
 
   const scrollOption_check = useCallback((value) => {
     if (value) {
@@ -85,8 +85,9 @@ const LandingPage = () => {
       let willBeUpdated = { ...filter };
       willBeUpdated["category"] = selected;
       let data = willBeUpdated;
+
       getData(data);
-      setFilter(willBeUpdated);
+      // setFilter(willBeUpdated);
     },
     [filter, getData]
   );
@@ -94,10 +95,13 @@ const LandingPage = () => {
   const searchFilter = useCallback(
     (searchValue) => {
       setSearch(true);
+
       let data = {
         filter,
         searchValue,
       };
+
+      setClearCategory((prev) => !prev);
       getData(data);
     },
     [filter, getData]
@@ -106,18 +110,13 @@ const LandingPage = () => {
   const getAllProduct = useCallback(() => {
     setRenderToggle((prev) => !prev);
     setScrollOption(false);
+    setClearCategory((prev) => !prev);
   }, []);
 
   return (
     <LandingContainer>
       <Background alt="background">
-        <h1
-          style={{
-            paddingTop: "100px",
-            textAlign: "center",
-            fontSize: "1.7rem",
-          }}
-        >
+        <h1 className="title">
           당신이 필요한 제품을 구매하시고 필요 없는 상품은 판매해보세요 !
         </h1>
         <FilterBox>
@@ -125,8 +124,9 @@ const LandingPage = () => {
             <Col lg={12} xs={12}>
               <CategoryFilter
                 Categories={Categories}
-                categoryFilter={(selected) => categoryFilter(selected)}
+                categoryFilter={categoryFilter}
                 categoryCheck={scrollOption_check}
+                clearCategory={clearCategory}
               />
             </Col>
             <Col lg={12} xs={24}></Col>
@@ -160,7 +160,7 @@ const LandingPage = () => {
                     <p className="title">{product.title}</p>
                     <p className="price">{`${product.price}원`}</p>
                     <span className="date">
-                      업로드 날짜:{" "}
+                      업로드 날짜:
                       {dayjs(product.createdAt).format("YYYY-MM-DD")}
                     </span>
                   </ProductData>

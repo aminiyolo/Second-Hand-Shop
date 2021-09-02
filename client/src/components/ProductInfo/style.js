@@ -1,5 +1,11 @@
 import styled from "styled-components";
 
+export const ProductInfoContainer = styled.div`
+  @media screen and (max-width: 991px) {
+    margin-bottom: 2.5rem;
+  }
+`;
+
 export const addedStyle = {
   border: "none",
   backgroundColor: "#FF6A4D",
@@ -7,7 +13,7 @@ export const addedStyle = {
   padding: "10px 8px",
   borderRadius: "5px",
   cursor: "pointer",
-  fontSize: "16px",
+  fontSize: "1rem",
   outline: "none",
 };
 
@@ -19,7 +25,7 @@ export const normalStyle = {
   outline: "none",
   borderRadius: "5px",
   cursor: "pointer",
-  fontSize: "16px",
+  fontSize: "1rem",
 };
 
 export const ChatBtn = styled.button`
@@ -30,7 +36,7 @@ export const ChatBtn = styled.button`
   padding: 10px 12px;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1rem;
 `;
 
 export const BtnContainer = styled.div`
@@ -54,12 +60,17 @@ export const Description = styled.div`
   & .price {
     margin-top: 10px;
   }
+
+  @media screen and (max-width: 570px) {
+    width: 20rem;
+    margin: 0 1rem;
+  }
 `;
 
 export const HeartContainer = styled.div`
   position: absolute;
   right: 20px;
-  font-size: 20px;
+  font-size: 1.25rem;
   & > span {
     margin-left: 5px;
   }

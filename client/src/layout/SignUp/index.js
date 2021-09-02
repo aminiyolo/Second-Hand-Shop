@@ -1,27 +1,27 @@
 import React, { useCallback, useState } from "react";
+import { Success, Loading, Label } from "../Login/style";
 import {
-  Success,
+  AuthButton,
+  Container,
+  Background,
+  Error,
+  H2,
   Form,
-  Label,
   Input,
   LinkContainer,
   Button,
-  Loading,
-} from "../Login/style";
-import { AuthButton, Container, Background, Error, H2 } from "./style";
-import { Link, withRouter } from "react-router-dom";
+} from "./style";
+import { Link, useHistory } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import axios from "axios";
 import dayjs from "dayjs";
 import useSWR from "swr";
 import fetcher from "../../hooks/fetcher";
 
-const SignUpPage = ({ history }) => {
-  function getNum() {
-    return Math.random();
-  }
-
+const SignUpPage = () => {
   const { data, revalidate } = useSWR("/api/users/data", fetcher);
+  const history = useHistory();
+
   const [authNum, onChangeAuthNum] = useInput("");
   const [auth, setAuth] = useState(getNum());
   const [authCheck, setAuthCheck] = useState(false);
@@ -41,6 +41,10 @@ const SignUpPage = ({ history }) => {
   const [passwordCheck, setPasswordCheck] = useState("");
   const [mismatchError, setMismatchError] = useState(false);
   const [signUpSuccess, setSignUpSuccess] = useState(false);
+
+  function getNum() {
+    return Math.random();
+  }
 
   const onChangePassword = useCallback(
     (e) => {
@@ -291,4 +295,4 @@ const SignUpPage = ({ history }) => {
   );
 };
 
-export default withRouter(SignUpPage);
+export default SignUpPage;

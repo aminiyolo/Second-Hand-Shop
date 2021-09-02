@@ -10,7 +10,7 @@ import { Loading } from "../Login/style";
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const [seller, setSeller] = useState("");
+  const [seller, setSeller] = useState(null);
 
   useEffect(() => {
     const getProductInfo = async () => {
@@ -20,8 +20,6 @@ const ProductDetail = () => {
         );
         setSeller(res.data.productInfo[0].seller.email);
         setProduct(res.data.productInfo[0]);
-
-        if (!res) setProduct([]);
       } catch (err) {
         console.log(err);
       }

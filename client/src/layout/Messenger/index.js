@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { withRouter } from "react-router";
+import { useHistory } from "react-router";
 import Conversation from "../../components/Conversation";
 import Message from "../../components/Message";
 import { io } from "socket.io-client";
@@ -9,8 +9,9 @@ import { Loading } from "../Login/style";
 import useSWR from "swr";
 import fetcher from "../../hooks/fetcher";
 
-const Messenger = ({ history }) => {
+const Messenger = () => {
   const { data: userData } = useSWR("/api/users/data", fetcher);
+  const history = useHistory();
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -186,4 +187,4 @@ const Messenger = ({ history }) => {
   );
 };
 
-export default withRouter(Messenger);
+export default Messenger;

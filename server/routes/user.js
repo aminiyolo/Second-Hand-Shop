@@ -7,6 +7,7 @@ router.post("/register", async (req, res) => {
   try {
     const email = await User.findOne({ email: req.body.email });
     if (email) {
+      // 이미 이메일이 존재하는 경우
       return res
         .status(200)
         .json({ success: false, msg: "이미 가입된 이메일입니다." });
@@ -14,6 +15,7 @@ router.post("/register", async (req, res) => {
 
     const nickname = await User.findOne({ nickname: req.body.nickname });
     if (nickname) {
+      // 이미 닉네임이 존재하는 경우
       return res
         .status(200)
         .json({ success: false, msg: "이미 존재하는 닉네임입니다." });
@@ -21,6 +23,7 @@ router.post("/register", async (req, res) => {
 
     const ID = await User.findOne({ ID: req.body.ID });
     if (ID) {
+      // 이미 아이디가 존재하는 경우
       return res
         .status(200)
         .json({ success: false, msg: "이미 존재하는 아이디입니다." });
@@ -35,43 +38,73 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/login", (req, res) => {
-  // Look for a requested ID in a database
-  User.findOne({ ID: req.body.ID }, (err, user) => {
+router.post("/login", async (req, res) => {
+  // 데이터베이스에서 요청된 아이디를 찾기
+  try {
+    const user = await User.findOne({ ID: req.body.ID });
     if (!user) {
-      return res.json({ success: false, msg: "존재하지 않는 사용자 입니다." });
+      return res
+        .status(200)
+        .json({ success: false, msg: "존재하지 않는 사용자 입니다." });
     }
-    // If there is a data that we look for, Check the password if corrected
+    // 데이터베이스에 우리가 찾고자 하는 아이디가 있다면, 비밀번호가 일치하는지 확인
     user.comparePassword(req.body.password, (err, isMatch) => {
-      if (err) {
-        return res.json({ success: false, msg: err });
-      }
       if (isMatch === false) {
         return res.json({
           success: false,
           msg: "비밀번호가 일치하지 않습니다.",
         });
       }
-      // If the password is correct, Give a token
+      // 비밀번호가 일치하다면 토큰 부여
       user.giveToken((err, user) => {
-        if (err) {
-          return res.json({ success: false });
-        }
         res
           .cookie("USER", user.token)
           .status(200)
           .json({ success: true, userId: user._id });
       });
     });
-  });
+  } catch (err) {
+    return res.status(500).json(err);
+  }
 });
+
+// router.post("/login", (req, res) => {
+//   // 데이터베이스에서 요청된 아이디를 찾기
+//   User.findOne({ ID: req.body.ID }, (err, user) => {
+//     if (!user) {
+//       return res.json({ success: false, msg: "존재하지 않는 사용자 입니다." });
+//     }
+//     // 데이터베이스에 우리가 찾고자 하는 아이디가 있다면, 비밀번호가 일치하는지 확인
+//     user.comparePassword(req.body.password, (err, isMatch) => {
+//       if (err) {
+//         return res.json({ success: false, msg: err });
+//       }
+//       if (isMatch === false) {
+//         return res.json({
+//           success: false,
+//           msg: "비밀번호가 일치하지 않습니다.",
+//         });
+//       }
+//       // 비밀번호가 일치하다면 토큰 부여
+//       user.giveToken((err, user) => {
+//         if (err) {
+//           return res.json({ success: false });
+//         }
+//         res
+//           .cookie("USER", user.token)
+//           .status(200)
+//           .json({ success: true, userId: user._id });
+//       });
+//     });
+//   });
+// });
 
 router.get("/logout", auth, async (req, res) => {
   try {
     await User.findOneAndUpdate({ _id: req.user._id }, { token: "" });
     res.status(200).json({ success: true });
   } catch (err) {
-    res.status(500).json({ success });
+    res.status(500).json(err);
   }
 });
 

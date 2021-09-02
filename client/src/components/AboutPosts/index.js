@@ -1,10 +1,11 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
-import { withRouter } from "react-router";
+import { useHistory } from "react-router";
 import dayjs from "dayjs";
 import { Img, Loading, Table, Title, Tr } from "./style";
 
-const AboutPosts = ({ history }) => {
+const AboutPosts = () => {
+  const history = useHistory();
   const [products, setProducts] = useState(null);
   const [deleteToggle, setDeleteToggle] = useState(false);
 
@@ -102,4 +103,4 @@ const AboutPosts = ({ history }) => {
   );
 };
 
-export default withRouter(AboutPosts);
+export default AboutPosts;

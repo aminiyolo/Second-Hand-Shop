@@ -7,7 +7,7 @@ export const Header = styled.header`
     Arial, sans-serif;
   font-weight: 700;
   color: whitesmoke;
-  font-size: 48px;
+  font-size: 3rem;
   line-height: 46px;
   letter-spacing: -0.75px;
   margin-top: 0px;
@@ -17,8 +17,14 @@ export const Header = styled.header`
 
 export const Form = styled.form`
   margin: 30px auto 0;
-  width: 400px;
   max-width: 400px;
+  overflow-x: hidden;
+
+  @media screen and (max-width: 580px) {
+    overflow-x: hidden;
+    width: 80%;
+    height: 70%;
+  }
 `;
 
 export const Label = styled.label`
@@ -41,7 +47,7 @@ export const Input = styled.input`
   transition: border 80ms ease-out, box-shadow 80ms ease-out;
   box-sizing: border-box;
   margin: 0 0 20px;
-  width: 100%;
+  width: 90%;
   color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
   background-color: rgba(var(--sk_primary_background, 255, 255, 255), 1);
   padding: 12px;
@@ -60,7 +66,7 @@ export const Input = styled.input`
 
 export const Button = styled.button`
   margin-bottom: 12px;
-  width: 100%;
+  width: 90%;
   max-width: 100%;
   color: #fff;
   background-color: #ff8a3d;
@@ -102,7 +108,7 @@ export const LinkContainer = styled.p`
   font-size: 13px;
   color: #616061;
   margin: 0 auto 8px;
-  width: 400px;
+  width: 25rem;
   max-width: 400px;
   padding-bottom: 20px;
   & a {
@@ -112,6 +118,10 @@ export const LinkContainer = styled.p`
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  @media screen and (max-width: 580px) {
+    text-align: center;
   }
 `;
 
@@ -128,13 +138,37 @@ export const FormAndImage = styled.div`
   background-image: url(${img});
   background-size: cover;
   background-position: center;
-  height: 620px;
+  width: 100%;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
+
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+  }
+
+  @media screen and (max-width: 768px) {
+    padding-top: 20rem;
+    padding-bottom: 50rem;
+    width: 100%;
+  }
+
+  @media screen and (max-width: 580px) {
+    padding-bottom: 50rem;
+    width: 105%;
+  }
+
+  @media screen and (max-width: 400px) {
+    width: 105%;
+  }
 `;
 
 export const Container = styled.div`
   margin: 160px 50px 40px 85px;
+
+  @media screen and (max-width: 400px) {
+    margin: 0;
+  }
 `;

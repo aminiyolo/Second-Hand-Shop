@@ -3,16 +3,16 @@ import styled from "styled-components";
 export const Nav = styled.div`
   width: 100%;
   position: fixed;
-  padding: 14px 16px;
+  padding: 0.875rem 1rem;
   background-color: white;
   display: flex;
-  box-shadow: 0 0 30px #f3f1f1;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.06);
   z-index: 1000;
 `;
 
 export const Logo = styled.h1`
   font-weight: 800;
-  font-size: 32px;
+  font-size: 2rem;
   margin-bottom: 0;
   & > span {
     color: #ff8a3d;
@@ -22,7 +22,7 @@ export const Logo = styled.h1`
 
 export const ButtonContainer = styled.div`
   position: absolute;
-  right: 17px;
+  right: 1rem;
   display: flex;
 `;
 
@@ -30,10 +30,10 @@ export const Upload = styled.div`
   margin-right: 35px;
   color: #ff8a3d;
   font-weight: 500;
-  font-size: 16px;
+  font-size: 1rem;
   margin-top: 0;
   border: 2px solid #ff8a3d;
-  border-radius: 5px;
+  border-radius: 0.5rem;
   line-height: 42px;
   padding: 0 10px;
   cursor: pointer;
@@ -46,7 +46,7 @@ export const Upload = styled.div`
 export const Cart = styled.div`
   color: #ff8a3d;
   margin-right: 30px;
-  font-size: 38px;
+  font-size: 2.5rem;
   line-height: 40px;
   cursor: pointer;
   transition: 250ms ease-out;

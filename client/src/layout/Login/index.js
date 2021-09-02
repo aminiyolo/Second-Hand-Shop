@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import axios from "axios";
-import { Link, withRouter } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   Form,
   Error,
@@ -17,8 +17,9 @@ import useInput from "../../hooks/useInput";
 import useSWR from "swr";
 import fetcher from "../../hooks/fetcher";
 
-const LoginPage = ({ history }) => {
+const LoginPage = () => {
   const { data, revalidate } = useSWR("/api/users/data", fetcher);
+  const history = useHistory();
   const [ID, onChangeID] = useInput("");
   const [password, onChangePassword] = useInput("");
   const [logInError, setLogInError] = useState("");
@@ -111,4 +112,4 @@ const LoginPage = ({ history }) => {
   );
 };
 
-export default withRouter(LoginPage);
+export default LoginPage;

@@ -34,13 +34,13 @@ export const ProfileModal = styled.div`
 `;
 
 export const Img = styled.img`
-  width: 25px;
+  width: 1.5rem;
   height: 25px;
   border-radius: 8px;
 `;
 
 export const Nickname = styled.span`
   margin-right: 10px;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 700;
 `;

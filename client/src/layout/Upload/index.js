@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import useSWR from "swr";
-import { withRouter } from "react-router";
+import { useHistory } from "react-router";
 import fetcher from "../../hooks/fetcher";
 import useInput from "../../hooks/useInput";
 import UploadBox from "../../components/UploadBox";
@@ -18,8 +18,10 @@ import {
 } from "./style";
 import { Error, Loading } from "../Login/style";
 
-const Upload = ({ history }) => {
+const Upload = () => {
   const { data: DATA } = useSWR("/api/users/data", fetcher);
+  const history = useHistory();
+
   const [category, setCategories] = useState(1);
   const [title, onChangeTitle] = useInput("");
   const [description, onChangeDescription] = useInput("");
@@ -157,7 +159,7 @@ const Upload = ({ history }) => {
               <br />
               <br />
               <SelectBox>
-                <label>카테고리</label>
+                <label className="category">카테고리</label>
                 <Select value={category} onChange={onChangeCategory}>
                   {Categories.map((Category, index) => (
                     <option key={index} value={Category.key}>
@@ -178,4 +180,4 @@ const Upload = ({ history }) => {
   );
 };
 
-export default withRouter(Upload);
+export default Upload;

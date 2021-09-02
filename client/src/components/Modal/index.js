@@ -8,31 +8,27 @@ import {
   CloseBtn,
   MeunContainer,
 } from "./style";
-import { withRouter } from "react-router";
-import useSWR from "swr";
-import fetcher from "../../hooks/fetcher";
+import { useHistory } from "react-router";
 
-const Modal = ({ history, onCloseModal }) => {
-  const { data, revalidate } = useSWR("/api/users/data", fetcher);
+const Modal = ({ onCloseModal, data, revalidate }) => {
+  const history = useHistory();
   const onLogout = useCallback(() => {
     const Logout = async () => {
       try {
-        await axios.get("/api/users/logout");
-        onCloseModal();
-        document.cookie =
-          "USER=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-        revalidate();
-
-        setTimeout(() => {
-          history.push("/login");
-        }, 500);
+        const res = await axios.get("/api/users/logout");
+        if (res.data.success) {
+          onCloseModal();
+          document.cookie =
+            "USER=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+          revalidate();
+        }
       } catch (err) {
         alert("로그아웃에 실패하였습니다.");
       }
     };
 
     Logout();
-  }, [history, onCloseModal, revalidate]);
+  }, [onCloseModal, revalidate]);
 
   const stopPropagation = (e) => {
     e.stopPropagation();
@@ -88,4 +84,4 @@ const Modal = ({ history, onCloseModal }) => {
   );
 };
 
-export default withRouter(Modal);
+export default Modal;

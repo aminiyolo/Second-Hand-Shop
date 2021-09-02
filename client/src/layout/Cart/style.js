@@ -60,10 +60,29 @@ export const ProductContainer = styled.div`
     border-radius: 5px;
     cursor: pointer;
     padding: 8px 12px;
+
+    @media screen and (max-width: 760px) {
+      bottom: 10px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.5rem;
+
+      & > .detail {
+        margin-left: 20px;
+        display: flex;
+        flex-direction: column;
+        color: black;
+        font-size: 0.2rem;
+      }
+    }
   }
 `;
 
 export const Img = styled.img`
   width: 200px;
   height: 100%;
+
+  @media screen and (max-width: 760px) {
+    width: 100px;
+    height: 90%;
+  }
 `;

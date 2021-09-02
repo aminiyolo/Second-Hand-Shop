@@ -2,13 +2,14 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { CartContainer, Empty, ProductContainer, Img } from "./style";
-import { withRouter, Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { Loading } from "../Login/style";
 import useSWR from "swr";
 import fetcher from "../../hooks/fetcher";
 
-const Cart = ({ history }) => {
+const Cart = () => {
   const { data: userData, revalidate } = useSWR("/api/users/data", fetcher);
+  const history = useHistory();
   const [products, setProducts] = useState(null);
 
   useEffect(() => {
@@ -121,4 +122,4 @@ const Cart = ({ history }) => {
   );
 };
 
-export default withRouter(Cart);
+export default Cart;

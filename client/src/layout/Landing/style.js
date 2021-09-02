@@ -13,10 +13,23 @@ export const Background = styled.div`
   background-position: center;
   width: 100%;
   height: 430px;
+
   & > .sentence {
     position: absolute;
     top: 25%;
     left: 19.5%;
+  }
+
+  & > .title {
+    padding-top: 100px;
+    text-align: center;
+    font-size: 1.7rem;
+  }
+
+  @media screen and (max-width: 820px) {
+    & > .title {
+      font-size: 1rem;
+    }
   }
 `;
 
@@ -26,6 +39,23 @@ export const FilterBox = styled.div`
   position: absolute;
   top: 45%;
   left: 30%;
+  z-index: 1000;
+
+  @media screen and (max-device-width: 1024px) {
+    top: 20%;
+  }
+
+  @media screen and (max-device-width: 768px) {
+    top: 28%;
+  }
+
+  @media screen and (max-width: 500px) {
+    top: 40%;
+  }
+
+  @media screen and (max-device-width: 400px) {
+    top: 42%;
+  }
 `;
 
 export const RenderBox = styled.div`
@@ -37,7 +67,7 @@ export const RenderBox = styled.div`
 `;
 
 export const ProductData = styled.div`
-  height: 30px;
+  height: 1.8rem;
   & > .title {
     margin-bottom: 5px;
     font-size: 16px;
@@ -58,22 +88,31 @@ export const ProductData = styled.div`
 export const cardStyle = {
   color: "black",
   paddingBottom: "65px",
+  boxShadow: "0 0.5rem 1rem rgba(0, 0, 0, 0.3)",
 };
 
 export const GetAllButton = styled.div`
-  position: absolute;
-  top: 40%;
-  left: 46%;
+  width: 15%;
+  height: 7.5%;
+  margin: auto;
+  margin-top: 1.1rem;
+  text-align: center;
+  font-size: 0.8rem;
   border: 2px solid #ff8a3d;
   background-color: #ff8a3d;
   color: whitesmoke;
   font-weight: 600;
-  padding: 4px 16px;
-  border-radius: 5px;
+  padding: 0.25rem 1rem;
+  border-radius: 0.5rem;
   cursor: pointer;
   &:hover {
     background-color: white;
     color: #ff8a3d;
     border: 2px solid white;
+  }
+
+  @media screen and (max-width: 820px) {
+    font-size: 0.5rem;
+    height: 13%;
   }
 `;
