@@ -68,37 +68,6 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// router.post("/login", (req, res) => {
-//   // 데이터베이스에서 요청된 아이디를 찾기
-//   User.findOne({ ID: req.body.ID }, (err, user) => {
-//     if (!user) {
-//       return res.json({ success: false, msg: "존재하지 않는 사용자 입니다." });
-//     }
-//     // 데이터베이스에 우리가 찾고자 하는 아이디가 있다면, 비밀번호가 일치하는지 확인
-//     user.comparePassword(req.body.password, (err, isMatch) => {
-//       if (err) {
-//         return res.json({ success: false, msg: err });
-//       }
-//       if (isMatch === false) {
-//         return res.json({
-//           success: false,
-//           msg: "비밀번호가 일치하지 않습니다.",
-//         });
-//       }
-//       // 비밀번호가 일치하다면 토큰 부여
-//       user.giveToken((err, user) => {
-//         if (err) {
-//           return res.json({ success: false });
-//         }
-//         res
-//           .cookie("USER", user.token)
-//           .status(200)
-//           .json({ success: true, userId: user._id });
-//       });
-//     });
-//   });
-// });
-
 router.get("/logout", auth, async (req, res) => {
   try {
     await User.findOneAndUpdate({ _id: req.user._id }, { token: "" });

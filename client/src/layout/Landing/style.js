@@ -5,6 +5,9 @@ export const LandingContainer = styled.div`
   margin: 0px auto 100px;
   padding-bottom: 40px;
   background-color: whitesmoke;
+
+  @media screen and (max-width: 768px) {
+  }
 `;
 
 export const Background = styled.div`
@@ -54,7 +57,7 @@ export const FilterBox = styled.div`
   }
 
   @media screen and (max-device-width: 400px) {
-    top: 42%;
+    top: 38%;
   }
 `;
 
@@ -113,6 +116,17 @@ export const GetAllButton = styled.div`
 
   @media screen and (max-width: 820px) {
     font-size: 0.5rem;
-    height: 13%;
+    height: 5.5%;
+  }
+
+  @media screen and (max-width: 415px) {
+    font-size: 0.5rem;
+    height: 12%;
+  }
+
+  @media screen and (max-device-width: 380px) {
+    font-size: 1px;
+    padding: 0.25rem;
+    height: 8.3%;
   }
 `;

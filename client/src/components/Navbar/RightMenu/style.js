@@ -14,6 +14,11 @@ export const Button = styled.button`
   outline: none;
   padding: 10px 12px;
   border-radius: 5px;
+
+  @media screen and (max-width: 400px) {
+    font-size: 0.7rem;
+    padding: 0.7rem 0.5rem;
+  }
 `;
 
 export const ProfileModal = styled.div`

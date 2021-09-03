@@ -12,6 +12,7 @@ import { useHistory } from "react-router";
 
 const Modal = ({ onCloseModal, data, revalidate }) => {
   const history = useHistory();
+
   const onLogout = useCallback(() => {
     const Logout = async () => {
       try {
@@ -71,7 +72,7 @@ const Modal = ({ onCloseModal, data, revalidate }) => {
                 </div>
               )}
               <div className="messenger" onClick={onMessenger}>
-                Messenger
+                Chat
               </div>
               <div onClick={onLogout} className="logout">
                 Logout
