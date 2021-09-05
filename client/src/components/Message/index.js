@@ -22,7 +22,7 @@ const Message = ({ message, owner }) => {
           <p className="text">{message.text}</p>
         </div>
         <div className="createdAt">
-          {dayjs(message.createdAt).format("MM/DD - h:mm A")}
+          {dayjs(message.createdAt).format("h:mm A")}
         </div>
       </div>
     </MessageWrapper>

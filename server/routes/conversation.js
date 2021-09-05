@@ -22,6 +22,7 @@ router.post("/", async (req, res) => {
     members: [req.body.senderId, req.body.receiverId],
     title: req.body.title,
     productId: req.body.productId,
+    image: req.body.image,
   });
 
   try {

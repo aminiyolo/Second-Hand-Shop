@@ -8,7 +8,7 @@ export const Nav = styled.div`
   background-color: white;
   display: flex;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.06);
-  z-index: 1000;
+  z-index: 10000;
 `;
 
 export const MenuBar = styled(Menu)`

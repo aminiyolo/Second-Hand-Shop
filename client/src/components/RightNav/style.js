@@ -6,7 +6,7 @@ export const NavContainer = styled.div`
   right: 0;
   left: 0;
   bottom: 0;
-  z-index: 1000;
+  z-index: 10000;
 `;
 
 export const RightNav = styled.div`

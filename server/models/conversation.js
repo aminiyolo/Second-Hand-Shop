@@ -11,6 +11,9 @@ const ConversationSchema = new mongoose.Schema(
     productId: {
       type: String,
     },
+    image: {
+      type: Array,
+    },
   },
   { timestamps: true }
 );

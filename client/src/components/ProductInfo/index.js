@@ -80,6 +80,7 @@ const ProductInfo = ({ product, seller }) => {
       receiverId: userData._id,
       title: product.title,
       productId: product._id,
+      image: product.images,
     };
 
     const makeConversation = async () => {

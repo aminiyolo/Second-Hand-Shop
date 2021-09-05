@@ -8,6 +8,8 @@ import "./style.css";
 import { Loading } from "../Login/style";
 import useSWR from "swr";
 import fetcher from "../../hooks/fetcher";
+import MakeSection from "../../utill/makeSection";
+import Textarea from "../../components/Textarea";
 
 const Messenger = () => {
   const { data: userData } = useSWR("/api/users/data", fetcher);
@@ -30,6 +32,9 @@ const Messenger = () => {
         createdAt: Date.now(),
       });
     });
+    return () => {
+      socket.current.off("disconnect");
+    };
   }, []);
 
   useEffect(() => {
@@ -50,6 +55,7 @@ const Messenger = () => {
       try {
         const res = await axios.get(`/api/conversations/${userData?._id}`);
         // 가장 최근의 생성된 대화방을 가장 위에 나타내기 위하여 reverse() 사용.
+        console.log(res);
         setConversations(res.data.reverse());
       } catch (err) {
         console.log(err);
@@ -129,6 +135,8 @@ const Messenger = () => {
     history.push("/");
   }
 
+  const msgSections = MakeSection(messages);
+
   return (
     <div className="messenger_Wrapper">
       <div className="messenger_list">
@@ -151,14 +159,23 @@ const Messenger = () => {
         <div className="message_workspace">
           {currentChat ? (
             <div>
-              {messages?.map((message, index) => (
-                <div key={index} ref={scrollRef}>
-                  <Message
-                    message={message}
-                    owner={message.sender === userData?._id}
-                  />
-                </div>
-              ))}
+              {Object.entries(msgSections).map(([date, messages]) => {
+                return (
+                  <section className="section" key={date}>
+                    <div className="stickyHeader">
+                      <button className="date">{date}</button>
+                    </div>
+                    {messages?.map((message, index) => (
+                      <div key={index} ref={scrollRef}>
+                        <Message
+                          message={message}
+                          owner={message.sender === userData?._id}
+                        />
+                      </div>
+                    ))}
+                  </section>
+                );
+              })}
             </div>
           ) : (
             <div className="info">
@@ -169,18 +186,11 @@ const Messenger = () => {
           )}
         </div>
         {currentChat && (
-          <div className="textareaWrapper">
-            <form className="form" onSubmit={handleSubmit}>
-              <input
-                className="textarea"
-                value={newMessages}
-                onChange={(e) => setNewMessages(e.target.value)}
-              />
-              <div className="submit">
-                <button onClick={handleSubmit}>Submit</button>
-              </div>
-            </form>
-          </div>
+          <Textarea
+            handleSubmit={handleSubmit}
+            newMessages={newMessages}
+            setNewMessages={setNewMessages}
+          />
         )}
       </div>
     </div>

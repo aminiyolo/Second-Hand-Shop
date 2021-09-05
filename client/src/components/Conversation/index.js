@@ -28,7 +28,11 @@ const Conversation = ({ conversation }) => {
     <Profile>
       {user && (
         <div>
-          <img className="img" src={user.image} alt="profile" />
+          <img
+            className="img"
+            src={`http://localhost:3050/${conversation?.image}`}
+            alt="productImg"
+          />
         </div>
       )}
       <div className="detail">
