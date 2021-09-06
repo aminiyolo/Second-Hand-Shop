@@ -4,7 +4,7 @@ import { SearchStyle } from "./style";
 
 const { Search } = Input;
 
-const SearchFilter = ({ searchFilter, checkSearch }) => {
+const SearchFilter = ({ searchFilter }) => {
   const [value, setValue] = useState("");
 
   const onSearch = useCallback((e) => {
@@ -15,10 +15,9 @@ const SearchFilter = ({ searchFilter, checkSearch }) => {
     (e) => {
       e.preventDefault();
       searchFilter(value);
-      checkSearch(value);
       setValue("");
     },
-    [value, searchFilter, checkSearch]
+    [value, searchFilter]
   );
 
   return (

@@ -58,7 +58,7 @@ const Upload = () => {
     setImages(images);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     Recheck(title, setTitleError);
     Recheck(description, setDescriptionError);
@@ -101,15 +101,21 @@ const Upload = () => {
       images,
       category,
     };
-
-    axios.post("api/product/upload", data).then((response) => {
-      if (response.data.success) {
-        alert("업로드 성공!");
-        history.push("/");
-      } else {
-        alert("업로드 실패!");
-      }
-    });
+    try {
+      await axios.post("api/product/upload", data);
+      alert("업로드 성공!");
+      history.push("/");
+    } catch (err) {
+      alert("업로드 실패!");
+    }
+    // axios.post("api/product/upload", data).then((response) => {
+    //   if (response.data.success) {
+    //     alert("업로드 성공!");
+    //     history.push("/");
+    //   } else {
+    //     alert("업로드 실패!");
+    //   }
+    // });
   };
 
   if (DATA === undefined) {
@@ -123,7 +129,7 @@ const Upload = () => {
   return (
     <React.Fragment>
       <UploadContainer>
-        <h1>Upload</h1>
+        <h1>업로드</h1>
         <div className="flex">
           <div className="uploadArea">
             <UploadBox

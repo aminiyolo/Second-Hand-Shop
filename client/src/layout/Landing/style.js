@@ -130,3 +130,25 @@ export const GetAllButton = styled.div`
     height: 8.3%;
   }
 `;
+
+export const MoreBtn = styled.div`
+  display: flex;
+  justify-content: center;
+
+  & > button {
+    outline: none;
+    border: 1px solid #ff8a3d;
+    padding: 0.5rem 0.6rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background-color: #ff8a3d;
+    color: #fff;
+    cursor: pointer;
+    transition: all 300ms ease-in;
+
+    &:hover {
+      color: #ff8a3d;
+      background-color: #fff;
+    }
+  }
+`;

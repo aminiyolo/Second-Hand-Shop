@@ -34,15 +34,19 @@ router.post("/image", (req, res) => {
   });
 });
 
-router.post("/upload", (req, res) => {
-  const product = new Product(req.body);
-  product.save((err) => {
-    if (err) return res.json({ success: false, err });
+router.post("/upload", async (req, res) => {
+  try {
+    const product = new Product(req.body);
+    await product.save();
     return res.status(200).json({ success: true });
-  });
+  } catch (err) {
+    return res.status(500).json(err);
+  }
 });
 
-router.post("/data", (req, res) => {
+router.post("/data", async (req, res) => {
+  let limit = req.body.limit ? parseInt(req.body.limit) : 8;
+  let skip = req.body.skip ? parseInt(req.body.skip) : 0;
   let searchValue = req.body.searchValue;
   let filter = {};
 
@@ -52,25 +56,24 @@ router.post("/data", (req, res) => {
     };
   }
 
-  if (searchValue) {
-    Product.find(filter)
-      .find({ $text: { $search: searchValue } })
-      .populate("seller")
-      .exec((err, products) => {
-        if (err) return res.status(400).json(err);
-        return res
-          .status(200)
-          .json({ success: true, products, length: products.length });
+  try {
+    if (searchValue) {
+      const products = await Product.find(filter)
+        .find({ $text: { $search: searchValue } })
+        .populate("seller");
+      return res.status(200).json({
+        products: products.reverse().splice(skip, limit),
+        length: products.length,
       });
-  } else {
-    Product.find(filter)
-      .populate("seller")
-      .exec((err, products) => {
-        if (err) return res.status(400).send(err);
-        return res
-          .status(200)
-          .send({ success: true, products, length: products.length });
+    } else {
+      const products = await Product.find(filter).populate("seller");
+      return res.status(200).json({
+        products: products.reverse().splice(skip, limit),
+        length: products.length,
       });
+    }
+  } catch (err) {
+    return res.status(500).json(err);
   }
 });
 

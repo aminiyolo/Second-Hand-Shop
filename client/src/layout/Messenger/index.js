@@ -55,7 +55,6 @@ const Messenger = () => {
       try {
         const res = await axios.get(`/api/conversations/${userData?._id}`);
         // 가장 최근의 생성된 대화방을 가장 위에 나타내기 위하여 reverse() 사용.
-        console.log(res);
         setConversations(res.data.reverse());
       } catch (err) {
         console.log(err);

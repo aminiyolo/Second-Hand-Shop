@@ -12,7 +12,7 @@ const AdminPage = () => {
   const { data: userData } = useSWR("/api/users/data", fetcher);
   const history = useHistory();
   const [users, setUsers] = useState([]);
-  const [clickedUsers, setClickedUsers] = useState(false);
+  const [clickedUsers, setClickedUsers] = useState(true);
   const [clickedPosts, setClickedPosts] = useState(false);
 
   useEffect(() => {

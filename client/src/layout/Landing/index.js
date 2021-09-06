@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import ProductCard from "../../components/ProductCard";
 import {
@@ -9,6 +9,7 @@ import {
   ProductData,
   cardStyle,
   GetAllButton,
+  MoreBtn,
 } from "./style";
 import { Col, Card, Row } from "antd";
 import CategoryFilter from "../../components/CategoryFilter";
@@ -19,77 +20,63 @@ import { Link } from "react-router-dom";
 
 const LandingPage = () => {
   const [products, setProducts] = useState([]);
-  const [renderToggle, setRenderToggle] = useState(false);
+  const [skip, setSkip] = useState(0);
+  const [limit, setLimit] = useState(2);
+  const [size, setSize] = useState(0);
   const [noneResult, setNoneResult] = useState(false);
   const [search, setSearch] = useState(false);
-  const [getAll, setGetAll] = useState(false);
-  const [filter, setFilter] = useState({
-    category: [],
-  });
-  const [items, setItems] = useState(10);
-  const [scrollOption, setScrollOption] = useState(false);
   const [clearCategory, setClearCategory] = useState(false);
 
-  const scrollOption_check = useCallback((value) => {
-    if (value) {
-      setScrollOption(true);
-    }
-  }, []);
-
   const getData = useCallback(
-    (data) => {
-      axios.post("/api/product/data", data).then((response) => {
-        if (response.data.success) {
-          if (response.data.products.length > 0) {
-            if (getAll) {
-              // 가장 최근의 업로드 된 것을 가장 위에 표시하기 위해 reverse() 함수사용
-              setProducts(response.data.products.reverse().splice(0, items));
-            } else {
-              setProducts(response.data.products.reverse().splice(0, items));
-            }
-            setNoneResult(false);
-            setGetAll(true);
-          } else {
-            setNoneResult(true);
-          }
+    async (data) => {
+      try {
+        const res = await axios.post("/api/product/data", data);
+        if (data.loadMore) {
+          setProducts([...products, ...res.data.products]);
         } else {
-          console.log(response.data.err);
+          if (res.data.products.length === 0) setNoneResult(true);
+          setProducts(res.data.products);
         }
-      });
+        setSize(res.data.length);
+      } catch (err) {
+        console.log(err);
+        alert("데이터를 불러오지 못했습니다. 재접속 해주시길 바랍니다.");
+      }
     },
-    [items, getAll]
+    [products]
   );
 
-  const infiniteScroll = useCallback(() => {
-    let scrollHeight = document.body.scrollHeight;
-    let scrollTop = document.documentElement.scrollTop;
-    let clientHeight = document.body.clientHeight;
-    let result = Math.round(scrollHeight - scrollTop - clientHeight);
-    if (result === 0) {
-      let n = 4;
-      setItems((items) => items + n);
-    }
+  useEffect(() => {
+    let data = {
+      skip,
+      limit,
+    };
+    getData(data);
   }, []);
 
-  useEffect(() => {
-    let data = {};
+  const onClickMore = () => {
+    let Skip = skip + limit;
 
-    if (scrollOption === false) {
-      getData(data);
-      window.addEventListener("scroll", infiniteScroll);
-    }
-  }, [renderToggle, items]);
+    let data = {
+      skip: Skip,
+      limit,
+      loadMore: true,
+    };
+
+    getData(data);
+    setSkip(Skip);
+  };
 
   const categoryFilter = useCallback(
     (selected) => {
-      let willBeUpdated = { ...filter };
+      let willBeUpdated = { category: [] };
       willBeUpdated["category"] = selected;
       let data = willBeUpdated;
 
+      setNoneResult(false);
       getData(data);
-      // setFilter(willBeUpdated);
     },
-    [filter, getData]
+    [getData]
   );
 
   const searchFilter = useCallback(
@@ -97,20 +84,24 @@ const LandingPage = () => {
       setSearch(true);
 
       let data = {
-        filter,
         searchValue,
       };
 
+      setNoneResult(false);
       setClearCategory((prev) => !prev);
       getData(data);
     },
-    [filter, getData]
+    [getData]
   );
 
   const getAllProduct = useCallback(() => {
-    setRenderToggle((prev) => !prev);
-    setScrollOption(false);
+    setNoneResult(false);
     setClearCategory((prev) => !prev);
+    setSearch(false);
+
+    let data = {};
+
+    getData(data);
   }, []);
 
   return (
@@ -125,17 +116,13 @@ const LandingPage = () => {
               <CategoryFilter
                 Categories={Categories}
                 categoryFilter={categoryFilter}
-                categoryCheck={scrollOption_check}
                 clearCategory={clearCategory}
               />
             </Col>
             <Col lg={12} xs={24}></Col>
           </Row>
         </FilterBox>
-        <SearchFilter
-          searchFilter={searchFilter}
-          checkSearch={scrollOption_check}
-        />
+        <SearchFilter searchFilter={searchFilter} />
         {search && (
           <GetAllButton onClick={getAllProduct}>전체 목록 보기</GetAllButton>
         )}
@@ -169,6 +156,11 @@ const LandingPage = () => {
             ))}
         </Row>
       </RenderBox>
+      {skip < size && (
+        <MoreBtn>
+          <button onClick={onClickMore}>더보기</button>
+        </MoreBtn>
+      )}
     </LandingContainer>
   );
 };

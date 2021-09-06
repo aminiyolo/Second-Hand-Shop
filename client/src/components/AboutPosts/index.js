@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import dayjs from "dayjs";
-import { Img, Loading, Table, Title, Tr } from "./style";
+import { Wrapper, Img, Loading, Table, Title, Tr } from "./style";
 
 const AboutPosts = () => {
   const history = useHistory();
@@ -56,7 +56,7 @@ const AboutPosts = () => {
   }
 
   return (
-    <>
+    <Wrapper>
       <Title>게시물 관리</Title>
       <div>총 게시물 수: {products.length}개</div>
       <br />
@@ -99,7 +99,7 @@ const AboutPosts = () => {
           </tbody>
         </Table>
       </>
-    </>
+    </Wrapper>
   );
 };
 

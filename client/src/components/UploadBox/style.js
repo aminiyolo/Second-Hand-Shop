@@ -9,6 +9,7 @@ export const InputContainer = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  border-radius: 0.8rem;
 
   @media screen and (max-width: 991px) {
     width: 120%;
