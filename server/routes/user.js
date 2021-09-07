@@ -134,7 +134,7 @@ router.get("/find", async (req, res) => {
   try {
     const user = userId
       ? await User.findById(userId)
-      : User.findOne({ nickname: userName });
+      : await User.findOne({ nickname: userName });
     res.status(200).json(user);
   } catch (err) {
     res.status(500).json(err);

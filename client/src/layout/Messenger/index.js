@@ -137,9 +137,9 @@ const Messenger = () => {
   const msgSections = MakeSection(messages);
 
   return (
-    <div className="messenger_Wrapper">
+    <div className="messenger_wrapper">
       <div className="messenger_list">
-        <div className="conversation_Wrapper">
+        <div className="conversation_wrapper">
           {conversations.map((conversation, index) => (
             <div
               className="conversation"
@@ -153,7 +153,9 @@ const Messenger = () => {
       </div>
       <div className="message_wrapper">
         <div className="message">
-          {currentChat && <Conversation conversation={currentChat} />}
+          {currentChat && (
+            <Conversation conversation={currentChat} price={true} />
+          )}
         </div>
         <div className="message_workspace">
           {currentChat ? (

@@ -67,6 +67,7 @@ export const ProductContainer = styled.div`
       font-size: 0.5rem;
 
       & > .detail {
+        position: relative;
         margin-left: 20px;
         display: flex;
         flex-direction: column;

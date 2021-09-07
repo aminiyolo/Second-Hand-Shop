@@ -1,19 +1,25 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { CartContainer, Empty, ProductContainer, Img } from "../Cart/style";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
+import Editor from "../../components/Edit";
 import { Loading } from "../Login/style";
 import useSWR from "swr";
 import fetcher from "../../hooks/fetcher";
+import { Edit } from "./style";
+import { FormOutlined } from "@ant-design/icons";
 
 const MyPage = () => {
   const { data: userData } = useSWR("/api/users/data", fetcher);
   const history = useHistory();
+
   const [products, setProducts] = useState(null);
   const [deleteToggle, setDeleteToggle] = useState(false);
   const [receiveData, setReceiveData] = useState(false);
+  const [clickedEdit, setClickedEdit] = useState(false);
+  const [productData, setProductData] = useState(null);
 
   const onRemove = (id) => {
     let data = {
@@ -57,6 +63,15 @@ const MyPage = () => {
     }
   }, [userData, deleteToggle]);
 
+  const onClickEdit = useCallback((product) => {
+    setProductData(product);
+    setClickedEdit(true);
+  }, []);
+
+  const closeEdit = useCallback(() => {
+    setClickedEdit(false);
+  }, []);
+
   if (userData?.isAuth === false) {
     history.push("/");
   }
@@ -65,50 +80,57 @@ const MyPage = () => {
     return <Loading>Loading...</Loading>;
   }
 
-  return (
-    <CartContainer>
-      <h1 className="title">내가 올린 상품</h1>
-      <p className="info">
-        # 상품의 이미지를 클릭하시면 상품페이지로 이동됩니다.
-      </p>
-      <br />
-      <div>
-        {products.length === 0 && receiveData !== false && (
-          <Empty>
-            <h1>텅 ~</h1>
-          </Empty>
-        )}
-        {products?.map((product, index) => (
-          <React.Fragment key={index}>
-            <ProductContainer>
-              <div>
-                <Link to={`/product/${product._id}`}>
-                  <Img
-                    src={`http://localhost:3050/${product.images[0]}`}
-                    alt={product.title}
-                  />
-                </Link>
-              </div>
-              <div className="detail">
-                <h2>{product.title}</h2>
-                <p>
-                  업로드 날짜: {dayjs(product.createdAt).format("YYYY-MM-DD")}
-                </p>
-                <div>{product.description}</div>
-                <div>{product.price}원</div>
-              </div>
-              <button
-                className="removeBtn"
-                onClick={() => onRemove(product._id)}
-              >
-                상품 지우기
-              </button>
-            </ProductContainer>
-          </React.Fragment>
-        ))}
-      </div>
-    </CartContainer>
-  );
+  if (!clickedEdit) {
+    return (
+      <CartContainer>
+        <h1 className="title">내가 올린 상품</h1>
+        <p className="info">
+          # 상품의 이미지를 클릭하시면 상품페이지로 이동됩니다.
+        </p>
+        <br />
+        <div>
+          {products.length === 0 && receiveData !== false && (
+            <Empty>
+              <h1>텅 ~</h1>
+            </Empty>
+          )}
+          {products?.map((product, index) => (
+            <React.Fragment key={index}>
+              <ProductContainer>
+                <div>
+                  <Link to={`/product/${product._id}`}>
+                    <Img
+                      src={`http://localhost:3050/${product.images[0]}`}
+                      alt={product.title}
+                    />
+                  </Link>
+                </div>
+                <div className="detail">
+                  <h2>{product.title}</h2>
+                  <p>
+                    업로드 날짜: {dayjs(product.createdAt).format("YYYY-MM-DD")}
+                  </p>
+                  <div>{product.description}</div>
+                  <div>{product.price}원</div>
+                  <Edit>
+                    <FormOutlined onClick={() => onClickEdit(product)} />
+                  </Edit>
+                </div>
+                <button
+                  className="removeBtn"
+                  onClick={() => onRemove(product._id)}
+                >
+                  상품 지우기
+                </button>
+              </ProductContainer>
+            </React.Fragment>
+          ))}
+        </div>
+      </CartContainer>
+    );
+  } else {
+    return <Editor product={productData} closeEdit={closeEdit} />;
+  }
 };
 
 export default MyPage;

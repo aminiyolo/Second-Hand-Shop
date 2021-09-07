@@ -29,6 +29,11 @@ export const Profile = styled.div`
       text-align: left;
       color: lightslategrey;
     }
+
+    & > div .price {
+      font-size: 0.8rem;
+      margin-left: 0.8rem;
+    }
   }
 
   @media screen and (max-width: 415px) {

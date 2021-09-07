@@ -21,6 +21,7 @@ const CategoryFilter = ({ Categories, categoryFilter, clearCategory }) => {
   };
 
   useEffect(() => {
+    // 특정 내용 검색 시 선택된 카테고리 값 초기화 하기
     setSelected([]);
   }, [clearCategory]);
 

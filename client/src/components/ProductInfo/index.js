@@ -81,6 +81,7 @@ const ProductInfo = ({ product, seller }) => {
       title: product.title,
       productId: product._id,
       image: product.images,
+      price: product.price,
     };
 
     const makeConversation = async () => {

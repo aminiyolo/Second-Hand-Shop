@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { Input } from "antd";
-import { SearchStyle } from "./style";
+import { SearchStyle, Form } from "./style";
 
 const { Search } = Input;
 
@@ -23,14 +23,14 @@ const SearchFilter = ({ searchFilter }) => {
   return (
     <React.Fragment>
       <div>
-        <form style={{ textAlign: "center" }} onSubmit={onSubmit}>
+        <Form onSubmit={onSubmit}>
           <Search
             placeholder="찾고자 하는 제품을 검색해보세요."
             value={value}
             onChange={onSearch}
             style={SearchStyle}
           />
-        </form>
+        </Form>
       </div>
     </React.Fragment>
   );

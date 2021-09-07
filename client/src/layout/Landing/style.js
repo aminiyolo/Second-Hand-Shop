@@ -83,7 +83,7 @@ export const ProductData = styled.div`
     font-size: 14px;
   }
 
-  & > .date {
+  & > .upload__date {
     font-size: 12px;
   }
 `;
@@ -91,6 +91,7 @@ export const ProductData = styled.div`
 export const cardStyle = {
   color: "black",
   paddingBottom: "65px",
+  borderRadius: "0.5rem",
   boxShadow: "0 0.5rem 1rem rgba(0, 0, 0, 0.3)",
 };
 

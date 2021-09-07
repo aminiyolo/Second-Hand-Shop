@@ -1,9 +1,8 @@
-import React from "react";
 import ImageGallery from "react-image-gallery";
 
 const ImageSlider = ({ product }) => {
   let container = [];
-
+  console.log(product);
   if (product) {
     product?.images.map((image) => {
       container.push({

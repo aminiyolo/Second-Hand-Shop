@@ -14,6 +14,9 @@ const ConversationSchema = new mongoose.Schema(
     image: {
       type: Array,
     },
+    price: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

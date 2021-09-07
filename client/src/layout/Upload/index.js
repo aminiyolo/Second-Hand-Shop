@@ -108,14 +108,6 @@ const Upload = () => {
     } catch (err) {
       alert("업로드 실패!");
     }
-    // axios.post("api/product/upload", data).then((response) => {
-    //   if (response.data.success) {
-    //     alert("업로드 성공!");
-    //     history.push("/");
-    //   } else {
-    //     alert("업로드 실패!");
-    //   }
-    // });
   };
 
   if (DATA === undefined) {

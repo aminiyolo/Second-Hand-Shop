@@ -4,23 +4,25 @@ import { Profile } from "./style";
 import useSWR from "swr";
 import fetcher from "../../hooks/fetcher";
 
-const Conversation = ({ conversation }) => {
+const Conversation = ({ conversation, price }) => {
   const { data: currentUser } = useSWR("/api/users/data", fetcher);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    // 대화하는 상대방의 정보
     const counterpart = conversation?.members?.find(
       (member) => member !== currentUser._id
     );
 
     const getUser = async () => {
       try {
-        const res = await axios(`/api/users/find?userId=${counterpart}`);
+        const res = await axios.get(`/api/users/find?userId=${counterpart}`);
         setUser(res.data);
       } catch (err) {
         console.log(err);
       }
     };
+
     getUser();
   }, [conversation, currentUser]);
 
@@ -36,8 +38,23 @@ const Conversation = ({ conversation }) => {
         </div>
       )}
       <div className="detail">
-        {user && <span className="nickname">{user.nickname}</span>}
-        <span className="title">{conversation?.title}</span>
+        {/* 채팅 화면 프로필 */}
+        {price && user && (
+          <>
+            <span className="nickname">{user.nickname}</span>
+            <div>
+              <span className="title">{conversation?.title}</span>
+              <span className="price">{conversation?.price}원</span>
+            </div>
+          </>
+        )}
+        {!price && user && (
+          // 대화방 프로필
+          <>
+            <span className="nickname">{user.nickname}</span>
+            <span className="title">{conversation?.title}</span>
+          </>
+        )}
       </div>
     </Profile>
   );

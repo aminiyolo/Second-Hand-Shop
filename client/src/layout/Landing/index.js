@@ -21,7 +21,7 @@ import { Link } from "react-router-dom";
 const LandingPage = () => {
   const [products, setProducts] = useState([]);
   const [skip, setSkip] = useState(0);
-  const [limit, setLimit] = useState(2);
+  const [limit, setLimit] = useState(4);
   const [size, setSize] = useState(0);
   const [noneResult, setNoneResult] = useState(false);
   const [search, setSearch] = useState(false);
@@ -146,8 +146,8 @@ const LandingPage = () => {
                   <ProductData>
                     <p className="title">{product.title}</p>
                     <p className="price">{`${product.price}원`}</p>
-                    <span className="date">
-                      업로드 날짜:
+                    <span className="upload__date">
+                      업로드 날짜:{" "}
                       {dayjs(product.createdAt).format("YYYY-MM-DD")}
                     </span>
                   </ProductData>

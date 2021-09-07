@@ -1,4 +1,4 @@
-.messenger_Wrapper {
+.messenger_wrapper {
   display: flex;
 }
 
@@ -10,7 +10,7 @@
   height: 100vh;
 }
 
-.conversation_Wrapper {
+.conversation_wrapper {
   border: none;
   text-align: center;
   margin: 100px auto;
@@ -94,7 +94,7 @@ button {
 }
 
 .section {
-  margin-top: 20px;
+  margin-top: 25px;
   border-top: 1px solid #ddd;
 }
 
@@ -118,7 +118,7 @@ button {
   box-shadow: 0 0 0 1px var(--saf-0), 0 1px 3px 0 rgba(0, 0, 0, 0.08);
   border-radius: 24px;
   position: relative;
-  top: -13px;
+  top: -15px;
   background: white;
   border: none;
   outline: none;
