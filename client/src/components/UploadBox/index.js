@@ -4,8 +4,13 @@ import Dropzone from "react-dropzone";
 import { UploadOutlined } from "@ant-design/icons";
 import { InputContainer, ImageContainer, Img, H3 } from "./style";
 
-const UploadBox = ({ getImages, clearImg, setClearImg }) => {
-  const [images, setImages] = useState([]);
+const UploadBox = ({
+  getImages,
+  clearImg,
+  setClearImg,
+  defaultImages = [], // 게시물 이미지 수정이 아닌, 최초 업로드시
+}) => {
+  const [images, setImages] = useState(defaultImages);
 
   const onDrop = (files) => {
     let formData = new FormData();

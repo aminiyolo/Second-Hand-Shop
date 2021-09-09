@@ -108,12 +108,31 @@ router.post("/myProduct", async (req, res) => {
 });
 
 router.post("/remove_from_myPage", async (req, res) => {
-  console.log(req.body.id);
   try {
     await Product.findByIdAndDelete({ _id: req.body.id });
     res.status(200).json({ success: true });
   } catch (err) {
     res.status(500).json(err);
+  }
+});
+
+router.post("/edit", async (req, res) => {
+  try {
+    await Product.findOneAndUpdate(
+      { _id: req.body.id },
+      {
+        $set: {
+          title: req.body.title,
+          description: req.body.description,
+          period: req.body.period,
+          price: req.body.price,
+          images: req.body.images,
+        },
+      }
+    );
+    return res.status(200).json();
+  } catch (err) {
+    return res.status(500).json(err);
   }
 });
 

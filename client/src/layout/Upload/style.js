@@ -91,6 +91,10 @@ export const Select = styled.select`
   border-radius: 3px;
   outline: none;
   cursor: pointer;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 export const Button = styled.button`

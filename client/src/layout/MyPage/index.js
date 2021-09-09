@@ -26,6 +26,9 @@ const MyPage = () => {
       id,
     };
 
+    const value = window.confirm("정말로 삭제하시겠습니까?");
+    if (!value) return;
+
     const removeMyItem = async () => {
       try {
         await axios.post("/api/product/remove_from_myPage", data);
@@ -61,7 +64,7 @@ const MyPage = () => {
 
       getMyProduct();
     }
-  }, [userData, deleteToggle]);
+  }, [userData, deleteToggle, clickedEdit]);
 
   const onClickEdit = useCallback((product) => {
     setProductData(product);

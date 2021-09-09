@@ -120,8 +120,8 @@ export const Cart = styled.div`
   font-size: 2.5rem;
   line-height: 40px;
   cursor: pointer;
-  transition: 250ms ease-out;
+  transition: 300ms ease-out;
   &:hover {
-    transform: scale(1.1);
+    transform: rotate(15deg);
   }
 `;

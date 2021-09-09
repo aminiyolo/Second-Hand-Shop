@@ -25,7 +25,8 @@ export const ImageContainer = styled.div`
 
   @media screen and (max-width: 991px) {
     margin: 0;
-    height: 5rem;
+    width: 100%;
+    height: 10rem;
   }
 `;
 
@@ -40,4 +41,8 @@ export const Img = styled.img`
 export const H3 = styled.h3`
   margin-top: 10px;
   margin-left: 30px;
+
+  @media screen and (max-width: 768px) {
+    font-size: 0.8rem;
+  }
 `;
