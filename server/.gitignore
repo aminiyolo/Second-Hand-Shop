@@ -2,8 +2,8 @@
 /build
 /auth
 dev.js
-
-
+/yarn.lock
+.env
 
 .DS_Store
 

@@ -15,12 +15,14 @@ import { Link, useHistory } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import axios from "axios";
 import dayjs from "dayjs";
-import useSWR from "swr";
-import fetcher from "../../hooks/fetcher";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useSelector } from "react-redux";
 
 const SignUpPage = () => {
-  const { data, revalidate } = useSWR("/api/users/data", fetcher);
   const history = useHistory();
+  const { user } = useSelector((state) => state);
 
   const [authNum, onChangeAuthNum] = useInput("");
   const [auth, setAuth] = useState(getNum());
@@ -149,7 +151,6 @@ const SignUpPage = () => {
         try {
           const res = await axios.post("/api/auth/mail", data);
           if (res.data.success) {
-            revalidate();
             setAuth(res.data.authNum);
           }
         } catch (err) {
@@ -158,7 +159,7 @@ const SignUpPage = () => {
       };
       authNumber();
     },
-    [email, setAuth, revalidate]
+    [email, setAuth]
   );
 
   const onClickCheckAuthNum = useCallback(
@@ -167,18 +168,18 @@ const SignUpPage = () => {
       if (auth === authNum) {
         setAuthCheck(true);
       } else {
+        toast.error("인증번호가 일치하지 않습니다", {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
         setAuthCheck(false);
       }
     },
     [auth, authNum]
   );
 
-  if (data?.token) {
+  if (user) {
     history.push("/");
-  }
-
-  if (data === undefined) {
-    return <Loading>Loading...</Loading>;
   }
 
   return (
@@ -188,20 +189,20 @@ const SignUpPage = () => {
         <Form>
           <Label id="email-label">
             <span>이메일 주소</span>
-            <div>
-              <Input
-                type="email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={onChangeEmail}
-              />
-              {!sendMail && (
-                <AuthButton onClick={getAuthNum}>인증번호 받기</AuthButton>
-              )}
-              {emailError && <Error>이메일을 입력해주세요</Error>}
-              {sendMail && <Success>인증번호를 전송했습니다.</Success>}
-            </div>
+            {/* <div> */}
+            <Input
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              onChange={onChangeEmail}
+            />
+            {!sendMail && (
+              <AuthButton onClick={getAuthNum}>인증번호 받기</AuthButton>
+            )}
+            {emailError && <Error>이메일을 입력해주세요</Error>}
+            {sendMail && <Success>인증번호를 전송했습니다.</Success>}
+            {/* </div> */}
           </Label>
           <Label>
             <span>인증번호</span>
@@ -290,6 +291,7 @@ const SignUpPage = () => {
           이미 회원이신가요?&nbsp;
           <Link to="/login">로그인 하러가기</Link>
         </LinkContainer>
+        <ToastContainer />
       </Container>
     </Background>
   );

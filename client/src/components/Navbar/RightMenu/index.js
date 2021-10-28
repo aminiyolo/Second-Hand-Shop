@@ -3,7 +3,7 @@ import { useHistory } from "react-router";
 import { Menu, Button, Img, Nickname } from "./style";
 import Modal from "../../Modal/index";
 
-const RightMenu = ({ data, revalidate }) => {
+const RightMenu = ({ user }) => {
   const history = useHistory();
   const [showProfileModal, setShowProfileModal] = useState(false);
 
@@ -23,24 +23,18 @@ const RightMenu = ({ data, revalidate }) => {
 
   return (
     <>
-      {data?.isAuth === false && (
+      {!user && (
         <Menu>
           <Button onClick={onClickLogin}>로그인</Button>
         </Menu>
       )}
-      {data?.token && (
+      {user && (
         <React.Fragment>
           <Button onClick={onClickProfile}>
-            <Nickname>{data.nickname}</Nickname>
-            <Img src={data.image} alt={data.nickname} />
+            <Nickname>{user.nickname}</Nickname>
+            <Img src={user.image} alt={user.nickname} />
           </Button>
-          {showProfileModal && (
-            <Modal
-              onCloseModal={onCloseModal}
-              data={data}
-              revalidate={revalidate}
-            />
-          )}
+          {showProfileModal && <Modal onCloseModal={onCloseModal} />}
         </React.Fragment>
       )}
     </>

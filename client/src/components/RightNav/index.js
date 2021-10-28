@@ -1,9 +1,13 @@
 import { RightNav, Options, NavContainer } from "./style";
 import { useHistory } from "react-router";
-import axios from "axios";
 
-const RightNavbar = ({ onCloseRightNav, revalidate }) => {
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../redux/apiCalls";
+
+const RightNavbar = ({ onCloseRightNav }) => {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state);
 
   const onClickHome = () => {
     onCloseRightNav();
@@ -31,21 +35,7 @@ const RightNavbar = ({ onCloseRightNav, revalidate }) => {
   };
 
   const onClickLogout = () => {
-    const Logout = async () => {
-      try {
-        const res = await axios.get("/api/users/logout");
-        if (res.data.success) {
-          onCloseRightNav();
-          document.cookie =
-            "USER=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-          revalidate();
-        }
-      } catch (err) {
-        alert("로그아웃에 실패하였습니다.");
-      }
-    };
-
-    Logout();
+    logout(dispatch, user.token);
   };
 
   const stopPropagation = (e) => {

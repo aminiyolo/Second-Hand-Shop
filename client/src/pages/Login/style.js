@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import img from "./image/LoginBG.jpg";
 
 export const Header = styled.header`
   text-align: center;
@@ -19,6 +18,7 @@ export const Form = styled.form`
   margin: 30px auto 0;
   max-width: 400px;
   overflow-x: hidden;
+  padding: 5px;
 
   @media screen and (max-width: 580px) {
     overflow-x: hidden;
@@ -135,7 +135,7 @@ export const Loading = styled.div`
 `;
 
 export const FormAndImage = styled.div`
-  background-image: url(${img});
+  background-image: url("https://i.ibb.co/HtLKZg2/LoginBG.jpg");
   background-size: cover;
   background-position: center;
   width: 100%;

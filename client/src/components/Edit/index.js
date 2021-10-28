@@ -6,9 +6,9 @@ import {
   Description,
   Input,
   Textarea,
-} from "../../layout/Upload/style";
+} from "../../pages/Upload/style";
 import UploadBox from "../UploadBox/index";
-import { Error } from "../../layout/Login/style";
+import { Error } from "../../pages/Login/style";
 import { EditWrapper, ButtonContainer } from "./style";
 
 const Editor = ({ product, closeEdit }) => {

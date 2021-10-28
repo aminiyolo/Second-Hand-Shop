@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import img from "../Login/image/LoginBG.jpg";
+// import img from "../Login/image/LoginBG.jpg";
 
 export const AuthButton = styled.button`
   margin-bottom: 10px;
@@ -9,6 +9,7 @@ export const AuthButton = styled.button`
   cursor: pointer;
   color: white;
   padding: 5px 8px;
+  display: flex;
 `;
 
 export const H2 = styled.h2`
@@ -26,7 +27,7 @@ export const Container = styled.div`
 `;
 
 export const Background = styled.div`
-  background-image: url(${img});
+  background-image: url("https://i.ibb.co/HtLKZg2/LoginBG.jpg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -56,12 +57,15 @@ export const Error = styled.div`
   color: red;
   margin: 8px 0 16px;
   font-weight: bold;
+  display: flex;
 `;
 
 export const Form = styled.form`
   margin: 30px auto 0;
   max-width: 400px;
   overflow-x: hidden;
+  padding: 5px;
+  text-align: center;
 
   @media screen and (max-width: 580px) {
     overflow-x: hidden;
@@ -77,7 +81,7 @@ export const Input = styled.input`
   transition: border 80ms ease-out, box-shadow 80ms ease-out;
   box-sizing: border-box;
   margin: 0 0 20px;
-  width: 90%;
+  width: 100%;
   color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
   background-color: rgba(var(--sk_primary_background, 255, 255, 255), 1);
   padding: 12px;
@@ -132,7 +136,9 @@ export const LinkContainer = styled.p`
 export const Button = styled.button`
   margin-bottom: 12px;
   width: 100%;
-  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: #fff;
   background-color: #ff8a3d;
   border: none;

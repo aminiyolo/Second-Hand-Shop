@@ -11,14 +11,14 @@ import {
 } from "./style";
 import { useHistory } from "react-router";
 import { ShoppingOutlined } from "@ant-design/icons";
-import useSWR from "swr";
-import fetcher from "../../hooks/fetcher";
 import RightNavbar from "../RightNav/index";
+import { useSelector } from "react-redux";
+import { Badge } from "antd";
 
 const Navbar = () => {
   const history = useHistory();
-  const { data, revalidate } = useSWR("/api/users/data", fetcher);
   const [open, setOpen] = useState(false);
+  const { user, cart } = useSelector((state) => state);
 
   const onUpload = () => {
     history.push("/upload");
@@ -42,27 +42,27 @@ const Navbar = () => {
 
   return (
     <>
-      {data?.token ? (
+      {user ? (
         <div>
           <Nav>
             <Logo>
               <span onClick={onClick}>2nd Hand</span>
             </Logo>
             <ButtonContainer>
-              <Cart onClick={onCart}>
-                <ShoppingOutlined />
-              </Cart>
+              <Badge
+                count={cart.length}
+                style={{ marginRight: "32px", marginTop: "10px" }}
+              >
+                <Cart onClick={onCart}>
+                  <ShoppingOutlined />
+                </Cart>
+              </Badge>
               <Upload onClick={onUpload}>상품 업로드</Upload>
-              <RightMenu data={data} revalidate={revalidate} />
+              <RightMenu user={user} />
             </ButtonContainer>
             {!open && <MenuBar onClick={onClickMenu} />}
           </Nav>
-          {open && (
-            <RightNavbar
-              onCloseRightNav={onCloseRightNav}
-              revalidate={revalidate}
-            />
-          )}
+          {open && <RightNavbar onCloseRightNav={onCloseRightNav} />}
         </div>
       ) : (
         <Nav>
@@ -70,7 +70,7 @@ const Navbar = () => {
             <span onClick={onClick}>2nd Hand</span>
           </Logo>
           <LoginContainer>
-            <RightMenu data={data} revalidate={revalidate} />
+            <RightMenu user={user} />
           </LoginContainer>
         </Nav>
       )}

@@ -6,13 +6,12 @@ import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import Editor from "../../components/Edit";
 import { Loading } from "../Login/style";
-import useSWR from "swr";
-import fetcher from "../../hooks/fetcher";
 import { Edit } from "./style";
 import { FormOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
 
 const MyPage = () => {
-  const { data: userData } = useSWR("/api/users/data", fetcher);
+  const { user } = useSelector((state) => state);
   const history = useHistory();
 
   const [products, setProducts] = useState(null);
@@ -43,9 +42,9 @@ const MyPage = () => {
   };
 
   useEffect(() => {
-    if (userData?._id) {
+    if (user) {
       let data = {
-        id: userData._id,
+        id: user._id,
       };
 
       const getMyProduct = async () => {
@@ -64,7 +63,7 @@ const MyPage = () => {
 
       getMyProduct();
     }
-  }, [userData, deleteToggle, clickedEdit]);
+  }, [user, deleteToggle, clickedEdit]);
 
   const onClickEdit = useCallback((product) => {
     setProductData(product);
@@ -75,7 +74,7 @@ const MyPage = () => {
     setClickedEdit(false);
   }, []);
 
-  if (userData?.isAuth === false) {
+  if (!user) {
     history.push("/");
   }
 

@@ -1,16 +1,16 @@
 import { Route, Switch, BrowserRouter } from "react-router-dom";
 import loadble from "@loadable/component";
 
-const Login = loadble(() => import("./layout/Login"));
-const SignUp = loadble(() => import("./layout/SignUp"));
-const Landing = loadble(() => import("./layout/Landing"));
+const Login = loadble(() => import("./pages/Login"));
+const SignUp = loadble(() => import("./pages/SignUp"));
+const Landing = loadble(() => import("./pages/Landing"));
 const NavBar = loadble(() => import("./components/Navbar"));
-const Upload = loadble(() => import("./layout/Upload"));
-const ProductDetail = loadble(() => import("./layout/ProductDetail"));
-const Cart = loadble(() => import("./layout/Cart"));
-const MyPage = loadble(() => import("./layout/MyPage"));
-const Messenger = loadble(() => import("./layout/Messenger"));
-const Admin = loadble(() => import("./layout/AdminPage"));
+const Upload = loadble(() => import("./pages/Upload"));
+const ProductDetail = loadble(() => import("./pages/ProductDetail"));
+const Cart = loadble(() => import("./pages/Cart"));
+const MyPage = loadble(() => import("./pages/MyPage"));
+const Messenger = loadble(() => import("./pages/Messenger"));
+const Admin = loadble(() => import("./pages/AdminPage"));
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Landing} />
           <Route path="/login" component={Login} />
-          <Route exact path="/signUp" component={SignUp} />
+          <Route exact path="/register" component={SignUp} />
           <Route exact path="/upload" component={Upload} />
           <Route exact path="/chat" component={Messenger} />
           <Route exact path="/myPage" component={MyPage} />

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import img from "../Login/image/LoginBG.jpg";
 
 export const LandingContainer = styled.div`
   margin: 0px auto 100px;
@@ -11,7 +10,7 @@ export const LandingContainer = styled.div`
 `;
 
 export const Background = styled.div`
-  background-image: url(${img});
+  background-image: url("https://i.ibb.co/HtLKZg2/LoginBG.jpg");
   background-size: cover;
   background-position: center;
   width: 100%;

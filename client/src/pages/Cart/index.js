@@ -4,11 +4,15 @@ import dayjs from "dayjs";
 import { CartContainer, Empty, ProductContainer, Img } from "./style";
 import { useHistory, Link } from "react-router-dom";
 import { Loading } from "../Login/style";
-import useSWR from "swr";
-import fetcher from "../../hooks/fetcher";
+import { useDispatch, useSelector } from "react-redux";
+import { removeCart } from "../../redux/apiCalls";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Cart = () => {
-  const { data: userData, revalidate } = useSWR("/api/users/data", fetcher);
+  const { user, cart } = useSelector((state) => state);
+  const dispatch = useDispatch();
   const history = useHistory();
   const [products, setProducts] = useState(null);
 
@@ -16,9 +20,9 @@ const Cart = () => {
     let container = [];
 
     const getProduct = async () => {
-      if (userData?.cart?.length > 0) {
-        userData.cart.forEach((data) => {
-          container.push(data.id);
+      if (cart.length > 0) {
+        cart.forEach((c) => {
+          container.push(c.id);
         });
       } else {
         return setProducts([]);
@@ -36,34 +40,39 @@ const Cart = () => {
     };
 
     getProduct();
-  }, [userData]);
+  }, [cart]);
 
-  const onClick = useCallback(
+  const handleRemove = useCallback(
     (id) => {
       let data = {
         id,
       };
 
-      const removeItem = async () => {
-        try {
-          await axios.post("/api/users/removeFrom_cart", data);
-          revalidate();
-          alert("삭제 되었습니다.");
-        } catch (err) {
-          console.log(err);
-        }
-      };
+      try {
+        removeCart(dispatch, data, user.token);
+        toast.success("삭제 되었습니다.", {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
+      } catch (err) {
+        alert("잠시 후에 다시 시도 해주세요.");
+      }
 
-      removeItem();
+      // const removeItem = async () => {
+      //   try {
+      //     await axios.post("/api/users/removeFrom_cart", data);
+      //     alert("삭제 되었습니다.");
+      //   } catch (err) {
+      //     console.log(err);
+      //   }
+      // };
+
+      // removeItem();
     },
-    [revalidate]
+    [dispatch, user.token]
   );
 
-  if (userData === undefined) {
-    return <Loading>Loading...</Loading>;
-  }
-
-  if (userData?.isAuth === false) {
+  if (!user) {
     history.push("/");
   }
 
@@ -110,7 +119,7 @@ const Cart = () => {
                 </div>
                 <button
                   className="removeBtn"
-                  onClick={() => onClick(product._id)}
+                  onClick={() => handleRemove(product._id)}
                 >
                   삭제
                 </button>
@@ -118,6 +127,7 @@ const Cart = () => {
             </React.Fragment>
           ))}
       </div>
+      <ToastContainer />
     </CartContainer>
   );
 };

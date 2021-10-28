@@ -1,17 +1,19 @@
 const { User } = require("../models/user");
+const jwt = require("jsonwebtoken");
 
-let auth = (req, res, next) => {
+const auth = (req, res, next) => {
   // Bring a token from client
-  let token = req.cookies.USER;
+  const token = req.headers?.authorization.slice(7);
+
+  // Decode a token
+  const decoded = jwt.verify(token, process.env.PRIVATE_TOKEN);
+
   // After decryption, find a user
-  User.findByToken(token, (err, user) => {
-    if (err) throw err;
-    if (!user) return res.json({ isAuth: false, err });
-    // If there is a user, then Authenticate
-    req.token = token;
-    req.user = user;
-    next();
-  });
+  const user = User.findOne({ _id: decoded, token });
+  console.log(user);
+  req.token = token;
+  req.user = user;
+  next();
 };
 
 module.exports = { auth };

@@ -13,11 +13,13 @@ import {
   ProductInfoContainer,
 } from "./style";
 import { HeartOutlined } from "@ant-design/icons";
-import useSWR from "swr";
-import fetcher from "../../hooks/fetcher";
+import { useSelector } from "react-redux";
+import { addCart, removeCart } from "../../redux/apiCalls";
+import { useDispatch } from "react-redux";
 
 const ProductInfo = ({ product, seller }) => {
-  const { data: userData, revalidate } = useSWR("/api/users/data", fetcher);
+  const { user, cart } = useSelector((state) => state);
+  const dispatch = useDispatch();
   const history = useHistory();
   const { id } = useParams();
   const [category, setCategory] = useState("");
@@ -25,7 +27,7 @@ const ProductInfo = ({ product, seller }) => {
   const [count, setCount] = useState(0);
 
   const onClickCart = useCallback(() => {
-    if (userData?.isAuth === false) {
+    if (!user) {
       let choice = window.confirm("로그인이 필요한 서비스 입니다.");
       if (choice) {
         history.push("/login");
@@ -33,7 +35,7 @@ const ProductInfo = ({ product, seller }) => {
       return;
     }
 
-    if (seller === userData.email) {
+    if (seller === user.email) {
       return alert("본인의 상품은 장바구니에 담을 수 없습니다.");
     }
 
@@ -42,28 +44,25 @@ const ProductInfo = ({ product, seller }) => {
     };
 
     if (!inAcart) {
-      axios.post("/api/users/addTo_cart", data).then((response) => {
-        if (response.data.success) {
-          setInAcart(true);
-          revalidate();
-        } else {
-          alert("장바구니 추가 실패!");
-        }
-      });
+      try {
+        addCart(dispatch, data, user.token);
+        setCount((prev) => prev + 1);
+      } catch (err) {
+        alert("다시 시도 해주세요.");
+      }
     } else {
-      axios.post("/api/users/removeFrom_cart", data).then((response) => {
-        if (response.data.success) {
-          setInAcart(false);
-          revalidate();
-        } else {
-          alert("삭제 실패!");
-        }
-      });
+      try {
+        removeCart(dispatch, data, user.token);
+        setCount((prev) => prev - 1);
+        setInAcart(false);
+      } catch (err) {
+        alert("다시 시도 해주세요.");
+      }
     }
-  }, [userData, history, id, seller, inAcart, revalidate]);
+  }, [user, history, id, seller, inAcart, dispatch]);
 
   const onClickChat = () => {
-    if (userData?.isAuth === false) {
+    if (!user) {
       let choice = window.confirm("로그인이 필요한 서비스 입니다.");
       if (choice) {
         history.push("/login");
@@ -71,13 +70,13 @@ const ProductInfo = ({ product, seller }) => {
       return;
     }
 
-    if (seller === userData.email) {
+    if (seller === user.email) {
       return alert("판매자가 본인에 해당합니다.");
     }
 
     let data = {
       senderId: product.seller._id,
-      receiverId: userData._id,
+      receiverId: user._id,
       title: product.title,
       productId: product._id,
       image: product.images,
@@ -111,20 +110,23 @@ const ProductInfo = ({ product, seller }) => {
 
   useEffect(() => {
     checkCategory(product, setCategory);
-    if (userData?.token) {
-      userData.cart.forEach((data) => {
-        if (data.id === id) setInAcart(true);
-      });
-    }
+    cart.forEach((c) => {
+      if (c.id === id) {
+        setInAcart(true);
+      }
+    });
 
     let data = {
       id,
     };
 
-    axios.post("/api/users/count_added_product", data).then((response) => {
-      setCount(response.data.length);
-    });
-  }, [product, userData, id]);
+    const getCount = async () => {
+      const res = await axios.post("/api/users/count_added_product", data);
+      setCount(res.data.length);
+    };
+
+    getCount();
+  }, [product, cart, id]);
 
   return (
     <ProductInfoContainer>

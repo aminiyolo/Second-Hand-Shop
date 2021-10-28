@@ -1,8 +1,9 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const config = require("./config/key");
 const cookieParser = require("cookie-parser");
+const dotenv = require("dotenv");
+dotenv.config();
 // const cors = require("cors");
 const path = require("path");
 const http = require("http");
@@ -72,7 +73,7 @@ app.use(cookieParser());
 // app.use(cors(corsOptions));
 
 mongoose
-  .connect(config.mongoURI, {
+  .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,

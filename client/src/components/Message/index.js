@@ -3,8 +3,10 @@ import dayjs from "dayjs";
 import { MessageWrapper } from "./style";
 import useSWR from "swr";
 import fetcher from "../../hooks/fetcher";
+import { useSelector } from "react-redux";
 
 const Message = ({ message, owner }) => {
+  const { user } = useSelector((state) => state);
   const { data: currentUser } = useSWR("/api/users/data", fetcher);
   const [counterpart, setCounterpart] = useState(null);
 
