@@ -108,6 +108,7 @@ export const Upload = styled.div`
   line-height: 42px;
   padding: 0 10px;
   cursor: pointer;
+  transition: all 300ms ease-in;
   &:hover {
     background-color: #ff8a3d;
     color: white;

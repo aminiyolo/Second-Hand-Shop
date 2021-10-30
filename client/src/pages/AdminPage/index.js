@@ -26,7 +26,7 @@ const AdminPage = () => {
     getAllUsers();
   }, []);
 
-  if (user.role !== 1) {
+  if (user?.role !== 1) {
     history.push("/");
   }
 

@@ -6,10 +6,7 @@ const ProductCard = ({ product }) => {
     <div>
       {product.images[0] && (
         <div>
-          <Img
-            src={`http://localhost:3050/${product.images[0]}`}
-            alt={product.title}
-          />
+          <Img src={product.images[0]} alt={product.title} />
         </div>
       )}
     </div>

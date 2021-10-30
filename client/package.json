@@ -13,6 +13,7 @@
     "autosize": "^5.0.1",
     "axios": "^0.21.1",
     "dayjs": "^1.10.6",
+    "firebase": "^9.2.0",
     "gravatar": "^1.8.1",
     "http-proxy-middleware": "^2.0.1",
     "react": "^17.0.2",

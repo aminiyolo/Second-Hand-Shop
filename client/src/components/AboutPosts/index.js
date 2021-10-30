@@ -78,7 +78,7 @@ const AboutPosts = () => {
                 <th>
                   <Img
                     onClick={() => onClickImg(product._id)}
-                    src={`http://localhost:3050/${product.images[0]}`}
+                    src={product.images[0]}
                     alt={product.title}
                   />
                 </th>

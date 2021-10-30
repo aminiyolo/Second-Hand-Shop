@@ -47,7 +47,11 @@ export const Options = styled.div`
   & > span {
     text-align: center;
     padding: 1rem;
-    margin-left: 1rem;
+    padding-left: 1rem;
+    &:hover {
+      background-color: #ffff;
+      color: #ff8a3d;
+    }
   }
 
   @media screen and (max-device-width: 768px) {

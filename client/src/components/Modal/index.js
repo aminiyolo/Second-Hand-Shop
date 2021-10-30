@@ -1,5 +1,4 @@
-import axios from "axios";
-import React, { useCallback, FC } from "react";
+import React, { useCallback } from "react";
 import {
   CreateModal,
   Menu,

@@ -17,9 +17,11 @@ import {
   SelectBox,
 } from "./style";
 import { Error, Loading } from "../Login/style";
+import { useSelector } from "react-redux";
 
 const Upload = () => {
-  const { data: DATA } = useSWR("/api/users/data", fetcher);
+  const { user } = useSelector((state) => state);
+  // const { data: DATA } = useSWR("/api/users/data", fetcher);
   const history = useHistory();
 
   const [category, setCategories] = useState(1);
@@ -93,7 +95,7 @@ const Upload = () => {
     }
 
     let data = {
-      seller: DATA._id,
+      seller: user._id,
       title,
       description,
       period,
@@ -110,11 +112,7 @@ const Upload = () => {
     }
   };
 
-  if (DATA === undefined) {
-    return <Loading>Loading...</Loading>;
-  }
-
-  if (DATA?.isAuth === false) {
+  if (!user) {
     history.push("/");
   }
 

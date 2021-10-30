@@ -16,7 +16,7 @@ export const Menu = styled.div`
   right: 28px;
   background-color: #ff6a4d;
   width: 200px;
-  height: 264.5px;
+  height: 248px;
   & > .menuWrapper {
     position: relative;
     padding-top: 15px;
@@ -56,32 +56,28 @@ export const Img = styled.img`
 `;
 
 export const Category = styled.div`
-  & > .myPage {
+  & > :hover {
+    background-color: #ffff;
+    color: #ff8a3d;
+  }
+  .myPage {
     border-top: 2px solid #ff8a7d;
     border-bottom: 2px solid #ff8a7d;
     padding: 18px 0;
     cursor: pointer;
-    &:hover {
-      background-color: #ff8a4d;
-    }
   }
   & > .messenger {
     cursor: pointer;
     padding: 18px;
     border-bottom: 2px solid #ff8a7d;
-    &:hover {
-      background-color: #ff8a4d;
-    }
   }
 
   & > .logout {
     padding-top: 4px;
     line-height: 52px;
-    padding-bottom: 7px;
+    height: 100%;
+    padding-bottom: 9px;
     cursor: pointer;
-    &:hover {
-      background-color: #ff8a4d;
-    }
   }
 `;
 

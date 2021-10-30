@@ -18,7 +18,7 @@ const ProductDetail = () => {
         const res = await axios.get(
           `/api/product/product_by_id?id=${id}&type=single`
         );
-        setSeller(res.data.productInfo[0].seller.email);
+        setSeller(res.data.productInfo[0].seller._id);
         setProduct(res.data.productInfo[0]);
       } catch (err) {
         console.log(err);

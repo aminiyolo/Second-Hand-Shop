@@ -85,7 +85,6 @@ mongoose
 app.use("/api/users", require("./routes/user"));
 app.use("/api/auth", require("./routes/authMail"));
 app.use("/api/product", require("./routes/product"));
-app.use("/upload", express.static("../upload"));
 app.use("/api/conversations", require("./routes/conversation"));
 app.use("/api/messages", require("./routes/message"));
 

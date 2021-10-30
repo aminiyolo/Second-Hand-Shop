@@ -35,7 +35,7 @@ const ProductInfo = ({ product, seller }) => {
       return;
     }
 
-    if (seller === user.email) {
+    if (seller === user._id) {
       return alert("본인의 상품은 장바구니에 담을 수 없습니다.");
     }
 
@@ -70,7 +70,7 @@ const ProductInfo = ({ product, seller }) => {
       return;
     }
 
-    if (seller === user.email) {
+    if (seller === user._id) {
       return alert("판매자가 본인에 해당합니다.");
     }
 
