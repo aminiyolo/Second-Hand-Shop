@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Success, Loading, Label } from "../Login/style";
+import { Success, Label } from "../Login/style";
 import {
   AuthButton,
   Container,
@@ -7,9 +7,9 @@ import {
   Error,
   H2,
   Form,
-  Input,
   LinkContainer,
   Button,
+  InputContainer,
 } from "./style";
 import { Link, useHistory } from "react-router-dom";
 import useInput from "../../hooks/useInput";
@@ -23,117 +23,73 @@ import { useSelector } from "react-redux";
 const SignUpPage = () => {
   const history = useHistory();
   const { user } = useSelector((state) => state);
+  const [values, setValues] = useState({
+    email: "",
+    ID: "",
+    nickname: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
 
   const [authNum, onChangeAuthNum] = useInput("");
   const [auth, setAuth] = useState(getNum());
   const [authCheck, setAuthCheck] = useState(false);
   const [sendMail, setSendMail] = useState(false);
   const [emailError, setEmailError] = useState(false);
-  const [nickNameCheck, setNickNameCheck] = useState(false);
-  const [emptyPassword, setEmptyPassword] = useState(false);
-  const [emptyID, setEmptyID] = useState(false);
-  const [shortID, setShortID] = useState(false);
-  const [shortPassword, setShortPassword] = useState(false);
-
-  const [email, onChangeEmail] = useInput("");
+  const [idInfo, setIdInfo] = useState(false);
+  const [nicknameInfo, setNicknameIdInfo] = useState(false);
+  const [passwordInfo, setPasswordInfo] = useState(false);
+  const [confirmPasswordInfo, setConfirmPasswordInfo] = useState(false);
   const [validatedEmail, setValidatedEmail] = useState("");
-  const [nickname, onChangeNickname] = useInput("");
-  const [ID, onChangeID] = useInput("");
-  const [password, setPassword] = useState("");
-  const [passwordCheck, setPasswordCheck] = useState("");
-  const [mismatchError, setMismatchError] = useState(false);
-  const [signUpSuccess, setSignUpSuccess] = useState(false);
 
   function getNum() {
     return Math.random();
   }
 
-  const onChangePassword = useCallback(
-    (e) => {
-      setPassword(e.target.value);
-      setMismatchError(e.target.value !== passwordCheck);
-    },
-    [passwordCheck]
-  );
-
-  const onChangePasswordCheck = useCallback(
-    (e) => {
-      setPasswordCheck(e.target.value);
-      setMismatchError(e.target.value !== password);
-    },
-    [password]
-  );
-
-  function ValidationCheck(state, setState) {
-    if (!state.trim()) {
-      setState(true);
-      return;
-    } else {
-      setState(false);
-    }
-  }
-
-  function checkIfShort(state, setState) {
-    if (state.length >= 1 && state.length < 6) setState(true);
-    else setState(false);
-  }
-
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
+      if (!authCheck) return;
 
-      ValidationCheck(nickname, setNickNameCheck);
-      ValidationCheck(password, setEmptyPassword);
-      ValidationCheck(ID, setEmptyID);
+      const { password, confirmPassword } = values;
 
-      checkIfShort(ID, setShortID);
-      checkIfShort(password, setShortPassword);
+      if (password !== confirmPassword) {
+        setConfirmPasswordInfo(true);
+        return;
+      } else setConfirmPasswordInfo(false);
 
-      if (!passwordCheck.trim() || !authCheck) return;
+      let data = {
+        ...values,
+        email: validatedEmail,
+        image: `http://gravatar.com/avatar/${dayjs(
+          new Date()
+        ).unix()}?d=identicon`,
+      };
 
-      if (!mismatchError) {
-        setSignUpSuccess(false);
-
-        let data = {
-          email: validatedEmail,
-          ID,
-          nickname,
-          password,
-          image: `http://gravatar.com/avatar/${dayjs(
-            new Date()
-          ).unix()}?d=identicon`,
-        };
-
-        const getResult = async () => {
-          try {
-            const res = await axios.post("/api/users/register", data);
-            if (res.data.success) {
-              alert("회원가입이 성공했습니다.");
-              history.push("/login");
-            } else alert(res.data.msg);
-          } catch (err) {
-            console.log(err);
-          }
-        };
-        getResult();
-      }
+      const getResult = async () => {
+        try {
+          const res = await axios.post("/api/users/register", data);
+          if (res.data.success) {
+            alert("회원가입이 성공했습니다.");
+            history.push("/login");
+          } else alert(res.data.msg);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      getResult();
     },
-    [
-      nickname,
-      password,
-      mismatchError,
-      authCheck,
-      passwordCheck,
-      ID,
-      validatedEmail,
-      history,
-    ]
+    [values, authCheck, validatedEmail, history]
   );
 
   const getAuthNum = useCallback(
     (e) => {
       e.preventDefault();
-
+      const email = Object.entries(values)[0][1];
       if (!email.trim()) {
         setEmailError(true);
         return;
@@ -159,12 +115,13 @@ const SignUpPage = () => {
       };
       authNumber();
     },
-    [email, setAuth]
+    [values, setAuth]
   );
 
   const onClickCheckAuthNum = useCallback(
     (e) => {
       e.preventDefault();
+      if (!authNum.trim()) return;
       if (auth === authNum) {
         setAuthCheck(true);
       } else {
@@ -186,106 +143,116 @@ const SignUpPage = () => {
     <Background>
       <Container>
         <H2>Sign Up</H2>
-        <Form>
+        <Form onSubmit={onSubmit}>
           <Label id="email-label">
             <span>이메일 주소</span>
-            {/* <div> */}
-            <Input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={onChangeEmail}
-            />
+            <InputContainer>
+              <input
+                type="email"
+                name="email"
+                required
+                onChange={handleChange}
+              />
+            </InputContainer>
             {!sendMail && (
               <AuthButton onClick={getAuthNum}>인증번호 받기</AuthButton>
             )}
-            {emailError && <Error>이메일을 입력해주세요</Error>}
+            {emailError && <Error color="red">이메일을 입력해주세요</Error>}
             {sendMail && <Success>인증번호를 전송했습니다.</Success>}
-            {/* </div> */}
           </Label>
           <Label>
             <span>인증번호</span>
-            <div>
-              <Input value={authNum} onChange={onChangeAuthNum} />
+            <InputContainer>
+              <input value={authNum} onChange={onChangeAuthNum} />
               {!authCheck && (
                 <AuthButton onClick={onClickCheckAuthNum}>
                   인증번호 확인
                 </AuthButton>
               )}
               {authCheck && <Success>인증이 되었습니다!</Success>}
-              {authCheck === false && <Error>인증이 필요합니다.</Error>}
-            </div>
+              {authCheck === false && (
+                <Error color="red">인증이 필요합니다.</Error>
+              )}
+            </InputContainer>
             <div></div>
           </Label>
           <Label id="nickname-label">
             <span>아이디</span>
-            <div>
-              <Input
+            <InputContainer>
+              <input
                 type="text"
-                id="ID"
                 name="ID"
-                value={ID}
-                onChange={onChangeID}
-                maxLength="13"
+                onChange={handleChange}
+                pattern="^[A-Za-z0-9]{6,16}$"
+                required
+                onBlur={() => setIdInfo(false)}
+                onFocus={() => setIdInfo(true)}
               />
-            </div>
+              {idInfo && (
+                <Error>
+                  아이디는 6자 이상 16자 이하이어야 하며 특수 문자가 들어가면
+                  안됩니다.
+                </Error>
+              )}
+            </InputContainer>
           </Label>
           <Label id="nickname-label">
             <span>닉네임</span>
-            <div>
-              <Input
+            <InputContainer>
+              <input
                 type="text"
-                id="nickname"
                 name="nickname"
-                value={nickname}
-                onChange={onChangeNickname}
-                maxLength="13"
+                onChange={handleChange}
+                pattern="^[A-Za-z0-9]{6,16}$"
+                required
+                onBlur={() => setNicknameIdInfo(false)}
+                onFocus={() => setNicknameIdInfo(true)}
               />
-            </div>
+              {nicknameInfo && (
+                <Error>
+                  닉네임은 6자 이상 16자 이하이어야 하며 특수 문자가 들어가면
+                  안됩니다.
+                </Error>
+              )}
+            </InputContainer>
           </Label>
           <Label id="password-label">
             <span>비밀번호</span>
-            <div>
-              <Input
+            <InputContainer>
+              <input
                 type="password"
-                id="password"
                 name="password"
-                value={password}
-                onChange={onChangePassword}
-                maxLength="16"
+                onChange={handleChange}
+                required
+                pattern="^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$"
+                onBlur={() => setPasswordInfo(false)}
+                onFocus={() => setPasswordInfo(true)}
               />
-            </div>
+              {passwordInfo && (
+                <Error>
+                  비밀번호는 6글자 이상 20자 이하이어야 하며 최소 숫자, 문자,
+                  특수문자 1자 이상 포함해야 합니다.
+                </Error>
+              )}
+            </InputContainer>
           </Label>
           <Label id="password-check-label">
             <span>비밀번호 확인</span>
-            <div>
-              <Input
+            <InputContainer>
+              <input
                 type="password"
-                id="password-check"
-                name="password-check"
-                value={passwordCheck}
-                onChange={onChangePasswordCheck}
-                maxLength="16"
+                name="confirmPassword"
+                onChange={handleChange}
+                required
               />
-            </div>
-            {mismatchError && <Error>비밀번호가 일치하지 않습니다.</Error>}
-            {emptyID && <Error>아이디를 입력해주세요.</Error>}
-            {shortID && <Error>아이디는 여섯글자 이상이어야 합니다.</Error>}
-            {shortPassword && (
-              <Error>비밀번호는 여섯글자 이상이어야 합니다.</Error>
-            )}
-            {!nickname && nickNameCheck && (
-              <Error>닉네임을 입력해주세요.</Error>
-            )}
-            {!password && emptyPassword && (
-              <Error>비밀번호를 입력해주세요.</Error>
-            )}
-            {signUpSuccess && (
-              <Success>회원가입되었습니다! 로그인해주세요.</Success>
-            )}
+              {confirmPasswordInfo && (
+                <Error color="red">비밀번호가 일치하지 않습니다.</Error>
+              )}
+            </InputContainer>
           </Label>
-          <Button onClick={onSubmit}>회원가입</Button>
+          <Button type="submit" disabled={!authCheck}>
+            회원가입
+          </Button>
         </Form>
         <LinkContainer>
           이미 회원이신가요?&nbsp;

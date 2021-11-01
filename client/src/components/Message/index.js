@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { MessageWrapper } from "./style";
-import useSWR from "swr";
-import fetcher from "../../hooks/fetcher";
 import { useSelector } from "react-redux";
 
 const Message = ({ message, owner }) => {
   const { user } = useSelector((state) => state);
-  const { data: currentUser } = useSWR("/api/users/data", fetcher);
   const [counterpart, setCounterpart] = useState(null);
 
   useEffect(() => {
-    if (message.sender !== currentUser._id) {
+    if (message.sender !== user._id) {
       setCounterpart("상대방");
     }
-  }, [currentUser, message]);
+  }, [user, message]);
 
   return (
     <MessageWrapper className="messageWrapper">

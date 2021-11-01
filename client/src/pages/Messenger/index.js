@@ -6,13 +6,12 @@ import Message from "../../components/Message";
 import { io } from "socket.io-client";
 import "./style.css";
 import { Loading } from "../Login/style";
-import useSWR from "swr";
-import fetcher from "../../hooks/fetcher";
 import MakeSection from "../../utill/makeSection";
 import Textarea from "../../components/Textarea";
+import { useSelector } from "react-redux";
 
 const Messenger = () => {
-  const { data: userData } = useSWR("/api/users/data", fetcher);
+  const { user } = useSelector((state) => state);
   const history = useHistory();
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
@@ -44,16 +43,16 @@ const Messenger = () => {
   }, [receivedMessage, currentChat]);
 
   useEffect(() => {
-    socket.current.emit("addUser", userData?._id);
+    socket.current.emit("addUser", user._id);
     socket.current.on("getUser", (users) => {
       setOnlineUsers(users);
     });
-  }, [userData]);
+  }, [user]);
 
   useEffect(() => {
     const getConversation = async () => {
       try {
-        const res = await axios.get(`/api/conversations/${userData?._id}`);
+        const res = await axios.get(`/api/conversations/${user._id}`);
         // 가장 최근의 생성된 대화방을 가장 위에 나타내기 위하여 reverse() 사용.
         setConversations(res.data.reverse());
       } catch (err) {
@@ -61,7 +60,7 @@ const Messenger = () => {
       }
     };
     getConversation();
-  }, [userData]);
+  }, [user]);
 
   useEffect(() => {
     const getMessages = async () => {
@@ -83,13 +82,13 @@ const Messenger = () => {
     }
 
     const message = {
-      sender: userData._id,
+      sender: user._id,
       text: newMessages,
       conversationId: currentChat._id,
     };
 
     const receiverId = currentChat.members.find(
-      (member) => member !== userData._id
+      (member) => member !== user._id
     );
 
     let online;
@@ -107,7 +106,7 @@ const Messenger = () => {
 
     if (online) {
       socket.current.emit("sendMessage", {
-        senderId: userData._id,
+        senderId: user._id,
         receiverId,
         text: newMessages,
       });
@@ -126,11 +125,11 @@ const Messenger = () => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  if (userData === undefined) {
+  if (user === undefined) {
     return <Loading>Loading...</Loading>;
   }
 
-  if (userData?.isAuth === false) {
+  if (!user) {
     history.push("/");
   }
 
@@ -170,7 +169,7 @@ const Messenger = () => {
                       <div key={index} ref={scrollRef}>
                         <Message
                           message={message}
-                          owner={message.sender === userData?._id}
+                          owner={message.sender === user?._id}
                         />
                       </div>
                     ))}

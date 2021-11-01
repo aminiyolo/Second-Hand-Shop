@@ -1,5 +1,4 @@
 import styled from "styled-components";
-// import img from "../Login/image/LoginBG.jpg";
 
 export const AuthButton = styled.button`
   margin-bottom: 10px;
@@ -53,13 +52,6 @@ export const Background = styled.div`
   }
 `;
 
-export const Error = styled.div`
-  color: red;
-  margin: 8px 0 16px;
-  font-weight: bold;
-  display: flex;
-`;
-
 export const Form = styled.form`
   margin: 30px auto 0;
   max-width: 400px;
@@ -74,41 +66,50 @@ export const Form = styled.form`
   }
 `;
 
-export const Input = styled.input`
-  border-radius: 4px;
-  --saf-0: rgba(var(--sk_foreground_high_solid, 134, 134, 134), 1);
-  border: 1px solid var(--saf-0);
-  transition: border 80ms ease-out, box-shadow 80ms ease-out;
-  box-sizing: border-box;
-  margin: 0 0 20px;
-  width: 100%;
-  color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
-  background-color: rgba(var(--sk_primary_background, 255, 255, 255), 1);
-  padding: 12px;
-  height: 44px;
-  padding-top: 11px;
-  padding-bottom: 13px;
-  font-size: 1.125rem;
-  line-height: 1.33333333;
-  &:focus {
-    --saf-0: rgba(var(--sk_highlight, 18, 100, 163), 1);
-    outline: none;
-    border: #ff8a3d;
-    box-shadow: 0 0 0 1px var(--saf-0), 0 0 0 5px rgba(255, 138, 61, 0.8);
-  }
+export const Error = styled.span`
+  font-size: 16px;
+  font-weight: 700;
+  padding: 3px;
+  color: ${({ color }) => color || "#2eb67d"};
+`;
 
-  @media screen and (max-width: 991px) {
+export const InputContainer = styled.div`
+  & input {
+    border-radius: 4px;
+    --saf-0: rgba(var(--sk_foreground_high_solid, 134, 134, 134), 1);
+    border: 1px solid var(--saf-0);
+    transition: border 80ms ease-out, box-shadow 80ms ease-out;
+    box-sizing: border-box;
+    margin: 0 0 20px;
     width: 100%;
-  }
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
+    background-color: rgba(var(--sk_primary_background, 255, 255, 255), 1);
+    padding: 12px;
+    height: 44px;
+    padding-top: 11px;
+    padding-bottom: 13px;
+    font-size: 1.125rem;
+    line-height: 1.33333333;
 
-  @media screen and (max-width: 760px) {
-    width: 100%;
-    font-size: 0.9rem;
-  }
+    &:focus {
+      --saf-0: rgba(var(--sk_highlight, 18, 100, 163), 1);
+      outline: none;
+      border: #ff8a3d;
+      box-shadow: 0 0 0 1px var(--saf-0), 0 0 0 5px rgba(255, 138, 61, 0.8);
+    }
+    @media screen and (max-width: 991px) {
+      width: 100%;
+    }
 
-  @media screen and (max-width: 400px) {
-    width: 100%;
-    font-size: 0.7rem;
+    @media screen and (max-width: 760px) {
+      width: 100%;
+      font-size: 0.9rem;
+    }
+
+    @media screen and (max-width: 400px) {
+      width: 100%;
+      font-size: 0.7rem;
+    }
   }
 `;
 
@@ -135,6 +136,7 @@ export const LinkContainer = styled.p`
 
 export const Button = styled.button`
   margin-bottom: 12px;
+  margin-top: 6px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -150,12 +152,13 @@ export const Button = styled.button`
   transition: all 80ms linear;
   user-select: none;
   outline: none;
-  cursor: pointer;
+  /* cursor: pointer; */
   border-radius: 4px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
   &:hover {
     background-color: #ff6a3d;
     border: none;
+    cursor: ${({ disabled }) => (disabled ? " not-allowed" : "potiner")};
   }
   &:focus {
     --saf-0: rgba(var(--sk_highlight, 18, 100, 163), 1);

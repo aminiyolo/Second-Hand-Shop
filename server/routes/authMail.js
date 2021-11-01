@@ -31,7 +31,7 @@ router.post("/mail", async (req, res) => {
   });
 
   let mailOptions = await transporter.sendMail({
-    from: `'Find Recipe' <${process.env.NODEMAILER_USER}>`,
+    from: `'2nd Hand' <${process.env.NODEMAILER_USER}>`,
     to: req.body.email,
     subject: "회원가입을 위한 인증번호를 입력해주세요.",
     html: emailTemplete,
