@@ -89,7 +89,8 @@ const SignUpPage = () => {
   const getAuthNum = useCallback(
     (e) => {
       e.preventDefault();
-      const email = Object.entries(values)[0][1];
+      const { email } = values;
+
       if (!email.trim()) {
         setEmailError(true);
         return;

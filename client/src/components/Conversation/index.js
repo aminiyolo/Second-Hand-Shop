@@ -10,7 +10,7 @@ const Conversation = ({ conversation, price }) => {
   useEffect(() => {
     // 대화하는 상대방의 정보
     const counterpart = conversation?.members?.find(
-      (member) => member !== user._id
+      (member) => member !== user?._id
     );
 
     const getUser = async () => {
@@ -23,7 +23,7 @@ const Conversation = ({ conversation, price }) => {
     };
 
     getUser();
-  }, [conversation, currentUser, user._id]);
+  }, [conversation, currentUser, user?._id]);
 
   return (
     <Profile>

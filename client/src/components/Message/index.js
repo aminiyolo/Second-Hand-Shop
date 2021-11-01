@@ -8,7 +8,7 @@ const Message = ({ message, owner }) => {
   const [counterpart, setCounterpart] = useState(null);
 
   useEffect(() => {
-    if (message.sender !== user._id) {
+    if (message.sender !== user?._id) {
       setCounterpart("상대방");
     }
   }, [user, message]);

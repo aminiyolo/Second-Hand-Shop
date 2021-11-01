@@ -3,14 +3,13 @@ import axios from "axios";
 import { useHistory } from "react-router";
 import Conversation from "../../components/Conversation";
 import Message from "../../components/Message";
-import { io } from "socket.io-client";
 import "./style.css";
 import { Loading } from "../Login/style";
 import MakeSection from "../../utill/makeSection";
 import Textarea from "../../components/Textarea";
 import { useSelector } from "react-redux";
 
-const Messenger = () => {
+const Messenger = ({ socket }) => {
   const { user } = useSelector((state) => state);
   const history = useHistory();
   const [conversations, setConversations] = useState([]);
@@ -19,12 +18,10 @@ const Messenger = () => {
   const [newMessages, setNewMessages] = useState("");
   const [receivedMessage, setReceivedMessage] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const socket = useRef();
   const scrollRef = useRef();
 
   useEffect(() => {
-    socket.current = io("ws://localhost:3050");
-    socket.current.on("getMessage", (data) => {
+    socket.on("getMessage", (data) => {
       setReceivedMessage({
         sender: data.senderId,
         text: data.text,
@@ -32,9 +29,9 @@ const Messenger = () => {
       });
     });
     return () => {
-      socket.current.off("disconnect");
+      socket.off("disconnect");
     };
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     receivedMessage &&
@@ -43,16 +40,16 @@ const Messenger = () => {
   }, [receivedMessage, currentChat]);
 
   useEffect(() => {
-    socket.current.emit("addUser", user._id);
-    socket.current.on("getUser", (users) => {
+    socket.emit("addUser", user?._id);
+    socket.on("getUser", (users) => {
       setOnlineUsers(users);
     });
-  }, [user]);
+  }, [user, socket]);
 
   useEffect(() => {
     const getConversation = async () => {
       try {
-        const res = await axios.get(`/api/conversations/${user._id}`);
+        const res = await axios.get(`/api/conversations/${user?._id}`);
         // 가장 최근의 생성된 대화방을 가장 위에 나타내기 위하여 reverse() 사용.
         setConversations(res.data.reverse());
       } catch (err) {
@@ -105,7 +102,7 @@ const Messenger = () => {
     }
 
     if (online) {
-      socket.current.emit("sendMessage", {
+      socket.emit("sendMessage", {
         senderId: user._id,
         receiverId,
         text: newMessages,

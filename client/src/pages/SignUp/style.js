@@ -152,13 +152,12 @@ export const Button = styled.button`
   transition: all 80ms linear;
   user-select: none;
   outline: none;
-  /* cursor: pointer; */
   border-radius: 4px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
   &:hover {
     background-color: #ff6a3d;
     border: none;
-    cursor: ${({ disabled }) => (disabled ? " not-allowed" : "potiner")};
+    cursor: ${({ disabled }) => (disabled ? " not-allowed" : "pointer")};
   }
   &:focus {
     --saf-0: rgba(var(--sk_highlight, 18, 100, 163), 1);
