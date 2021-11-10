@@ -32,11 +32,11 @@ export const RightNav = styled.div`
   }
 
   @media screen and (max-device-width: 768px) {
-    width: 18rem;
+    width: 10rem;
   }
 
   @media screen and (max-device-width: 415px) {
-    width: 11.5rem;
+    width: 7.5rem;
   }
 `;
 

@@ -1,9 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import useSWR from "swr";
 import { useHistory } from "react-router";
-import fetcher from "../../hooks/fetcher";
-import useInput from "../../hooks/useInput";
 import UploadBox from "../../components/UploadBox";
 import { Categories } from "./data";
 import {
@@ -15,42 +12,32 @@ import {
   Select,
   Button,
   SelectBox,
+  ButtonContainer,
 } from "./style";
-import { Error, Loading } from "../Login/style";
+import { Error } from "../Login/style";
 import { useSelector } from "react-redux";
 
-const Upload = () => {
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const Upload = ({ product = null, closeEdit = null }) => {
   const { user } = useSelector((state) => state);
-  // const { data: DATA } = useSWR("/api/users/data", fetcher);
   const history = useHistory();
+  const [value, setValue] = useState({
+    title: "",
+    description: "",
+    period: "",
+    price: "",
+  });
 
   const [category, setCategories] = useState(1);
-  const [title, onChangeTitle] = useInput("");
-  const [description, onChangeDescription] = useInput("");
-  const [period, onChangePeriod] = useInput("");
-  const [price, onChangePrice] = useInput("");
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState(product?.images || []);
   const [clearImg, setClearImg] = useState(false);
-
-  const [titleError, setTitleError] = useState(false);
-  const [descriptionError, setDescriptionError] = useState(false);
-  const [periodError, setPeriodError] = useState(false);
-  const [priceError, setPriceError] = useState(false);
   const [imgError, setImgError] = useState(false);
 
-  function ValidationCheck(state, setState) {
-    if (!state.trim()) {
-      setState(true);
-    } else {
-      setState(false);
-    }
-  }
-
-  function Recheck(state, setState) {
-    if (state) {
-      setState(false);
-    }
-  }
+  const handleChange = (e) => {
+    setValue({ ...value, [e.target.name]: e.target.value });
+  };
 
   const onChangeCategory = (e) => {
     setCategories(e.target.value);
@@ -60,46 +47,50 @@ const Upload = () => {
     setImages(images);
   };
 
+  // 수정한 포스트를 업로드
+  const editData = async (e) => {
+    e.preventDefault();
+
+    const { title, description, period, price } = value;
+
+    if (!title || !description || !period || !price || images.length < 1)
+      return toast.error("사진 및 모든 입력을 완성해주세요", {
+        autoClose: 2000,
+      });
+
+    const data = {
+      id: product._id,
+      ...value,
+      images,
+    };
+
+    try {
+      await axios.post("/api/product/edit", data);
+      alert("수정되었습니다.");
+      closeEdit();
+    } catch (err) {
+      alert("잠시 후에 다시 시도해주시길 바랍니다.");
+    }
+  };
+
+  // 수정 취소
+  const onClickCancle = useCallback(() => {
+    closeEdit();
+  }, [closeEdit]);
+
+  // 최초 포스트를 업로드
   const onSubmit = async (e) => {
     e.preventDefault();
-    Recheck(title, setTitleError);
-    Recheck(description, setDescriptionError);
-    Recheck(period, setPeriodError);
-    Recheck(price, setPriceError);
-    ValidationCheck(title, setTitleError);
-    ValidationCheck(description, setDescriptionError);
-    ValidationCheck(period, setPeriodError);
+    if (product) return;
 
     if (!images.length) {
       setImgError(true);
-    }
-
-    if (price <= 0) {
-      setPriceError(true);
-    }
-
-    if (period <= 0) {
-      setPeriodError(true);
-    }
-
-    if (
-      !title ||
-      !description ||
-      !price ||
-      !period ||
-      !images.length ||
-      period <= 0 ||
-      price <= 0
-    ) {
       return;
     }
 
     let data = {
+      ...value,
       seller: user._id,
-      title,
-      description,
-      period,
-      price,
       images,
       category,
     };
@@ -111,6 +102,38 @@ const Upload = () => {
       alert("업로드 실패!");
     }
   };
+
+  // 기존 포스트를 수정하기 위해 DB에서 데이터 값 불러오기
+  const getProductInfo = async () => {
+    try {
+      const res = await axios.get(
+        `/api/product/product_by_id?id=${product._id}&type=single`
+      );
+      setValue((value) => ({
+        ...value,
+        title: res.data.productInfo[0].title,
+      }));
+      setValue((value) => ({
+        ...value,
+        description: res.data.productInfo[0].description,
+      }));
+      setValue((value) => ({
+        ...value,
+        period: res.data.productInfo[0].period,
+      }));
+      setValue((value) => ({
+        ...value,
+        price: res.data.productInfo[0].price,
+      }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // 수정 시에만 useEffect 발동
+  useEffect(() => {
+    product && getProductInfo();
+  }, []);
 
   if (!user) {
     history.push("/");
@@ -126,31 +149,52 @@ const Upload = () => {
               getImages={getImages}
               clearImg={clearImg}
               setClearImg={setClearImg}
+              defaultImages={product?.images}
             />
           </div>
           <DescriptionBox>
-            <form onSubmit={onSubmit}>
+            <form onSubmit={product ? onSubmit : editData}>
               <Description>
                 <label>제목</label>
-                <Input value={title} onChange={onChangeTitle} />
-                {titleError && <Error>제목을 입력해주세요</Error>}
+                <Input
+                  value={value.title}
+                  name="title"
+                  onChange={handleChange}
+                  type="text"
+                  required
+                />
                 <br />
                 <br />
                 <label>상세설명</label>
-                <Textarea value={description} onChange={onChangeDescription} />
-                {descriptionError && <Error>상세설명을 입력해주세요</Error>}
+                <Textarea
+                  value={value.description}
+                  name="description"
+                  onChange={handleChange}
+                  required
+                />
                 <br />
                 <br />
-                <label>사용한 개월 수 (ex 3 또는 7) </label>
-                <Input type="number" value={period} onChange={onChangePeriod} />
-                {periodError && (
-                  <Error>사용 개월 수는 최소 1개월 입니다.</Error>
-                )}
+                <label>사용한 개월 수 (최대 개월 수 36) </label>
+                <Input
+                  type="number"
+                  name="period"
+                  value={value.period}
+                  onChange={handleChange}
+                  required
+                  min={1}
+                  max={36}
+                />
                 <br />
                 <br />
                 <label>가격(원)</label>
-                <Input value={price} onChange={onChangePrice} type="number" />
-                {priceError && <Error>가격은 최소 1원 입니다.</Error>}
+                <Input
+                  value={value.price}
+                  name="price"
+                  onChange={handleChange}
+                  type="number"
+                  required
+                  min={1}
+                />
               </Description>
               <br />
               <br />
@@ -167,9 +211,17 @@ const Upload = () => {
               <br />
               {imgError && <Error>사진을 첨부해주세요.</Error>}
               <br />
-              <Button onSubmit={onSubmit}>등록하기</Button>
+              {!product ? (
+                <Button onSubmit={onSubmit}>등록하기</Button>
+              ) : (
+                <ButtonContainer>
+                  <button onClick={editData}>수정하기</button>
+                  <button onClick={onClickCancle}>취소하기</button>
+                </ButtonContainer>
+              )}
             </form>
           </DescriptionBox>
+          <ToastContainer position="top-right" />
         </div>
       </UploadContainer>
     </React.Fragment>

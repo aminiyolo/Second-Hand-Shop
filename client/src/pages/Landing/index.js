@@ -47,11 +47,17 @@ const LandingPage = () => {
   );
 
   useEffect(() => {
+    const source = axios.CancelToken.source();
+
     let data = {
       skip,
       limit,
     };
     getData(data);
+
+    return () => {
+      source.cancel();
+    };
   }, []);
 
   const onClickMore = () => {

@@ -26,7 +26,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <NavBar />
+        <NavBar socket={socket} />
         <Switch>
           <Route exact path="/" component={Landing} />
           <Route path="/login" component={Login} />

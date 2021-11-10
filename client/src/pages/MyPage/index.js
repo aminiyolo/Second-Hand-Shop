@@ -4,11 +4,12 @@ import dayjs from "dayjs";
 import { CartContainer, Empty, ProductContainer, Img } from "../Cart/style";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
-import Editor from "../../components/Edit";
+// import Editor from "../../components/Edit";
 import { Loading } from "../Login/style";
 import { Edit } from "./style";
 import { FormOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import Upload from "../Upload";
 
 const MyPage = () => {
   const { user } = useSelector((state) => state);
@@ -128,7 +129,7 @@ const MyPage = () => {
       </CartContainer>
     );
   } else {
-    return <Editor product={productData} closeEdit={closeEdit} />;
+    return <Upload product={productData} closeEdit={closeEdit} />;
   }
 };
 

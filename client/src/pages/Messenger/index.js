@@ -55,6 +55,11 @@ const Messenger = ({ socket }) => {
       } catch (err) {
         console.log(err);
       }
+
+      const source = axios.CancelToken.source();
+      return () => {
+        source.cancel();
+      };
     };
     getConversation();
   }, [user]);
@@ -67,6 +72,11 @@ const Messenger = ({ socket }) => {
       } catch (err) {
         console.log(err);
       }
+
+      const source = axios.CancelToken.source();
+      return () => {
+        source.cancel();
+      };
     };
     getMessages();
   }, [currentChat]);
@@ -77,6 +87,10 @@ const Messenger = ({ socket }) => {
     if (!newMessages.trim()) {
       return;
     }
+
+    socket.on("getUser", (users) => {
+      setOnlineUsers(users);
+    });
 
     const message = {
       sender: user._id,

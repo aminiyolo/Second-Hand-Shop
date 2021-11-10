@@ -14,6 +14,7 @@ export const UploadContainer = styled.div`
   }
 
   @media screen and (max-width: 991px) {
+    width: 90%;
     margin: 0 auto;
     text-align: center;
     overflow-x: hidden;
@@ -25,6 +26,10 @@ export const UploadContainer = styled.div`
       justify-content: center;
       align-items: center;
     }
+  }
+
+  @media screen and (max-width: 415px) {
+    width: 90%;
   }
 `;
 
@@ -110,5 +115,37 @@ export const Button = styled.button`
   &:hover {
     background-color: #ff8a3d;
     color: white;
+  }
+`;
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  margin-top: 3rem;
+
+  & > button {
+    border: 2px solid #ff8a3d;
+    padding: 8px;
+    border-radius: 5px;
+    background-color: white;
+    color: #ff8a3d;
+    margin: 0 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    &:hover {
+      background-color: #ff8a3d;
+      color: white;
+    }
+
+    @media screen and (max-width: 415px) {
+      margin-bottom: 20px;
+    }
+  }
+
+  @media screen and (max-width: 415px) {
+    width: 100%;
+    margin-top: 1rem;
+    flex-direction: column;
   }
 `;
