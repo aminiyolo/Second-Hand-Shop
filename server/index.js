@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 dotenv.config();
-// const cors = require("cors");
 const path = require("path");
 const http = require("http");
 const SocketIO = require("socket.io");
@@ -53,6 +52,13 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("notification", ({ senderNickname, receiverId }) => {
+    const user = getUser(receiverId);
+    io.to(user.socketId).emit("notification", {
+      senderNickname,
+    });
+  });
+
   // when disconnect
   socket.on("disconnect", () => {
     console.log("disconnected");
@@ -64,13 +70,6 @@ io.on("connection", (socket) => {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-
-// const corsOptions = {
-//   origin: "http://localhost:3000",
-//   credentials: true,
-// };
-
-// app.use(cors(corsOptions));
 
 mongoose
   .connect(process.env.MONGO_URL, {

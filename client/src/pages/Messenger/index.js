@@ -42,6 +42,7 @@ const Messenger = ({ socket }) => {
   useEffect(() => {
     socket.emit("addUser", user?._id);
     socket.on("getUser", (users) => {
+      console.log(users);
       setOnlineUsers(users);
     });
   }, [user, socket]);
@@ -120,6 +121,10 @@ const Messenger = ({ socket }) => {
         senderId: user._id,
         receiverId,
         text: newMessages,
+      });
+      socket.emit("notification", {
+        senderNickname: user.nickname,
+        receiverId,
       });
     }
 

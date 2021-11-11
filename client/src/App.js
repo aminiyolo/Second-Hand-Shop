@@ -23,6 +23,10 @@ function App() {
     user && setSocket(io("ws://localhost:3050"));
   }, [user]);
 
+  useEffect(() => {
+    user && socket && socket?.emit("addUser", user?._id);
+  }, [socket, user]);
+
   return (
     <>
       <BrowserRouter>
