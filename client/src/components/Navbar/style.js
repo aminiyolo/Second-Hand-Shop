@@ -9,7 +9,11 @@ export const Nav = styled.div`
   background-color: white;
   display: flex;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.06);
-  z-index: 4;
+  z-index: 1001;
+
+  @media screen and (max-width: 415px) {
+    width: ${({ pathname }) => (pathname === "/" ? 90 : 100)}%;
+  }
 `;
 
 export const MenuBar = styled(Menu)`
@@ -29,7 +33,7 @@ export const MenuBar = styled(Menu)`
   }
 
   @media screen and (max-device-width: 415px) {
-    right: 2rem;
+    right: ${({ pathname }) => (pathname === "/" ? 2.2 : 1)}rem;
   }
 `;
 
@@ -152,9 +156,18 @@ export const Modal = styled.div`
   padding: ${({ padding }) => padding}px;
   width: ${({ width }) => width}rem;
   text-align: center;
-  border-radius: 5px;
+  border-radius: 8px;
 `;
 
 export const ModalClose = styled.div`
   margin-top: 8px;
+
+  .btn {
+    outline: none;
+    border: 1.5px solid #ff8a3d;
+    border-radius: 5px;
+    background-color: white;
+    padding: 5px;
+    cursor: pointer;
+  }
 `;

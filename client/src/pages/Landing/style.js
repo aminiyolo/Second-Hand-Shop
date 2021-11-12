@@ -4,9 +4,6 @@ export const LandingContainer = styled.div`
   margin: 0px auto 100px;
   padding-bottom: 40px;
   background-color: whitesmoke;
-
-  @media screen and (max-width: 768px) {
-  }
 `;
 
 export const Background = styled.div`

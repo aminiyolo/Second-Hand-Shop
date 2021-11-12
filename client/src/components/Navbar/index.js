@@ -62,11 +62,15 @@ const Navbar = ({ socket }) => {
     setNotification(0);
   };
 
+  useEffect(() => {
+    if (pathname !== "/") setModal(false);
+  }, [pathname]);
+
   return (
     <>
       {user ? (
         <div>
-          <Nav>
+          <Nav pathname={pathname}>
             <Logo>
               <span onClick={onClick}>2nd Hand</span>
             </Logo>
@@ -86,15 +90,19 @@ const Navbar = ({ socket }) => {
                 <Modal left={-100} width={15} padding={20}>
                   {msgFrom}으로 부터 메세지가 도착했습니다.
                   <ModalClose>
-                    <button onClick={handleNotification}>읽음</button>
+                    <button className="btn" onClick={handleNotification}>
+                      읽음
+                    </button>
                   </ModalClose>
                 </Modal>
               ) : (
                 modal && (
-                  <Modal left={-65} width={10} padding={15}>
+                  <Modal left={-65} width={10} padding={10}>
                     알림 없음
                     <ModalClose>
-                      <button onClick={handleNotification}>닫기</button>
+                      <button className="btn" onClick={handleNotification}>
+                        닫기
+                      </button>
                     </ModalClose>
                   </Modal>
                 )
@@ -110,7 +118,7 @@ const Navbar = ({ socket }) => {
               <Upload onClick={onUpload}>상품 업로드</Upload>
               <RightMenu user={user} />
             </ButtonContainer>
-            {!open && <MenuBar onClick={onClickMenu} />}
+            {!open && <MenuBar pathname={pathname} onClick={onClickMenu} />}
           </Nav>
           {open && <RightNavbar onCloseRightNav={onCloseRightNav} />}
         </div>

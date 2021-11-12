@@ -1,8 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { Input } from "antd";
-import { SearchStyle, Form } from "./style";
-
-const { Search } = Input;
+import { Form, Input, Search } from "./style";
 
 const SearchFilter = ({ searchFilter }) => {
   const [value, setValue] = useState("");
@@ -14,6 +11,7 @@ const SearchFilter = ({ searchFilter }) => {
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
+      if (!value.trim()) return; // 검색 값 공백 시 검색 blocking
       searchFilter(value);
       setValue("");
     },
@@ -24,12 +22,12 @@ const SearchFilter = ({ searchFilter }) => {
     <React.Fragment>
       <div>
         <Form onSubmit={onSubmit}>
-          <Search
+          <Input
             placeholder="찾고자 하는 제품을 검색해보세요."
             value={value}
             onChange={onSearch}
-            style={SearchStyle}
           />
+          <Search onClick={onSubmit} />
         </Form>
       </div>
     </React.Fragment>

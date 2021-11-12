@@ -36,7 +36,7 @@ export const RightNav = styled.div`
   }
 
   @media screen and (max-device-width: 415px) {
-    width: 7.5rem;
+    width: ${({ pathname }) => (pathname === "/" ? 11.5 : 7.5)}rem;
   }
 `;
 

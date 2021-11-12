@@ -12,7 +12,7 @@ import {
   HeartContainer,
   ProductInfoContainer,
 } from "./style";
-import { HeartOutlined } from "@ant-design/icons";
+import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { addCart, removeCart } from "../../redux/apiCalls";
 import { useDispatch } from "react-redux";
@@ -142,7 +142,11 @@ const ProductInfo = ({ product, seller }) => {
         <div>사용기간: &nbsp;{product?.period}개월</div>
         <div className="price">가격: &nbsp;{product?.price}원</div>
         <HeartContainer>
-          <HeartOutlined />
+          {inAcart ? (
+            <HeartFilled style={{ color: "red" }} />
+          ) : (
+            <HeartOutlined />
+          )}
           <span>{count}</span>
         </HeartContainer>
       </Description>

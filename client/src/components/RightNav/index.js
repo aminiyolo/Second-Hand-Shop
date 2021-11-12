@@ -1,13 +1,15 @@
 import { RightNav, Options, NavContainer } from "./style";
 import { useHistory } from "react-router";
+import { useLocation } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/apiCalls";
 
 const RightNavbar = ({ onCloseRightNav }) => {
+  const { user } = useSelector((state) => state);
+  const { pathname } = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state);
 
   const onClickHome = () => {
     onCloseRightNav();
@@ -44,7 +46,7 @@ const RightNavbar = ({ onCloseRightNav }) => {
 
   return (
     <NavContainer onClick={() => onCloseRightNav()}>
-      <RightNav onClick={stopPropagation}>
+      <RightNav pathname={pathname} onClick={stopPropagation}>
         <Options>
           <span onClick={onClickHome}>Home</span>
           <span onClick={onClickMyPage}>My Page</span>

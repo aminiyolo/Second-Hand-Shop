@@ -153,7 +153,7 @@ const Upload = ({ product = null, closeEdit = null }) => {
             />
           </div>
           <DescriptionBox>
-            <form onSubmit={product ? onSubmit : editData}>
+            <form onSubmit={product ? editData : onSubmit}>
               <Description>
                 <label>제목</label>
                 <Input

@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from "react";
-import axios from "axios";
 import { Link, useHistory } from "react-router-dom";
 import {
   Form,
@@ -14,20 +13,13 @@ import {
   Container,
 } from "./style";
 import useInput from "../../hooks/useInput";
-// import useSWR from "swr";
-// import fetcher from "../../hooks/fetcher";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/apiCalls";
 
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
 const LoginPage = () => {
-  // const { data, revalidate } = useSWR("/api/users/data", fetcher);
   const history = useHistory();
   const [ID, onChangeID] = useInput("");
   const [password, onChangePassword] = useInput("");
-  // const [logInError, setLogInError] = useState("");
   const [emptyCheck, setEmptyCheck] = useState(false);
   const { user, isFetching, error } = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -35,7 +27,6 @@ const LoginPage = () => {
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
-      // setLogInError("");
 
       if (!ID.trim() || !password.trim()) {
         return setEmptyCheck(true);
@@ -49,22 +40,6 @@ const LoginPage = () => {
       };
 
       login(dispatch, data);
-
-      // const login = async () => {
-      //   try {
-      //     const res = await axios.post("/api/users/login", data);
-      //     if (res.data.success) {
-      //       // revalidate();
-      //       history.push("/");
-      //     } else {
-      //       setLogInError(res.data.msg);
-      //     }
-      //   } catch (err) {
-      //     console.log(err);
-      //   }
-      // };
-
-      // login();
     },
     [ID, password, dispatch]
   );
@@ -119,7 +94,6 @@ const LoginPage = () => {
           <Link to="/register">회원가입 하러가기</Link>
         </LinkContainer>
       </Container>
-      <ToastContainer />
     </FormAndImage>
   );
 };
