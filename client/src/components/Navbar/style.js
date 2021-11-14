@@ -114,6 +114,8 @@ export const Upload = styled.div`
   padding: 0 10px;
   cursor: pointer;
   transition: all 300ms ease-in;
+  user-select: none;
+
   &:hover {
     background-color: #ff8a3d;
     color: white;
@@ -150,13 +152,14 @@ export const Modal = styled.div`
   position: absolute;
   top: 45px;
   left: ${({ left }) => left}px;
-  background-color: whitesmoke;
+  background-color: #fafafa;
   font-size: 1rem;
   font-weight: 500;
   padding: ${({ padding }) => padding}px;
   width: ${({ width }) => width}rem;
   text-align: center;
   border-radius: 8px;
+  user-select: none;
 `;
 
 export const ModalClose = styled.div`
@@ -169,5 +172,10 @@ export const ModalClose = styled.div`
     background-color: white;
     padding: 5px;
     cursor: pointer;
+
+    &:hover {
+      background-color: #ff8a3d;
+      color: white;
+    }
   }
 `;

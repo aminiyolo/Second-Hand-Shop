@@ -6,6 +6,7 @@ export const Form = styled.form`
   text-align: center;
   border-radius: 50%;
   position: relative;
+  user-select: none;
 `;
 
 export const Input = styled(input)`

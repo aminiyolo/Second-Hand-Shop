@@ -83,7 +83,7 @@ const Navbar = ({ socket }) => {
                     marginTop: "10px",
                   }}
                 >
-                  <Notification onClick={() => setModal(true)} />
+                  <Notification onClick={() => setModal((prev) => !prev)} />
                 </Badge>
               )}
               {modal && notification ? (

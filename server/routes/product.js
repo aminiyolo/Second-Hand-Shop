@@ -12,9 +12,19 @@ router.post("/upload", async (req, res) => {
   }
 });
 
+router.get("/data", async (req, res) => {
+  const cursor = req.query.cursor || "";
+  try {
+    const products = await Product.find().populate("seller");
+    const fromIndex =
+      products.reverse().findIndex((product) => product.id === cursor) + 1;
+    return res.status(200).json(products.slice(fromIndex, fromIndex + 4));
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+});
+
 router.post("/data", async (req, res) => {
-  let limit = req.body.limit ? parseInt(req.body.limit) : 8;
-  let skip = req.body.skip ? parseInt(req.body.skip) : 0;
   let searchValue = req.body.searchValue;
   let filter = {};
 
@@ -29,16 +39,10 @@ router.post("/data", async (req, res) => {
       const products = await Product.find(filter)
         .find({ $text: { $search: searchValue } })
         .populate("seller");
-      return res.status(200).json({
-        products: products.reverse().splice(skip, limit),
-        length: products.length,
-      });
+      return res.status(200).json(products.reverse());
     } else {
       const products = await Product.find(filter).populate("seller");
-      return res.status(200).json({
-        products: products.reverse().splice(skip, limit),
-        length: products.length,
-      });
+      return res.status(200).json(products.reverse());
     }
   } catch (err) {
     return res.status(500).json(err);

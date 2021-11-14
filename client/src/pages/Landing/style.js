@@ -23,6 +23,7 @@ export const Background = styled.div`
     padding-top: 100px;
     text-align: center;
     font-size: 1.7rem;
+    font-weight: 550;
   }
 
   @media screen and (max-width: 820px) {

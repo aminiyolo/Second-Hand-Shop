@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import axios from "axios";
 import ProductCard from "../../components/ProductCard";
 import {
@@ -9,7 +9,6 @@ import {
   ProductData,
   cardStyle,
   GetAllButton,
-  MoreBtn,
 } from "./style";
 import { Col, Card, Row } from "antd";
 import CategoryFilter from "../../components/CategoryFilter";
@@ -17,72 +16,71 @@ import SearchFilter from "../../components/SearchFilter";
 import dayjs from "dayjs";
 import { Categories } from "../Upload/data";
 import { Link } from "react-router-dom";
+import InfiniteScroll from "../../utill/infiniteScroll";
 
 const LandingPage = () => {
   const [products, setProducts] = useState([]);
-  const [skip, setSkip] = useState(0);
-  const [limit, setLimit] = useState(4);
-  const [size, setSize] = useState(0);
+  const [hasNext, setHasNext] = useState(true);
+  const [hasCategory, setHasCategory] = useState(false);
   const [noneResult, setNoneResult] = useState(false);
   const [search, setSearch] = useState(false);
   const [clearCategory, setClearCategory] = useState(false);
+  const fetchMore = useRef(null);
+  const intersecting = InfiniteScroll(fetchMore);
 
-  const getData = useCallback(
-    async (data) => {
-      try {
-        const res = await axios.post("/api/product/data", data);
-        if (data.loadMore) {
-          setProducts([...products, ...res.data.products]);
-        } else {
-          if (res.data.products.length === 0) setNoneResult(true);
-          setProducts(res.data.products);
-        }
-        setSize(res.data.length);
-      } catch (err) {
-        console.log(err);
-        alert("데이터를 불러오지 못했습니다. 재접속 해주시길 바랍니다.");
+  const getData = useCallback(async () => {
+    let cursor;
+    // 검색 후 초기화시 최초 리스트 렌더
+    if (search) cursor = "";
+    else cursor = products[products.length - 1]?._id || "";
+    setNoneResult(false);
+    setSearch(false);
+    setHasNext(true);
+    try {
+      const res = await axios.get(`/api/product/data?cursor=${cursor}`);
+      // setState는 비동기 함수이므로 위에서 setSearch(false)를 실행해도, search 값이 true일때 아래코드가 작동할 때 까지는 true 값을 유지한다.
+      !search ? setProducts([...products, ...res.data]) : setProducts(res.data);
+      !res.data.length && setHasNext(false);
+    } catch (err) {
+      console.log(err);
+      alert("데이터를 불러오지 못했습니다. 잠시 후 다시 시도 바랍니다.");
+    }
+  }, [products, search]);
+
+  const getFilteredData = useCallback(async (data) => {
+    try {
+      const res = await axios.post("/api/product/data", data);
+      if (res.data.length) {
+        setProducts([...res.data]);
+      } else {
+        setNoneResult(true);
+        setProducts([]);
+        setHasNext(true);
       }
-    },
-    [products]
-  );
-
-  useEffect(() => {
-    const source = axios.CancelToken.source();
-
-    let data = {
-      skip,
-      limit,
-    };
-    getData(data);
-
-    return () => {
-      source.cancel();
-    };
+    } catch (err) {
+      console.log(err);
+      alert("데이터를 불러오지 못했습니다. 잠시 후 다시 시도 바랍니다.");
+    }
   }, []);
-
-  const onClickMore = () => {
-    let Skip = skip + limit;
-
-    let data = {
-      skip: Skip,
-      limit,
-      loadMore: true,
-    };
-
-    getData(data);
-    setSkip(Skip);
-  };
 
   const categoryFilter = useCallback(
     (selected) => {
+      !selected.length ? setHasCategory(false) : setHasCategory(true);
+
+      if (!selected.length) {
+        setProducts([]);
+        setHasNext(true);
+        return getData();
+      }
+
       let willBeUpdated = { category: [] };
       willBeUpdated["category"] = selected;
       let data = willBeUpdated;
 
       setNoneResult(false);
-      getData(data);
+      getFilteredData(data);
     },
-    [getData]
+    [getFilteredData, getData]
   );
 
   const searchFilter = useCallback(
@@ -95,20 +93,16 @@ const LandingPage = () => {
 
       setNoneResult(false);
       setClearCategory((prev) => !prev);
-      getData(data);
+      getFilteredData(data);
     },
-    [getData]
+    [getFilteredData]
   );
 
-  const getAllProduct = useCallback(() => {
-    setNoneResult(false);
-    setClearCategory((prev) => !prev);
-    setSearch(false);
-
-    let data = {};
-
-    getData(data);
-  }, []);
+  useEffect(() => {
+    if (intersecting && !hasCategory && hasNext) {
+      getData();
+    }
+  }, [intersecting]);
 
   return (
     <LandingContainer>
@@ -129,9 +123,7 @@ const LandingPage = () => {
           </Row>
         </FilterBox>
         <SearchFilter searchFilter={searchFilter} />
-        {search && (
-          <GetAllButton onClick={getAllProduct}>전체 목록 보기</GetAllButton>
-        )}
+        {search && <GetAllButton onClick={getData}>목록 보기</GetAllButton>}
       </Background>
       <RenderBox>
         {noneResult && (
@@ -162,11 +154,7 @@ const LandingPage = () => {
             ))}
         </Row>
       </RenderBox>
-      {skip < size && (
-        <MoreBtn>
-          <button onClick={onClickMore}>더보기</button>
-        </MoreBtn>
-      )}
+      {!search && <div ref={fetchMore}></div>}
     </LandingContainer>
   );
 };

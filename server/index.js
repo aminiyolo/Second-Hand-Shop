@@ -8,6 +8,7 @@ const path = require("path");
 const http = require("http");
 const SocketIO = require("socket.io");
 
+// Socket
 const server = http.createServer(app);
 const io = SocketIO(server, {
   cors: {

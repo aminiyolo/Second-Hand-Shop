@@ -24,6 +24,7 @@ export const Button = styled.button`
 export const ProfileModal = styled.div`
   display: flex;
   padding: 20px;
+
   & img {
     display: flex;
   }
@@ -42,10 +43,12 @@ export const Img = styled.img`
   width: 1.5rem;
   height: 25px;
   border-radius: 8px;
+  user-select: none;
 `;
 
 export const Nickname = styled.span`
   margin-right: 10px;
   font-size: 1rem;
   font-weight: 700;
+  user-select: none;
 `;

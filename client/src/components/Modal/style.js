@@ -17,6 +17,8 @@ export const Menu = styled.div`
   background-color: #ff6a4d;
   width: 200px;
   height: 248px;
+  user-select: none;
+
   & > .menuWrapper {
     position: relative;
     padding-top: 15px;
