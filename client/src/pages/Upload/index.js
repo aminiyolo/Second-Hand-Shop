@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+import axiosInstance from "../../config";
 import { useHistory } from "react-router";
 import UploadBox from "../../components/UploadBox";
 import { Categories } from "./data";
@@ -65,7 +65,7 @@ const Upload = ({ product = null, closeEdit = null }) => {
     };
 
     try {
-      await axios.post("/api/product/edit", data);
+      await axiosInstance.post("/api/product/edit", data);
       alert("수정되었습니다.");
       closeEdit();
     } catch (err) {
@@ -95,7 +95,7 @@ const Upload = ({ product = null, closeEdit = null }) => {
       category,
     };
     try {
-      await axios.post("api/product/upload", data);
+      await axiosInstance.post("api/product/upload", data);
       alert("업로드 성공!");
       history.push("/");
     } catch (err) {
@@ -106,7 +106,7 @@ const Upload = ({ product = null, closeEdit = null }) => {
   // 기존 포스트를 수정하기 위해 DB에서 데이터 값 불러오기
   const getProductInfo = async () => {
     try {
-      const res = await axios.get(
+      const res = await axiosInstance.get(
         `/api/product/product_by_id?id=${product._id}&type=single`
       );
       setValue((value) => ({

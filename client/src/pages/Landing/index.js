@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, useRef } from "react";
-import axios from "axios";
+import axiosInstance from "../../config";
 import ProductCard from "../../components/ProductCard";
 import {
   Background,
@@ -37,7 +37,7 @@ const LandingPage = () => {
     setSearch(false);
     setHasNext(true);
     try {
-      const res = await axios.get(`/api/product/data?cursor=${cursor}`);
+      const res = await axiosInstance.get(`/api/product/data?cursor=${cursor}`);
       // setState는 비동기 함수이므로 위에서 setSearch(false)를 실행해도, search 값이 true일때 아래코드가 작동할 때 까지는 true 값을 유지한다.
       !search ? setProducts([...products, ...res.data]) : setProducts(res.data);
       !res.data.length && setHasNext(false);
@@ -49,7 +49,7 @@ const LandingPage = () => {
 
   const getFilteredData = useCallback(async (data) => {
     try {
-      const res = await axios.post("/api/product/data", data);
+      const res = await axiosInstance.post("/api/product/data", data);
       if (res.data.length) {
         setProducts([...res.data]);
       } else {

@@ -13,7 +13,7 @@ import {
 } from "./style";
 import { Link, useHistory } from "react-router-dom";
 import useInput from "../../hooks/useInput";
-import axios from "axios";
+import axiosInstance from "../../config";
 import dayjs from "dayjs";
 
 import { ToastContainer, toast } from "react-toastify";
@@ -72,7 +72,7 @@ const SignUpPage = () => {
 
       const getResult = async () => {
         try {
-          const res = await axios.post("/api/users/register", data);
+          const res = await axiosInstance.post("/api/users/register", data);
           if (res.data.success) {
             alert("회원가입이 성공했습니다.");
             history.push("/login");
@@ -106,7 +106,7 @@ const SignUpPage = () => {
 
       const authNumber = async () => {
         try {
-          const res = await axios.post("/api/auth/mail", data);
+          const res = await axiosInstance.post("/api/auth/mail", data);
           if (res.data.success) {
             setAuth(res.data.authNum);
           }

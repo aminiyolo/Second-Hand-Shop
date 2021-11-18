@@ -12,7 +12,7 @@ const SocketIO = require("socket.io");
 const server = http.createServer(app);
 const io = SocketIO(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://aminiyo-second-hand-market.herokuapp.com",
     methods: ["GET", "POST"],
     allowedHeaders: ["*"],
     credentials: true,
@@ -88,16 +88,11 @@ app.use("/api/product", require("./routes/product"));
 app.use("/api/conversations", require("./routes/conversation"));
 app.use("/api/messages", require("./routes/message"));
 
-if (process.env.NODE_ENV === "production") {
-  // Set static folder
-  // All the javascript and css files will be read and served from this folder
-  app.use(express.static("client/build"));
+app.use(express.static(path.join(__dirname, "/client/build")));
 
-  // index.html for all page routes    html or routing and naviagtion
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"));
-  });
-}
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/client/build", "index.html"));
+});
 
 const port = process.env.PORT || 3050;
 

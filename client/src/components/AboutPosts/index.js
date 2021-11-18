@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "../../config";
 import React, { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import dayjs from "dayjs";
@@ -13,7 +13,7 @@ const AboutPosts = () => {
     const getAllProducts = async () => {
       let data = {};
       try {
-        const res = await axios.post("/api/product/data", data);
+        const res = await axiosInstance.post("/api/product/data", data);
         setProducts(res.data.products);
 
         if (!res) setProducts([]);
@@ -41,7 +41,7 @@ const AboutPosts = () => {
       if (!result) return;
 
       try {
-        await axios.post("/api/product/remove_from_myPage", data);
+        await axiosInstance.post("/api/product/remove_from_myPage", data);
         setDeleteToggle((prev) => !prev);
       } catch (err) {
         alert("삭제 중 오류가 발생했습니다.");

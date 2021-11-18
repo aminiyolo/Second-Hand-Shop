@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "../../config";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
@@ -16,7 +16,7 @@ const AdminPage = () => {
   useEffect(() => {
     const getAllUsers = async () => {
       try {
-        const res = await axios.get("/api/users/all");
+        const res = await axiosInstance.get("/api/users/all");
         setUsers(res.data);
       } catch (err) {
         console.log(err);

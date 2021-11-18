@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import axiosInstance from "../../config";
 import axios from "axios";
 import { useHistory } from "react-router";
 import Conversation from "../../components/Conversation";
@@ -50,7 +51,7 @@ const Messenger = ({ socket }) => {
   useEffect(() => {
     const getConversation = async () => {
       try {
-        const res = await axios.get(`/api/conversations/${user?._id}`);
+        const res = await axiosInstance.get(`/api/conversations/${user?._id}`);
         // 가장 최근의 생성된 대화방을 가장 위에 나타내기 위하여 reverse() 사용.
         setConversations(res.data.reverse());
       } catch (err) {
@@ -68,7 +69,9 @@ const Messenger = ({ socket }) => {
   useEffect(() => {
     const getMessages = async () => {
       try {
-        const res = await axios.get(`/api/messages/${currentChat?._id}`);
+        const res = await axiosInstance.get(
+          `/api/messages/${currentChat?._id}`
+        );
         setMessages(res.data);
       } catch (err) {
         console.log(err);
@@ -129,7 +132,7 @@ const Messenger = ({ socket }) => {
     }
 
     try {
-      const res = await axios.post("/api/messages", message);
+      const res = await axiosInstance.post("/api/messages", message);
       setMessages([...messages, res.data]);
       setNewMessages("");
     } catch (err) {

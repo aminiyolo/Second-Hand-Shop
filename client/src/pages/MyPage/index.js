@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "../../config";
 import React, { useCallback, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { CartContainer, Empty, ProductContainer, Img } from "../Cart/style";
@@ -30,7 +30,7 @@ const MyPage = () => {
 
     const removeMyItem = async () => {
       try {
-        await axios.post("/api/product/remove_from_myPage", data);
+        await axiosInstance.post("/api/product/remove_from_myPage", data);
         setDeleteToggle((prev) => !prev);
         alert("상품이 삭제되었습니다.");
       } catch (err) {
@@ -49,7 +49,7 @@ const MyPage = () => {
 
       const getMyProduct = async () => {
         try {
-          const res = await axios.post("/api/product/myProduct", data);
+          const res = await axiosInstance.post("/api/product/myProduct", data);
           if (res.data.length < 0) {
             setReceiveData(true);
             setProducts([]);

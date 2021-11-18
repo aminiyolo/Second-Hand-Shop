@@ -6,12 +6,12 @@ import {
   addSuccess,
   removeSuccess,
 } from "./userRedux";
-import axios from "axios";
+import axiosInstance from "../config";
 
 export const login = async (dispatch, user) => {
   dispatch(loginStart());
   try {
-    const res = await axios.post("/api/users/login", user);
+    const res = await axiosInstance.post("/api/users/login", user);
     dispatch(loginSuccess(res.data));
   } catch (err) {
     dispatch(loginFailure());
@@ -20,7 +20,7 @@ export const login = async (dispatch, user) => {
 
 export const logout = async (dispatch, token) => {
   try {
-    await axios.get("/api/users/logout", {
+    await axiosInstance.get("/api/users/logout", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -33,7 +33,7 @@ export const logout = async (dispatch, token) => {
 
 export const addCart = async (dispatch, id, token) => {
   try {
-    await axios.post("/api/users/addToCart", id, {
+    await axiosInstance.post("/api/users/addToCart", id, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -46,7 +46,7 @@ export const addCart = async (dispatch, id, token) => {
 
 export const removeCart = async (dispatch, id, token) => {
   try {
-    await axios.post("/api/users/removeFromCart", id, {
+    await axiosInstance.post("/api/users/removeFromCart", id, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

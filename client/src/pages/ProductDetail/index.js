@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import ImageSlider from "../../components/ImageSlider";
 import ProductInfo from "../../components/ProductInfo";
 import { Row, Col } from "antd";
-import axios from "axios";
+import axiosInstance from "../../config";
 import { DetailContainer } from "./style";
 import { Loading } from "../Login/style";
 
@@ -15,7 +15,7 @@ const ProductDetail = () => {
   useEffect(() => {
     const getProductInfo = async () => {
       try {
-        const res = await axios.get(
+        const res = await axiosInstance.get(
           `/api/product/product_by_id?id=${id}&type=single`
         );
         setSeller(res.data.productInfo[0].seller._id);

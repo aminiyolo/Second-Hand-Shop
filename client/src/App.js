@@ -20,7 +20,12 @@ function App() {
   const [socket, setSocket] = useState("");
 
   useEffect(() => {
-    user && setSocket(io("ws://localhost:3050"));
+    user &&
+      setSocket(
+        io(
+          "ws://aminiyo-second-hand-market.herokuapp.com/socket.io/?EIO=4&transport=websocket"
+        )
+      );
   }, [user]);
 
   useEffect(() => {

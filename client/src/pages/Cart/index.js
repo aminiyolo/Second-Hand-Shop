@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "../../config";
 import React, { useCallback, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { CartContainer, Empty, ProductContainer, Img } from "./style";
@@ -29,7 +29,7 @@ const Cart = () => {
       }
 
       try {
-        const res = await axios.get(
+        const res = await axiosInstance.get(
           `/api/product/product_by_id?id=${container}&type=array`
         );
 
@@ -57,17 +57,6 @@ const Cart = () => {
       } catch (err) {
         alert("잠시 후에 다시 시도 해주세요.");
       }
-
-      // const removeItem = async () => {
-      //   try {
-      //     await axios.post("/api/users/removeFrom_cart", data);
-      //     alert("삭제 되었습니다.");
-      //   } catch (err) {
-      //     console.log(err);
-      //   }
-      // };
-
-      // removeItem();
     },
     [dispatch, user.token]
   );

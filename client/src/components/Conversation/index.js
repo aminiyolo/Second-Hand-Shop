@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../config";
 import { Profile } from "./style";
 import { useSelector } from "react-redux";
 
@@ -16,7 +16,9 @@ const Conversation = ({ conversation, price }) => {
 
     const getUser = async () => {
       try {
-        const res = await axios.get(`/api/users/find?userId=${counterpart}`);
+        const res = await axiosInstance.get(
+          `/api/users/find?userId=${counterpart}`
+        );
         setCurrentUser(res.data);
       } catch (err) {
         console.log(err);

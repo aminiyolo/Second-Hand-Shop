@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { checkCategory } from "./categoryData";
 import dayjs from "dayjs";
-import axios from "axios";
+import axiosInstance from "../../config";
 import { useParams, useHistory } from "react-router";
 import {
   addedStyle,
@@ -85,7 +85,7 @@ const ProductInfo = ({ product, seller }) => {
 
     const makeConversation = async () => {
       try {
-        await axios.post("/api/conversations", data);
+        await axiosInstance.post("/api/conversations", data);
         history.push("/chat");
       } catch (err) {
         console.log(err);
@@ -94,7 +94,7 @@ const ProductInfo = ({ product, seller }) => {
 
     const checkConversation = async () => {
       try {
-        const res = await axios.post("/api/conversations/check", data);
+        const res = await axiosInstance.post("/api/conversations/check", data);
 
         if (res.data.length > 0) {
           history.push("/chat");
@@ -121,7 +121,10 @@ const ProductInfo = ({ product, seller }) => {
     };
 
     const getCount = async () => {
-      const res = await axios.post("/api/users/count_added_product", data);
+      const res = await axiosInstance.post(
+        "/api/users/count_added_product",
+        data
+      );
       setCount(res.data.length);
     };
 
