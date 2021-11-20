@@ -1,11 +1,11 @@
 /node_modules
 /build
 /auth
-dev.js
 /yarn.lock
 .env
-
+/client
 .DS_Store
+Procfile
 
 npm-debug.log*
 yarn-debug.kog*

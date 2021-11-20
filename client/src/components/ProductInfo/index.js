@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { checkCategory } from "./categoryData";
 import dayjs from "dayjs";
-import axiosInstance from "../../config";
+import { axiosInstance } from "../../config";
 import { useParams, useHistory } from "react-router";
 import {
   addedStyle,

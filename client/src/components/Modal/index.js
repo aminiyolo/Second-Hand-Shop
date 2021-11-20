@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   CreateModal,
   Menu,
@@ -12,12 +12,24 @@ import { useHistory } from "react-router";
 import { logout } from "../../redux/apiCalls";
 import { useDispatch, useSelector } from "react-redux";
 
-const Modal = ({ onCloseModal }) => {
+const Modal = ({ onCloseModal, socket }) => {
   const { user } = useSelector((state) => state);
+  const [soc, setSoc] = useState(null);
+  const [flag, setFlag] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    setSoc(socket);
+    flag && soc.off("disconnect");
+    return () => {
+      soc && soc.off("disconnect");
+    };
+  }, [socket, soc, flag]);
+  console.log(soc);
+
   const onLogout = useCallback(() => {
+    setFlag(true);
     logout(dispatch, user.token);
   }, [user.token, dispatch]);
 

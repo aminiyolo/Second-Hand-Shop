@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import axiosInstance from "../../config";
+import { axiosInstance } from "../../config";
 import axios from "axios";
 import { useHistory } from "react-router";
 import Conversation from "../../components/Conversation";
@@ -21,6 +21,7 @@ const Messenger = ({ socket }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const scrollRef = useRef();
 
+  console.log(onlineUsers);
   useEffect(() => {
     socket.on("getMessage", (data) => {
       setReceivedMessage({

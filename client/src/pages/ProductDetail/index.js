@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import ImageSlider from "../../components/ImageSlider";
 import ProductInfo from "../../components/ProductInfo";
 import { Row, Col } from "antd";
-import axiosInstance from "../../config";
+import { axiosInstance } from "../../config";
 import { DetailContainer } from "./style";
 import { Loading } from "../Login/style";
 

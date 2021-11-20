@@ -10,14 +10,7 @@ const SocketIO = require("socket.io");
 
 // Socket
 const server = http.createServer(app);
-const io = SocketIO(server, {
-  cors: {
-    origin: "https://aminiyo-second-hand-market.herokuapp.com",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["*"],
-    credentials: true,
-  },
-});
+const io = SocketIO(server);
 
 let users = [];
 
@@ -47,7 +40,7 @@ io.on("connection", (socket) => {
   // send and get message
   socket.on("sendMessage", ({ senderId, receiverId, text }) => {
     const user = getUser(receiverId);
-    io.to(user.socketId).emit("getMessage", {
+    io.to(user?.socketId).emit("getMessage", {
       senderId,
       text,
     });

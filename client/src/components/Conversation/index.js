@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axiosInstance from "../../config";
+import { axiosInstance } from "../../config";
 import { Profile } from "./style";
 import { useSelector } from "react-redux";
 

@@ -128,7 +128,7 @@ const Navbar = ({ socket }) => {
             <span onClick={onClick}>2nd Hand</span>
           </Logo>
           <LoginContainer>
-            <RightMenu user={user} />
+            <RightMenu user={user} socket={socket} />
           </LoginContainer>
         </Nav>
       )}

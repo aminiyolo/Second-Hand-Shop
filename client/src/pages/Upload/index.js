@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import axiosInstance from "../../config";
+import { axiosInstance } from "../../config";
 import { useHistory } from "react-router";
 import UploadBox from "../../components/UploadBox";
 import { Categories } from "./data";

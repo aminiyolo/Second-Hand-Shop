@@ -13,7 +13,7 @@ import {
 } from "./style";
 import { Link, useHistory } from "react-router-dom";
 import useInput from "../../hooks/useInput";
-import axiosInstance from "../../config";
+import { axiosInstance } from "../../config";
 import dayjs from "dayjs";
 
 import { ToastContainer, toast } from "react-toastify";

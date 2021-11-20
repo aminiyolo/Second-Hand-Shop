@@ -1,4 +1,4 @@
-import axiosInstance from "../../config";
+import { axiosInstance } from "../../config";
 import React, { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import dayjs from "dayjs";
@@ -6,15 +6,17 @@ import { Wrapper, Img, Loading, Table, Title, Tr } from "./style";
 
 const AboutPosts = () => {
   const history = useHistory();
-  const [products, setProducts] = useState(null);
+  const [products, setProducts] = useState([]);
   const [deleteToggle, setDeleteToggle] = useState(false);
+
+  console.log(products);
 
   useEffect(() => {
     const getAllProducts = async () => {
       let data = {};
       try {
         const res = await axiosInstance.post("/api/product/data", data);
-        setProducts(res.data.products);
+        setProducts(res.data);
 
         if (!res) setProducts([]);
       } catch (err) {}
@@ -51,7 +53,7 @@ const AboutPosts = () => {
     remove();
   }, []);
 
-  if (products === null) {
+  if (!products.length) {
     return <Loading>Loading...</Loading>;
   }
 
@@ -73,7 +75,7 @@ const AboutPosts = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map((product) => (
+            {products?.map((product) => (
               <Tr key={product._id}>
                 <th>
                   <Img

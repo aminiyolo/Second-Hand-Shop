@@ -1,4 +1,4 @@
-import axiosInstance from "../../config";
+import { axiosInstance } from "../../config";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
@@ -55,7 +55,7 @@ const AdminPage = () => {
       <hr />
       <RenderWrapper>
         {clickedUsers && <AboutUsers users={users} />}
-        {clickedPosts && <AboutPosts users={users} />}
+        {clickedPosts && <AboutPosts />}
       </RenderWrapper>
     </AdminPageContainer>
   );

@@ -6,7 +6,7 @@ import {
   addSuccess,
   removeSuccess,
 } from "./userRedux";
-import axiosInstance from "../config";
+import { axiosInstance } from "../config";
 
 export const login = async (dispatch, user) => {
   dispatch(loginStart());

@@ -1,4 +1,4 @@
-import axiosInstance from "../../config";
+import { axiosInstance } from "../../config";
 import React, { useCallback, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { CartContainer, Empty, ProductContainer, Img } from "./style";

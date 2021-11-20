@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, useRef } from "react";
-import axiosInstance from "../../config";
+import { axiosInstance } from "../../config";
 import ProductCard from "../../components/ProductCard";
 import {
   Background,
