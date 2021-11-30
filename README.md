@@ -14,7 +14,7 @@
 
 ## 풀스택 프로젝트 (개인 프로젝트)
 
-<img src="https://i.ibb.co/RBJPCFR/image.png" width="525px" height="450px" title="홈" alt="홈"></img><br/>
+<img src="https://i.ibb.co/LnJpsq8/image.png" width="525px" height="450px" title="홈" alt="홈"></img><br/>
 
 ### 클라이언트(React), 서버(express, mongoDB) 모두 혼자서 진행하여 완성하였습니다.
 
@@ -78,7 +78,7 @@
 3. 회원가입 시 정규표현식을 사용하여 유효성 검사
    </br>
    </br>
-   <img src="https://i.ibb.co/HDTjpN9/image.png" width="525px" height="450px" title="검색기능" alt="검색기능"></img><br/>
+   <img src="https://i.ibb.co/HDTjpN9/image.png" width="525px" height="450px" title="이메일 인증" alt="이메일 인증"></img><br/>
 
 ---
 
