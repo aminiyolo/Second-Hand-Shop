@@ -31,7 +31,7 @@ const LandingPage = () => {
   const getData = useCallback(async () => {
     let cursor;
     // 검색 후 초기화시 최초 리스트 렌더
-    if (search) cursor = "";
+    if (search || hasCategory) cursor = "";
     else cursor = products[products.length - 1]?._id || "";
     setNoneResult(false);
     setSearch(false);
@@ -45,7 +45,7 @@ const LandingPage = () => {
       console.log(err);
       alert("데이터를 불러오지 못했습니다. 잠시 후 다시 시도 바랍니다.");
     }
-  }, [products, search]);
+  }, [products, search, hasCategory]);
 
   const getFilteredData = useCallback(async (data) => {
     try {
@@ -63,25 +63,24 @@ const LandingPage = () => {
     }
   }, []);
 
-  const categoryFilter = useCallback(
-    (selected) => {
-      !selected.length ? setHasCategory(false) : setHasCategory(true);
+  const categoryFilter = (selected) => {
+    !selected.length ? setHasCategory(false) : setHasCategory(true);
 
-      if (!selected.length) {
-        setProducts([]);
-        setHasNext(true);
-        return getData();
-      }
+    if (!selected.length) {
+      setHasCategory(false);
+      setProducts([]);
+      setHasNext(true);
+      getFilteredData();
+      return;
+    }
 
-      let willBeUpdated = { category: [] };
-      willBeUpdated["category"] = selected;
-      let data = willBeUpdated;
-
-      setNoneResult(false);
-      getFilteredData(data);
-    },
-    [getFilteredData, getData]
-  );
+    setHasCategory(true);
+    let willBeUpdated = { category: [] };
+    willBeUpdated["category"] = selected;
+    let data = willBeUpdated;
+    setNoneResult(false);
+    selected.length && getFilteredData(data);
+  };
 
   const searchFilter = useCallback(
     (searchValue) => {
@@ -123,7 +122,7 @@ const LandingPage = () => {
           </Row>
         </FilterBox>
         <SearchFilter searchFilter={searchFilter} />
-        {search && <GetAllButton onClick={getData}>목록 보기</GetAllButton>}
+        {search && <GetAllButton onClick={getData}>전체목록 보기</GetAllButton>}
       </Background>
       <RenderBox>
         {noneResult && (
@@ -154,7 +153,7 @@ const LandingPage = () => {
             ))}
         </Row>
       </RenderBox>
-      {!search && <div ref={fetchMore}></div>}
+      {!search && !hasCategory && <div ref={fetchMore}></div>}
     </LandingContainer>
   );
 };

@@ -41,6 +41,10 @@ router.post("/data", async (req, res) => {
         .populate("seller");
       return res.status(200).json(products.reverse());
     } else {
+      if (!Object.keys(filter).length) {
+        const products = await Product.find(filter).populate("seller");
+        return res.status(200).json(products.reverse().splice(0, 4));
+      }
       const products = await Product.find(filter).populate("seller");
       return res.status(200).json(products.reverse());
     }
