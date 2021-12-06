@@ -25,6 +25,16 @@
 - 서버
   - express, mongoose, jsonwebtoken, nodemailer, crypto-js, cookie-parser, dotenv, socket.io
 
+## 파일 구조
+
+---
+
+> 프론트(client 폴더) - client/src/index.js 에서 App.js(모든 컴포넌트가 렌더링 되는 파일) 렌더링, 페이지 로딩 시 첫 화면의 컴포넌트는 pages/Landing/index.js 입니다. pages 폴더에는 주요 화면단 컴포넌트들이 위치해 있습니다(로그인, 회원가입 등) 주요 화면단 컴포넌트들의 세부 컴포넌트들은 src/components 파일 안에 위치하고 있습니다.
+
+> 백(server 폴더) - server/index.js(main), server/models(DB), server/routes(RestAPI)
+
+---
+
 ## 주요기능
 
 ---
