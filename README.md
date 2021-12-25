@@ -21,7 +21,7 @@
 ### 프로젝트에 사용한 주요 라이브러리 / 프레임워크
 
 - 클라이언트
-  - React, React-redux, react-router, @reduxjs/toolkit, Styled-components, Antd, Axios, dayjs, react-toastify, @loadable/component, redux-persist, react-image-gallery, react-dropzone, firebase, http-proxy-middleware, socket.io-client
+  - TypeScript, React, React-redux, react-router, @reduxjs/toolkit, Styled-components, Antd, Axios, dayjs, react-toastify, @loadable/component, redux-persist, react-image-gallery, react-dropzone, firebase, http-proxy-middleware, socket.io-client
 - 서버
   - express, mongoose, jsonwebtoken, nodemailer, crypto-js, cookie-parser, dotenv, socket.io
 
