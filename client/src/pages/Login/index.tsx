@@ -34,20 +34,12 @@ const LoginPage = () => {
       }
 
       setEmptyCheck(false);
-
-      let data = {
-        ID,
-        password,
-      };
-
-      login(dispatch, data);
+      login(dispatch, { ID, password });
     },
     [ID, password, dispatch],
   );
 
-  if (user) {
-    history.push("/");
-  }
+  user && history.push("/");
 
   if (user === undefined) {
     return <Loading>Loading...</Loading>;

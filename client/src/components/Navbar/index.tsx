@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import RightMenu from "./RightMenu";
 import {
   Nav,
@@ -36,37 +36,37 @@ const Navbar: React.VFC<IProps> = ({ socket }) => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    if (!socket) return;
+    if (!socket) return; // early exit
     socket?.on("notification", ({ senderNickname }) => {
       setMsgFrom(senderNickname);
       setNotification(notification + 1);
     });
   }, [socket, notification, msgFrom]);
 
-  const onUpload = () => {
+  const onUpload = useCallback(() => {
     history.push("/upload");
-  };
+  }, [history]);
 
-  const onCart = () => {
+  const onCart = useCallback(() => {
     history.push("/cart");
-  };
+  }, [history]);
 
-  const onClick = () => {
+  const onClick = useCallback(() => {
     history.push("/");
-  };
+  }, [history]);
 
-  const onClickMenu = () => {
+  const onClickMenu = useCallback(() => {
     setOpen(true);
-  };
+  }, []);
 
-  const onCloseRightNav = () => {
+  const onCloseRightNav = useCallback(() => {
     setOpen(false);
-  };
+  }, []);
 
-  const handleNotification = () => {
+  const handleNotification = useCallback(() => {
     setModal(false);
     setNotification(0);
-  };
+  }, []);
 
   useEffect(() => {
     if (pathname !== "/") setModal(false);

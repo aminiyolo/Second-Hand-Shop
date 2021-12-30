@@ -28,20 +28,20 @@ const Modal: React.VFC<IProps> = ({ onCloseModal, socket }) => {
   useEffect(() => {
     setSoc(socket);
     flag && soc?.off("disconnect");
+
     return () => {
       soc && soc.off("disconnect");
     };
   }, [socket, soc, flag]);
 
   const onLogout = useCallback(() => {
-    if (!user) return;
     setFlag(true);
-    logout(dispatch, user.token);
+    logout(dispatch, user!.token);
   }, [dispatch, user]);
 
-  const stopPropagation = (e: any) => {
+  const stopPropagation = useCallback((e: any) => {
     e.stopPropagation();
-  };
+  }, []);
 
   const onMyPage = useCallback(() => {
     history.push("/myPage");

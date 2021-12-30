@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Collapse, Checkbox } from "antd";
 
 const { Panel } = Collapse;
@@ -21,23 +21,22 @@ const CategoryFilter: React.VFC<IProps> = ({
 }) => {
   const [selected, setSelected] = useState<number[]>([]);
 
-  const onToggle = (key: number) => {
-    // 선택된 것의 index number를 구한 뒤 인덱스 넘버가 이미 체크되어 있으면 삭제시키고 그렇지 않으면 추가해준다.
-    const indexNum = selected.indexOf(key);
-    const willBeUpdated = [...selected];
+  const onToggle = useCallback(
+    (key: number) => {
+      // 선택된 것의 index number를 구한 뒤 인덱스 넘버가 이미 체크되어 있으면 삭제시키고 그렇지 않으면 추가해준다.
+      const indexNum = selected.indexOf(key);
+      const newSelected = [...selected];
 
-    if (indexNum === -1) {
-      willBeUpdated.push(key);
-    } else {
-      willBeUpdated.splice(indexNum, 1);
-    }
-    setSelected(willBeUpdated);
-    categoryFilter(willBeUpdated);
-  };
+      indexNum === -1 ? newSelected.push(key) : newSelected.splice(indexNum, 1);
+
+      setSelected(newSelected);
+      categoryFilter(newSelected);
+    },
+    [selected, categoryFilter],
+  );
 
   useEffect(() => {
-    // 특정 내용 검색 시 선택된 카테고리 값 초기화 하기
-    setSelected([]);
+    setSelected([]); // 특정 내용 검색 시 선택된 카테고리 값 초기화 하기
   }, [clearCategory]);
 
   return (

@@ -20,17 +20,14 @@ const AboutPosts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [deleteToggle, setDeleteToggle] = useState(false);
 
-  console.log(products);
-
   useEffect(() => {
     const getAllProducts = async () => {
-      let data = {};
       try {
-        const res = await axiosInstance.post("/api/product/data", data);
-        setProducts(res.data);
-
-        if (!res) setProducts([]);
-      } catch (err) {}
+        const res = await axiosInstance.post("/api/product/data", {});
+        res ? setProducts(res.data) : setProducts([]);
+      } catch (err) {
+        alert("잠시 후에 다시 시도해주세요.");
+      }
     };
 
     getAllProducts();
@@ -45,16 +42,11 @@ const AboutPosts = () => {
 
   const onRemove = useCallback((id) => {
     const remove = async () => {
-      let data = {
-        id,
-      };
-
-      let result = window.confirm("회원의 상품을 정말로 삭제하시겠습니까?");
-
-      if (!result) return;
+      const res = window.confirm("회원의 상품을 정말로 삭제하시겠습니까?");
+      if (!res) return;
 
       try {
-        await axiosInstance.post("/api/product/remove_from_myPage", data);
+        await axiosInstance.post("/api/product/remove_from_myPage", { id });
         setDeleteToggle((prev) => !prev);
       } catch (err) {
         alert("삭제 중 오류가 발생했습니다.");

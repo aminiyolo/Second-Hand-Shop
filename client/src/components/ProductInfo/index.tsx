@@ -48,10 +48,8 @@ const ProductInfo: React.VFC<IProps> = ({ product, seller }) => {
 
   const onClickCart = useCallback(() => {
     if (!user) {
-      let choice = window.confirm("로그인이 필요한 서비스 입니다.");
-      if (choice) {
-        history.push("/login");
-      }
+      const res = window.confirm("로그인이 필요한 서비스 입니다.");
+      res && history.push("/login");
       return;
     }
 
@@ -59,42 +57,26 @@ const ProductInfo: React.VFC<IProps> = ({ product, seller }) => {
       return alert("본인의 상품은 장바구니에 담을 수 없습니다.");
     }
 
-    let data = {
-      id,
-    };
+    !inAcart &&
+      addCart(dispatch, { id }, user.token) &&
+      setCount((prev) => prev + 1);
 
-    if (!inAcart) {
-      try {
-        addCart(dispatch, data, user.token);
-        setCount((prev) => prev + 1);
-      } catch (err) {
-        alert("다시 시도 해주세요.");
-      }
-    } else {
-      try {
-        removeCart(dispatch, data, user.token);
-        setCount((prev) => prev - 1);
-        setInAcart(false);
-      } catch (err) {
-        alert("다시 시도 해주세요.");
-      }
-    }
+    inAcart &&
+      removeCart(dispatch, { id }, user.token) &&
+      setCount((prev) => prev - 1) &&
+      setInAcart(false);
   }, [user, history, id, seller, inAcart, dispatch]);
 
-  const onClickChat = () => {
+  const onClickChat = useCallback(() => {
     if (!user) {
-      let choice = window.confirm("로그인이 필요한 서비스 입니다.");
-      if (choice) {
-        history.push("/login");
-      }
+      const res = window.confirm("로그인이 필요한 서비스 입니다.");
+      res && history.push("/login");
       return;
     }
 
-    if (seller === user._id) {
-      return alert("판매자가 본인에 해당합니다.");
-    }
+    if (seller === user._id) return alert("판매자가 본인에 해당합니다.");
 
-    let data = {
+    const data = {
       senderId: product.seller._id,
       receiverId: user._id,
       title: product.title,
@@ -116,35 +98,25 @@ const ProductInfo: React.VFC<IProps> = ({ product, seller }) => {
       try {
         const res = await axiosInstance.post("/api/conversations/check", data);
 
-        if (res.data.length > 0) {
-          history.push("/chat");
-        } else {
-          makeConversation();
-        }
+        res.data.length > 0 ? history.push("/chat") : makeConversation();
       } catch (err) {
         console.log(err);
       }
     };
+
     checkConversation();
-  };
+  }, [history, product, seller, user]);
 
   useEffect(() => {
     checkCategory(product, setCategory);
     cart.forEach((c) => {
-      if (c.id === id) {
-        setInAcart(true);
-      }
+      c.id === id && setInAcart(true);
     });
 
-    let data = {
-      id,
-    };
-
     const getCount = async () => {
-      const res = await axiosInstance.post(
-        "/api/users/count_added_product",
-        data,
-      );
+      const res = await axiosInstance.post("/api/users/count_added_product", {
+        id,
+      });
       setCount(res.data.length);
     };
 

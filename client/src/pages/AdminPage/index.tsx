@@ -28,9 +28,7 @@ const AdminPage = () => {
     getAllUsers();
   }, []);
 
-  if (user?.role !== 1) {
-    history.push("/");
-  }
+  user?.role !== 1 && history.push("/"); // 어드민만 입장 가능
 
   return (
     <AdminPageContainer>

@@ -26,50 +26,53 @@ const UploadBox: React.VFC<IProps> = ({
 }) => {
   const [images, setImages] = useState<string[]>(defaultImages);
 
-  const onDrop = (files: any) => {
-    const fileName = new Date().getTime() + files[0].name;
-    const storage = getStorage(app);
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, files[0]);
+  const onDrop = useCallback(
+    (files: any) => {
+      const fileName = new Date().getTime() + files[0].name;
+      const storage = getStorage(app);
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, files[0]);
 
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
-        switch (snapshot.state) {
-          case "paused":
-            console.log("Upload is paused");
-            break;
-          case "running":
-            console.log("Upload is running");
-            break;
-          default:
-        }
-      },
-      (error) => {
-        // Handle unsuccessful uploads
-        alert("다시 시도해주세요.");
-      },
-      () => {
-        // Handle successful uploads on complete
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log(downloadURL);
-          setImages([...images, downloadURL]);
-          getImages([...images, downloadURL]);
-        });
-      },
-    );
-  };
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+            default:
+          }
+        },
+        (error) => {
+          // Handle unsuccessful uploads
+          alert("다시 시도해주세요.");
+        },
+        () => {
+          // Handle successful uploads on complete
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log(downloadURL);
+            setImages([...images, downloadURL]);
+            getImages([...images, downloadURL]);
+          });
+        },
+      );
+    },
+    [getImages, images],
+  );
 
   const onRemove = useCallback(
     (image) => {
       const indexNum = images.indexOf(image);
-      let willBeUpdated = [...images];
-      willBeUpdated.splice(indexNum, 1);
-      setImages(willBeUpdated);
-      getImages(willBeUpdated);
+      const newImages = [...images];
+      newImages.splice(indexNum, 1);
+      setImages(newImages);
+      getImages(newImages);
     },
     [images, getImages],
   );

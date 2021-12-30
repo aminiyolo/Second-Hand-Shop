@@ -32,9 +32,12 @@ const SignUpPage = () => {
     confirmPassword: "",
   });
 
-  const handleChange = (e: any) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
+  const handleChange = useCallback(
+    (e: any) => {
+      setValues({ ...values, [e.target.name]: e.target.value });
+    },
+    [values],
+  );
 
   const [authNum, onChangeAuthNum] = useInput("");
   const [auth, setAuth] = useState<number>(getNum());
@@ -59,11 +62,10 @@ const SignUpPage = () => {
       const { password, confirmPassword } = values;
 
       if (password !== confirmPassword) {
-        setConfirmPasswordInfo(true);
-        return;
+        return setConfirmPasswordInfo(true);
       } else setConfirmPasswordInfo(false);
 
-      let data = {
+      const data = {
         ...values,
         email: validatedEmail,
         image: `http://gravatar.com/avatar/${dayjs(
@@ -82,6 +84,7 @@ const SignUpPage = () => {
           console.log(err);
         }
       };
+
       getResult();
     },
     [values, authCheck, validatedEmail, history],
@@ -93,28 +96,22 @@ const SignUpPage = () => {
       const { email } = values;
 
       if (!email.trim()) {
-        setEmailError(true);
-        return;
+        return setEmailError(true);
       }
+
       setEmailError(false);
-
-      let data = {
-        email,
-      };
-
       setSendMail(true);
       setValidatedEmail(email); // 인증번호를 받고 이메일 주소를 지우거나 다른 것으로 기입할 경우에 대비하여 인증번호를 발송한 이메일 주소를 state에 저장
 
       const authNumber = async () => {
         try {
-          const res = await axiosInstance.post("/api/auth/mail", data);
-          if (res.data.success) {
-            setAuth(res.data.authNum);
-          }
+          const res = await axiosInstance.post("/api/auth/mail", { email });
+          res.data.success && setAuth(res.data.authNum);
         } catch (err) {
           console.log(err);
         }
       };
+
       authNumber();
     },
     [values, setAuth],
@@ -124,9 +121,8 @@ const SignUpPage = () => {
     (e) => {
       e.preventDefault();
       if (!authNum.trim()) return;
-      if (auth === authNum) {
-        setAuthCheck(true);
-      } else {
+      if (auth === authNum) setAuthCheck(true);
+      else {
         toast.error("인증번호가 일치하지 않습니다", {
           autoClose: 2000,
           position: toast.POSITION.BOTTOM_RIGHT,
@@ -137,9 +133,7 @@ const SignUpPage = () => {
     [auth, authNum],
   );
 
-  if (user) {
-    history.push("/");
-  }
+  user && history.push("/");
 
   return (
     <Background>

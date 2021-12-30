@@ -13,13 +13,13 @@ import {
   Info,
 } from "./style";
 import { Loading } from "../Login/style";
-import MakeSection from "../../utill/makeSection";
+import MakeSection from "../../utill/useMakeSection";
 import Textarea from "../../components/Textarea";
 import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
 import { RootState } from "../../redux/store";
 import { ConversationType as CurrentChat } from "../../components/Conversation";
-import { Msg } from "../../utill/makeSection";
+import { Msg } from "../../utill/useMakeSection";
 
 interface IProps {
   socket: Socket | undefined;
@@ -41,6 +41,7 @@ const Messenger: React.VFC<IProps> = ({ socket }) => {
   const [receivedMessage, setReceivedMessage] = useState<Msg | null>(null);
   const [onlineUsers, setOnlineUsers] = useState<{ userId: string }[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const msgSections = MakeSection(messages);
 
   useEffect(() => {
     socket?.on("getMessage", (data) => {
@@ -50,6 +51,7 @@ const Messenger: React.VFC<IProps> = ({ socket }) => {
         createdAt: Date.now(),
       });
     });
+
     return () => {
       socket?.off("disconnect");
     };
@@ -64,7 +66,6 @@ const Messenger: React.VFC<IProps> = ({ socket }) => {
   useEffect(() => {
     socket?.emit("addUser", user?._id);
     socket?.on("getUser", (users) => {
-      console.log(users);
       setOnlineUsers(users);
     });
   }, [user, socket]);
@@ -80,6 +81,7 @@ const Messenger: React.VFC<IProps> = ({ socket }) => {
       }
 
       const source = axios.CancelToken.source();
+
       return () => {
         source.cancel();
       };
@@ -99,6 +101,7 @@ const Messenger: React.VFC<IProps> = ({ socket }) => {
       }
 
       const source = axios.CancelToken.source();
+
       return () => {
         source.cancel();
       };
@@ -125,17 +128,13 @@ const Messenger: React.VFC<IProps> = ({ socket }) => {
     );
 
     let online;
-    let users: string[] = [];
+    const users: string[] = [];
 
     onlineUsers.forEach((user) => {
       users.push(user.userId);
     });
 
-    if (users.indexOf(receiverId) === -1) {
-      online = false;
-    } else {
-      online = true;
-    }
+    users.indexOf(receiverId) === -1 ? (online = false) : (online = true);
 
     if (online) {
       socket?.emit("sendMessage", {
@@ -143,6 +142,7 @@ const Messenger: React.VFC<IProps> = ({ socket }) => {
         receiverId,
         text: newMessages,
       });
+
       socket?.emit("notification", {
         senderNickname: user?.nickname,
         receiverId,
@@ -166,11 +166,7 @@ const Messenger: React.VFC<IProps> = ({ socket }) => {
     return <Loading>Loading...</Loading>;
   }
 
-  if (!user) {
-    history.push("/");
-  }
-
-  const msgSections = MakeSection(messages);
+  !user && history.push("/");
 
   return (
     <MessengerWrapper>

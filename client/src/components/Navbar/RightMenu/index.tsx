@@ -30,16 +30,15 @@ const RightMenu: React.VFC<IProps> = ({ user, socket }) => {
 
   return (
     <>
-      {!user && (
+      {!user ? (
         <Menu>
           <Button onClick={onClickLogin}>로그인</Button>
         </Menu>
-      )}
-      {user && (
+      ) : (
         <React.Fragment>
           <Button onClick={onClickProfile}>
-            <Nickname>{user.nickname}</Nickname>
-            <Img src={user.image} alt={user.nickname} />
+            <Nickname>{user?.nickname}</Nickname>
+            <Img src={user?.image} alt={user?.nickname} />
           </Button>
           {showProfileModal && socket && (
             <Modal onCloseModal={onCloseModal} socket={socket} />

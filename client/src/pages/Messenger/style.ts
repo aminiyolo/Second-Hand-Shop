@@ -93,10 +93,3 @@ export const Info = styled.div`
   padding-top: 140px;
   font-size: 20px;
 `;
-
-// export const Button = styled.button`
-//   padding: 10px 5px;
-//   border-radius: 5px;
-//   outline: none;
-//   border: 1px solid lightgray;
-// `;

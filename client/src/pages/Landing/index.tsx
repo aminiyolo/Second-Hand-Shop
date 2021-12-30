@@ -16,7 +16,7 @@ import SearchFilter from "../../components/SearchFilter";
 import dayjs from "dayjs";
 import { Categories } from "../Upload/data";
 import { Link } from "react-router-dom";
-import InfiniteScroll from "../../utill/infiniteScroll";
+import InfiniteScroll from "../../utill/useInfiniteScroll";
 
 type Products = {
   _id: string;
@@ -44,13 +44,13 @@ const LandingPage = () => {
     setNoneResult(false);
     setSearch(false);
     setHasNext(true);
+
     try {
       const res = await axiosInstance.get(`/api/product/data?cursor=${cursor}`);
       // setState는 비동기 함수이므로 위에서 setSearch(false)를 실행해도, search 값이 true일때 아래코드가 작동할 때 까지는 true 값을 유지한다.
       !search ? setProducts([...products, ...res.data]) : setProducts(res.data);
       !res.data.length && setHasNext(false);
     } catch (err) {
-      console.log(err);
       alert("데이터를 불러오지 못했습니다. 잠시 후 다시 시도 바랍니다.");
     }
   }, [products, search, hasCategory]);
@@ -66,7 +66,6 @@ const LandingPage = () => {
         setHasNext(true);
       }
     } catch (err) {
-      console.log(err);
       alert("데이터를 불러오지 못했습니다. 잠시 후 다시 시도 바랍니다.");
     }
   }, []);
@@ -83,24 +82,18 @@ const LandingPage = () => {
     }
 
     setHasCategory(true);
-    let willBeUpdated: { category: number[] } = { category: [] };
-    willBeUpdated["category"] = selected;
-    let data = willBeUpdated;
+    const newCategory: { category: number[] } = { category: [] };
+    newCategory["category"] = selected;
     setNoneResult(false);
-    selected.length && getFilteredData(data);
+    selected.length && getFilteredData(newCategory);
   };
 
   const searchFilter = useCallback(
     (searchValue) => {
       setSearch(true);
-
-      let data = {
-        searchValue,
-      };
-
       setNoneResult(false);
       setClearCategory((prev) => !prev);
-      getFilteredData(data);
+      getFilteredData({ searchValue });
     },
     [getFilteredData],
   );

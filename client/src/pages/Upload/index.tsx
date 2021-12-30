@@ -42,73 +42,80 @@ const Upload: React.VFC<IProps> = ({ product = null, closeEdit = null }) => {
   const [clearImg, setClearImg] = useState(false);
   const [imgError, setImgError] = useState(false);
 
-  const handleChange = (e: any) => {
-    setValue({ ...value, [e.target.name]: e.target.value });
-  };
+  const handleChange = useCallback(
+    (e: any) => {
+      setValue({ ...value, [e.target.name]: e.target.value });
+    },
+    [value],
+  );
 
-  const onChangeCategory = (e: any) => {
+  const onChangeCategory = useCallback((e: any) => {
     setCategories(e.target.value);
-  };
+  }, []);
 
-  const getImages = (images: string[]) => {
+  const getImages = useCallback((images: string[]) => {
     setImages(images);
-  };
+  }, []);
 
   // 수정한 포스트를 업로드
-  const editData = async (e: any) => {
-    e.preventDefault();
-    // if (!product) return;
-    const { title, description, period, price } = value;
+  const editData = useCallback(
+    async (e: any) => {
+      e.preventDefault();
+      const { title, description, period, price } = value;
 
-    if (!title || !description || !period || !price || images.length < 1)
-      return toast.error("사진 및 모든 입력을 완성해주세요", {
-        autoClose: 2000,
-      });
+      if (!title || !description || !period || !price || images.length < 1)
+        return toast.error("사진 및 모든 입력을 완성해주세요", {
+          autoClose: 2000,
+        });
 
-    const data = {
-      id: product?._id,
-      ...value,
-      images,
-    };
+      const data = {
+        id: product?._id,
+        ...value,
+        images,
+      };
 
-    try {
-      await axiosInstance.post("/api/product/edit", data);
-      alert("수정되었습니다.");
-      closeEdit && closeEdit();
-    } catch (err) {
-      alert("잠시 후에 다시 시도해주시길 바랍니다.");
-    }
-  };
+      try {
+        await axiosInstance.post("/api/product/edit", data);
+        alert("수정되었습니다.");
+        closeEdit!();
+      } catch (err) {
+        alert("잠시 후에 다시 시도해주시길 바랍니다.");
+      }
+    },
+    [closeEdit, images, value, product?._id],
+  );
 
   // 수정 취소
   const onClickCancle = useCallback(() => {
-    closeEdit && closeEdit();
+    closeEdit!();
   }, [closeEdit]);
 
   // 최초 포스트를 업로드
-  const onSubmit = async (e: any) => {
-    e.preventDefault();
-    if (product) return;
+  const onSubmit = useCallback(
+    async (e: any) => {
+      e.preventDefault();
+      if (product) return;
 
-    if (!images.length) {
-      setImgError(true);
-      return;
-    }
+      if (!images.length) {
+        return setImgError(true);
+      }
 
-    let data = {
-      ...value,
-      seller: user?._id,
-      images,
-      category,
-    };
-    try {
-      await axiosInstance.post("api/product/upload", data);
-      alert("업로드 성공!");
-      history.push("/");
-    } catch (err) {
-      alert("업로드 실패!");
-    }
-  };
+      const data = {
+        ...value,
+        seller: user?._id,
+        images,
+        category,
+      };
+      try {
+        await axiosInstance.post("api/product/upload", data);
+        alert("업로드 성공!");
+        history.push("/");
+      } catch (err) {
+        alert("업로드 실패!");
+      }
+    },
+    [category, history, images, product, user?._id, value],
+  );
 
   // 기존 포스트를 수정하기 위해 DB에서 데이터 값 불러오기
   const getProductInfo = useCallback(async () => {
@@ -142,9 +149,7 @@ const Upload: React.VFC<IProps> = ({ product = null, closeEdit = null }) => {
     product && getProductInfo();
   }, [getProductInfo, product]);
 
-  if (!user) {
-    history.push("/");
-  }
+  !user && history.push("/");
 
   return (
     <React.Fragment>

@@ -6,18 +6,19 @@ interface IProps {
 }
 
 const ImageSlider: React.VFC<IProps> = ({ product }) => {
-  let container: ReactImageGalleryItem[] = [];
-
-  if (product) {
-    product?.images.forEach((image) => {
-      container.push({
+  const getItems = (product: Product) => {
+    const items: ReactImageGalleryItem[] = [];
+    product.images.forEach((image) => {
+      items.push({
         original: image,
         thumbnail: image,
       });
     });
-  }
 
-  return <ImageGallery showPlayButton={false} items={container} />;
+    return items;
+  };
+
+  return <ImageGallery showPlayButton={false} items={getItems(product)} />;
 };
 
 export default ImageSlider;

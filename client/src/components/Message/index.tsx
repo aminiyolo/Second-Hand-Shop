@@ -18,9 +18,7 @@ const Message: React.VFC<IProps> = ({ message, owner }) => {
   const [counterpart, setCounterpart] = useState<string | null>(null);
 
   useEffect(() => {
-    if (message.sender !== user?._id) {
-      setCounterpart("상대방");
-    }
+    message.sender !== user?._id && setCounterpart("상대방");
   }, [user, message]);
 
   return (

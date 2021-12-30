@@ -21,17 +21,13 @@ const MyPage = () => {
   const [clickedEdit, setClickedEdit] = useState(false);
   const [productData, setProductData] = useState<Product | null>(null);
 
-  const onRemove = (id: string) => {
-    let data = {
-      id,
-    };
-
-    const value = window.confirm("정말로 삭제하시겠습니까?");
-    if (!value) return;
+  const onRemove = useCallback((id: string) => {
+    const res = window.confirm("정말로 삭제하시겠습니까?");
+    if (!res) return;
 
     const removeMyItem = async () => {
       try {
-        await axiosInstance.post("/api/product/remove_from_myPage", data);
+        await axiosInstance.post("/api/product/remove_from_myPage", { id });
         setDeleteToggle((prev) => !prev);
         alert("상품이 삭제되었습니다.");
       } catch (err) {
@@ -40,30 +36,26 @@ const MyPage = () => {
     };
 
     removeMyItem();
-  };
+  }, []);
 
   useEffect(() => {
-    if (user) {
-      let data = {
-        id: user._id,
-      };
+    const getMyProduct = async () => {
+      try {
+        const res = await axiosInstance.post("/api/product/myProduct", {
+          id: user?._id,
+        });
+        if (res.data.length < 0) {
+          setReceiveData(true);
+          setProducts([]);
+        } else setReceiveData(true);
 
-      const getMyProduct = async () => {
-        try {
-          const res = await axiosInstance.post("/api/product/myProduct", data);
-          if (res.data.length < 0) {
-            setReceiveData(true);
-            setProducts([]);
-          } else setReceiveData(true);
+        setProducts(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
-          setProducts(res.data);
-        } catch (err) {
-          console.log(err);
-        }
-      };
-
-      getMyProduct();
-    }
+    getMyProduct();
   }, [user, deleteToggle, clickedEdit]);
 
   const onClickEdit = useCallback((product) => {
@@ -75,9 +67,7 @@ const MyPage = () => {
     setClickedEdit(false);
   }, []);
 
-  if (!user) {
-    history.push("/");
-  }
+  !user && history.push("/");
 
   if (products === null) {
     return <Loading>Loading...</Loading>;
@@ -128,9 +118,7 @@ const MyPage = () => {
         </div>
       </CartContainer>
     );
-  } else {
-    return <Upload product={productData} closeEdit={closeEdit} />;
-  }
+  } else return <Upload product={productData} closeEdit={closeEdit} />;
 };
 
 export default MyPage;

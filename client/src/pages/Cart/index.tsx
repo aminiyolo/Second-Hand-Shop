@@ -18,16 +18,14 @@ const Cart = () => {
   const [products, setProducts] = useState<Product[] | null>(null);
 
   useEffect(() => {
-    let container: string[] = [];
+    const container: string[] = [];
 
     const getProduct = async () => {
       if (cart.length > 0) {
         cart.forEach((c) => {
           container.push(c.id);
         });
-      } else {
-        return setProducts([]);
-      }
+      } else return setProducts([]);
 
       try {
         const res = await axiosInstance.get(
@@ -45,12 +43,8 @@ const Cart = () => {
 
   const handleRemove = useCallback(
     (id) => {
-      let data = {
-        id,
-      };
-
       try {
-        removeCart(dispatch, data, user!.token);
+        removeCart(dispatch, { id }, user!.token);
         toast.success("삭제 되었습니다.", {
           autoClose: 2000,
           position: toast.POSITION.BOTTOM_RIGHT,
@@ -62,9 +56,7 @@ const Cart = () => {
     [dispatch, user],
   );
 
-  if (!user) {
-    history.push("/");
-  }
+  !user && history.push("/");
 
   if (products === null) {
     return <Loading>Loading...</Loading>;

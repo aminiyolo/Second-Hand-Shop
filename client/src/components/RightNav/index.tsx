@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/apiCalls";
 import { RootState } from "../../redux/store";
+import { useCallback } from "react";
 
 interface IProps {
   onCloseRightNav: () => void;
@@ -16,38 +17,38 @@ const RightNavbar: React.VFC<IProps> = ({ onCloseRightNav }) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const onClickHome = () => {
+  const onClickHome = useCallback(() => {
     onCloseRightNav();
     history.push("/");
-  };
+  }, [history, onCloseRightNav]);
 
-  const onClickMyPage = () => {
+  const onClickMyPage = useCallback(() => {
     onCloseRightNav();
     history.push("/myPage");
-  };
+  }, [history, onCloseRightNav]);
 
-  const onClickChat = () => {
+  const onClickChat = useCallback(() => {
     onCloseRightNav();
     history.push("/chat");
-  };
+  }, [history, onCloseRightNav]);
 
-  const onClickCart = () => {
+  const onClickCart = useCallback(() => {
     onCloseRightNav();
     history.push("/cart");
-  };
+  }, [history, onCloseRightNav]);
 
-  const onClickUpload = () => {
+  const onClickUpload = useCallback(() => {
     onCloseRightNav();
     history.push("/upload");
-  };
+  }, [history, onCloseRightNav]);
 
-  const onClickLogout = () => {
+  const onClickLogout = useCallback(() => {
     user && logout(dispatch, user.token);
-  };
+  }, [dispatch, user]);
 
-  const stopPropagation = (e: any) => {
+  const stopPropagation = useCallback((e: any) => {
     e.stopPropagation();
-  };
+  }, []);
 
   return (
     <NavContainer onClick={() => onCloseRightNav()}>
