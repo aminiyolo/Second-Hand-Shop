@@ -18,6 +18,16 @@
 
 ### 클라이언트(React), 서버(express, mongoDB) 모두 혼자서 진행하여 완성하였습니다.
 
+---
+
+### 2021년 12월 23일 기존 React 프로젝트에 Typescript 적용 완료, Typescript 적용 안된 버전은 main 브랜치에 위치
+
+#### React + Typescript -> master 브랜치
+
+#### React -> main 브랜치
+
+---
+
 ### 프로젝트에 사용한 주요 라이브러리 / 프레임워크
 
 - 클라이언트
