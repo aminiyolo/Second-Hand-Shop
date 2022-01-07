@@ -49,6 +49,7 @@ const SignUpPage = () => {
   const [passwordInfo, setPasswordInfo] = useState(false);
   const [confirmPasswordInfo, setConfirmPasswordInfo] = useState(false);
   const [validatedEmail, setValidatedEmail] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
 
   function getNum() {
     return Math.random();
@@ -74,13 +75,16 @@ const SignUpPage = () => {
       };
 
       const getResult = async () => {
+        setIsFetching(true);
         try {
           const res = await axiosInstance.post("/api/users/register", data);
+          setIsFetching(false);
           if (res.data.success) {
             alert("회원가입이 성공했습니다.");
             history.push("/login");
           } else alert(res.data.msg);
         } catch (err) {
+          setIsFetching(false);
           console.log(err);
         }
       };
@@ -146,6 +150,7 @@ const SignUpPage = () => {
               <input
                 type="email"
                 name="email"
+                autoComplete="off"
                 required
                 onChange={handleChange}
               />
@@ -179,6 +184,7 @@ const SignUpPage = () => {
                 type="text"
                 name="ID"
                 onChange={handleChange}
+                autoComplete="off"
                 pattern="^[A-Za-z0-9]{6,16}$"
                 required
                 onBlur={() => setIdInfo(false)}
@@ -199,6 +205,7 @@ const SignUpPage = () => {
                 type="text"
                 name="nickname"
                 onChange={handleChange}
+                autoComplete="off"
                 pattern="^[A-Za-z0-9]{6,16}$"
                 required
                 onBlur={() => setNicknameIdInfo(false)}
@@ -218,6 +225,7 @@ const SignUpPage = () => {
               <input
                 type="password"
                 name="password"
+                autoComplete="off"
                 onChange={handleChange}
                 required
                 pattern="^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$"
@@ -238,6 +246,7 @@ const SignUpPage = () => {
               <input
                 type="password"
                 name="confirmPassword"
+                autoComplete="off"
                 onChange={handleChange}
                 required
               />
@@ -246,7 +255,7 @@ const SignUpPage = () => {
               )}
             </InputContainer>
           </Label>
-          <Button type="submit" disabled={!authCheck}>
+          <Button type="submit" disabled={!authCheck || isFetching}>
             회원가입
           </Button>
         </Form>

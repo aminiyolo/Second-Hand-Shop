@@ -44,7 +44,8 @@ const MyPage = () => {
         const res = await axiosInstance.post("/api/product/myProduct", {
           id: user?._id,
         });
-        if (res.data.length < 0) {
+
+        if (!res.data.length) {
           setReceiveData(true);
           setProducts([]);
         } else setReceiveData(true);

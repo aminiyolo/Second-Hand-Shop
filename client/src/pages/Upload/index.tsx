@@ -41,6 +41,7 @@ const Upload: React.VFC<IProps> = ({ product = null, closeEdit = null }) => {
   const [images, setImages] = useState<string[]>([]);
   const [clearImg, setClearImg] = useState(false);
   const [imgError, setImgError] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
 
   const handleChange = useCallback(
     (e: any) => {
@@ -63,7 +64,7 @@ const Upload: React.VFC<IProps> = ({ product = null, closeEdit = null }) => {
       e.preventDefault();
       const { title, description, period, price } = value;
 
-      if (!title || !description || !period || !price || images.length < 1)
+      if (!title || !description || !period || !price || !images.length)
         return toast.error("사진 및 모든 입력을 완성해주세요", {
           autoClose: 2000,
         });
@@ -74,11 +75,15 @@ const Upload: React.VFC<IProps> = ({ product = null, closeEdit = null }) => {
         images,
       };
 
+      setIsFetching(true);
+
       try {
         await axiosInstance.post("/api/product/edit", data);
+        setIsFetching(false);
         alert("수정되었습니다.");
         closeEdit!();
       } catch (err) {
+        setIsFetching(false);
         alert("잠시 후에 다시 시도해주시길 바랍니다.");
       }
     },
@@ -106,11 +111,16 @@ const Upload: React.VFC<IProps> = ({ product = null, closeEdit = null }) => {
         images,
         category,
       };
+
+      setIsFetching(true);
+
       try {
         await axiosInstance.post("api/product/upload", data);
+        setIsFetching(false);
         alert("업로드 성공!");
         history.push("/");
       } catch (err) {
+        setIsFetching(false);
         alert("업로드 실패!");
       }
     },
@@ -123,21 +133,23 @@ const Upload: React.VFC<IProps> = ({ product = null, closeEdit = null }) => {
       const res = await axiosInstance.get(
         `/api/product/product_by_id?id=${product?._id}&type=single`,
       );
+      const [title, description, period, price] = res.data.productInfo[0]; // 구조 분해 할당
+
       setValue((value) => ({
         ...value,
-        title: res.data.productInfo[0].title,
+        title,
       }));
       setValue((value) => ({
         ...value,
-        description: res.data.productInfo[0].description,
+        description,
       }));
       setValue((value) => ({
         ...value,
-        period: res.data.productInfo[0].period,
+        period,
       }));
       setValue((value) => ({
         ...value,
-        price: res.data.productInfo[0].price,
+        price,
       }));
     } catch (err) {
       console.log(err);
@@ -167,41 +179,51 @@ const Upload: React.VFC<IProps> = ({ product = null, closeEdit = null }) => {
           <DescriptionBox>
             <form onSubmit={product ? editData : onSubmit}>
               <Description>
-                <label>제목</label>
+                <label htmlFor="title">제목</label>
                 <Input
                   value={value.title}
+                  id="title"
                   name="title"
+                  autoComplete="off"
                   onChange={handleChange}
                   type="text"
                   required
                 />
                 <br />
                 <br />
-                <label>상세설명</label>
+                <label htmlFor="description">상세설명</label>
                 <Textarea
                   value={value.description}
+                  id="description"
                   name="description"
+                  autoComplete="off"
                   onChange={handleChange}
                   required
                 />
                 <br />
                 <br />
-                <label>사용한 개월 수 (최대 개월 수 36) </label>
+                <label htmlFor="period">
+                  사용한 개월 수 (최대 개월 수 36){" "}
+                </label>
                 <Input
                   type="number"
+                  id="period"
                   name="period"
                   value={value.period}
                   onChange={handleChange}
+                  autoComplete="off"
                   required
                   min={1}
                   max={36}
                 />
                 <br />
                 <br />
-                <label>가격(원)</label>
+                <label htmlFor="price">가격(원)</label>
                 <Input
                   value={value.price}
                   name="price"
+                  id="price"
+                  autoComplete="off"
                   onChange={handleChange}
                   type="number"
                   required
@@ -224,10 +246,14 @@ const Upload: React.VFC<IProps> = ({ product = null, closeEdit = null }) => {
               {imgError && <Error>사진을 첨부해주세요.</Error>}
               <br />
               {!product ? (
-                <Button onSubmit={onSubmit}>등록하기</Button>
+                <Button disabled={isFetching} onSubmit={onSubmit}>
+                  등록하기
+                </Button>
               ) : (
                 <ButtonContainer>
-                  <button onClick={editData}>수정하기</button>
+                  <button disabled={isFetching} onClick={editData}>
+                    수정하기
+                  </button>
                   <button onClick={onClickCancle}>취소하기</button>
                 </ButtonContainer>
               )}

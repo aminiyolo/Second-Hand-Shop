@@ -127,13 +127,13 @@ const Messenger: React.VFC<IProps> = ({ socket }) => {
       (member) => member !== user?._id,
     );
 
-    let online;
     const users: string[] = [];
 
     onlineUsers.forEach((user) => {
       users.push(user.userId);
     });
 
+    let online;
     users.indexOf(receiverId) === -1 ? (online = false) : (online = true);
 
     if (online) {

@@ -57,6 +57,7 @@ const LoginPage = () => {
                 type="text"
                 id="ID"
                 name="ID"
+                autoComplete="off"
                 value={ID}
                 onChange={onChangeID}
               />
@@ -69,6 +70,7 @@ const LoginPage = () => {
                 type="password"
                 id="password"
                 name="password"
+                autoComplete="off"
                 value={password}
                 onChange={onChangePassword}
               />

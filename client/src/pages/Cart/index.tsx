@@ -18,10 +18,9 @@ const Cart = () => {
   const [products, setProducts] = useState<Product[] | null>(null);
 
   useEffect(() => {
-    const container: string[] = [];
-
     const getProduct = async () => {
-      if (cart.length > 0) {
+      const container: string[] = [];
+      if (cart.length) {
         cart.forEach((c) => {
           container.push(c.id);
         });
@@ -74,12 +73,12 @@ const Cart = () => {
       </div>
       <br />
       <div>
-        {products.length < 1 && (
+        {!products.length && (
           <Empty>
             <h1>텅 ~</h1>
           </Empty>
         )}
-        {products !== [] &&
+        {products &&
           products.map((product, index) => (
             <React.Fragment key={index}>
               <ProductContainer>

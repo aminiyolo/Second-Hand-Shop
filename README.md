@@ -22,9 +22,9 @@
 
 ### 2021년 12월 23일 기존 React 프로젝트에 Typescript 적용 완료, Typescript 적용 안된 버전은 main 브랜치에 위치
 
-#### React + Typescript -> master 브랜치
+#### React + Typescript 버전 -> master 브랜치
 
-#### React -> main 브랜치
+#### React 버전 -> main 브랜치
 
 ---
 
