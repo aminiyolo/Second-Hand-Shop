@@ -122,7 +122,7 @@ const Navbar: React.VFC<IProps> = ({ socket }) => {
                 </Cart>
               </Badge>
               <Upload onClick={onUpload}>상품 업로드</Upload>
-              <RightMenu user={user} />
+              <RightMenu user={user} socket={socket} />
             </ButtonContainer>
             {!open && <MenuBar pathname={pathname} onClick={onClickMenu} />}
           </Nav>

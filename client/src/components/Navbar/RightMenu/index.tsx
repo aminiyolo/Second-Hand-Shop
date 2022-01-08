@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { Menu, Button, Img, Nickname } from "./style";
 import Modal from "../../Modal/index";

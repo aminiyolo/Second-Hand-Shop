@@ -10,9 +10,16 @@ const SocketIO = require("socket.io");
 const cors = require("cors");
 
 // Socket
-const server = http.createServer(app);
-const io = SocketIO(server);
 
+const server = http.createServer(app);
+const io = SocketIO(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["*"],
+    credentials: true,
+  },
+});
 let users = [];
 
 const addUser = (userId, socketId) => {

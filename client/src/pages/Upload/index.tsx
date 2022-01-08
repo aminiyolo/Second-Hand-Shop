@@ -133,7 +133,7 @@ const Upload: React.VFC<IProps> = ({ product = null, closeEdit = null }) => {
       const res = await axiosInstance.get(
         `/api/product/product_by_id?id=${product?._id}&type=single`,
       );
-      const [title, description, period, price] = res.data.productInfo[0]; // 구조 분해 할당
+      const { title, description, period, price } = res.data.productInfo[0]; // 구조 분해 할당
 
       setValue((value) => ({
         ...value,
